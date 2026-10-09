@@ -13,7 +13,6 @@ from fractions import Fraction
 from itertools import product
 
 Poly = tuple[int, ...]
-ROOT_CANDIDATE_CAP = 1_000_000
 PRIMES = tuple(p for p in range(2, 200) if all(p % q for q in range(2, p) if q * q <= p))
 
 
@@ -173,29 +172,87 @@ def irreducible_mod(f: Poly, p: int) -> bool:
     return True
 
 
+def _divisors(n: int) -> list[int]:
+    n = abs(n)
+    return [k for k in range(1, n + 1) if n % k == 0]
+
+
+def _evaluate(f, t) -> int:
+    return sum(a * t ** i for i, a in enumerate(f))
+
+
+def _exact_quotient(f: list, g: list):
+    """f / g for monic integer g, or None when g does not divide f."""
+    r = [Fraction(x) for x in f]
+    q = [Fraction(0)] * (len(f) - len(g) + 1)
+    while len(r) >= len(g):
+        c = r[-1] / g[-1]
+        k = len(r) - len(g)
+        q[k] = c
+        for i, x in enumerate(g):
+            r[k + i] -= c * x
+        r.pop()
+    return q if all(x == 0 for x in r) else None
+
+
+def kronecker_factor(f: Poly, k: int):
+    """A monic integer factor of f of degree k, or None (Kronecker's method).
+
+    Any such factor g satisfies g(t) | f(t) at k + 1 integer points where
+    f(t) != 0; every choice of signed divisors is interpolated and tested."""
+    points = []
+    t = 0
+    while len(points) < k + 1:
+        if _evaluate(f, t) != 0:
+            points.append(t)
+        t = -t if t > 0 else 1 - t
+    choices = [[s * q for q in _divisors(_evaluate(f, t)) for s in (1, -1)] for t in points]
+    for values in product(*choices):
+        g = [Fraction(0)] * (k + 1)
+        for i, (xi, yi) in enumerate(zip(points, values)):
+            basis = [Fraction(1)]
+            denom = 1
+            for j, xj in enumerate(points):
+                if j != i:
+                    basis = [(basis[m - 1] if m > 0 else 0) - xj * (basis[m] if m < len(basis) else 0)
+                             for m in range(len(basis) + 1)]
+                    denom *= xi - xj
+            for m in range(k + 1):
+                g[m] += yi * basis[m] / denom
+        if g[k] == 1 and all(c.denominator == 1 for c in g):
+            if _exact_quotient(list(f), [int(c) for c in g]) is not None:
+                return tuple(int(c) for c in g)
+    return None
+
+
 def irreducibility_verdict(f: Poly) -> tuple[int, int]:
-    """(1, p) irreducible over Q, certified by f mod p (p = 0: by excluding
-    rational roots, decisive for degree <= 3); (0, r) reducible with integer
-    root r, the first in the order -1, 1, -2, 2, ...; (-1, 0) inconclusive,
-    also when |f(0)| exceeds ROOT_CANDIDATE_CAP. f must be monic."""
+    """For a monic f of degree d >= 1:
+
+    (0, k)  reducible; k >= 1 is the least degree of a monic integer factor;
+    (1, p)  irreducible over Q, certified by f mod p irreducible (p prime);
+    (1, 0)  irreducible over Q, certified by excluding every monic factor of
+            degree <= d/2 (decisive for d <= 3 by rational roots alone);
+    (-1, 0) inconclusive (the canonical kernel's factor search exceeded its
+            budget; the oracle's Kronecker search has none).
+
+    Order: rational roots, then (d >= 4) a prime certificate, then factors of
+    degree 2..d/2. Mirrors kernel/sadic/spectrum.mojo by other algorithms."""
     d = len(f) - 1
-    c0 = f[0]
-    if d > 1:
-        if c0 == 0:
-            return (0, 0)
-        if abs(c0) > ROOT_CANDIDATE_CAP:
-            return (-1, 0)
-        for k in range(1, abs(c0) + 1):
-            if c0 % k == 0:
-                for r in (-k, k):
-                    if sum(a * r ** i for i, a in enumerate(f)) == 0:
-                        return (0, r)
+    if d >= 2:
+        if f[0] == 0:
+            return (0, 1)
+        for k in range(1, abs(f[0]) + 1):
+            if f[0] % k == 0 and any(_evaluate(f, r) == 0 for r in (-k, k)):
+                return (0, 1)
     if d <= 3:
         return (1, 0)
     for p in PRIMES:
         if irreducible_mod(f, p):
             return (1, p)
-    return (-1, 0)
+    for k in range(2, d // 2 + 1):
+        if kronecker_factor(f, k) is not None:
+            return (0, k)
+    return (1, 0)
 
 
 def primitivity_exponent(m) -> int:

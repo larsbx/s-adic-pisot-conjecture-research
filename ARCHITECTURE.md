@@ -27,6 +27,6 @@ change goes upstream first and is re-vendored with
 
 The repository's own code is `kernel/sadic/` (canonical: `directive`, `cocycle`,
 `balance`, `spectrum`, `periodic`, `overlap`), the drivers `kernel/vectors.mojo` and
-`kernel/brun4_census.mojo`, `reference/sadic_reference/` (oracle: the package,
+`kernel/brun_census.mojo`, `reference/sadic_reference/` (oracle: the package,
 `spectrum`, `periodic`, `bpa`, `overlap`) and `tools/cross_check.py`, which fails closed when the two disagree on
 the battery printed by `kernel/vectors.mojo`.

@@ -1,4 +1,4 @@
-"""Census of the primitive periodic points of the unordered Brun algorithm, d = 4.
+"""Census of the primitive periodic points of the unordered Brun algorithm.
 
 For every Lyndon word w of length 1..L with w^infinity admissible under BST23
 (6.10), run the verdict pipeline of kernel/sadic/periodic.mojo on the
@@ -6,8 +6,9 @@ composite sigma_w: primitive -> irreducible -> Pisot -> balanced pair
 algorithm. Prints one summary line per length and every word whose verdict is
 neither a certified exclusion nor `bpa:terminates`.
 
-Usage: mojo run -I . brun4_census.mojo [L] [max_states] [max_length]
-(defaults 7 200000 20000). Specification: docs/sadic-g3-brun4-census.md.
+Usage: mojo run -I . brun_census.mojo [d] [L] [max_states] [max_length]
+(defaults 4 7 200000 20000). Specification: docs/sadic-g3-brun4-census.md
+(d = 4) and docs/sadic-g6-brun-higher-census.md (d >= 5).
 """
 
 from std.sys import argv
@@ -25,11 +26,12 @@ def joined(w: List[Int]) -> String:
 
 def main() raises:
     var args = argv()
-    var max_len = Int(args[1]) if len(args) > 1 else 7
-    var max_states = Int(args[2]) if len(args) > 2 else 200000
-    var max_length = Int(args[3]) if len(args) > 3 else 20000
-    var shift = brun_unordered(4)
-    print("Brun d=4 periodic census, periods 1.." + String(max_len) + ", BPA budgets " + String(max_states) + " states, length " + String(max_length))
+    var d = Int(args[1]) if len(args) > 1 else 4
+    var max_len = Int(args[2]) if len(args) > 2 else 7
+    var max_states = Int(args[3]) if len(args) > 3 else 200000
+    var max_length = Int(args[4]) if len(args) > 4 else 20000
+    var shift = brun_unordered(d)
+    print("Brun d=" + String(d) + " periodic census, periods 1.." + String(max_len) + ", BPA budgets " + String(max_states) + " states, length " + String(max_length))
     var names = verdict_names()
     var stages = len(names)
     var total = List[Int]()

@@ -75,5 +75,5 @@ jobs:
         working-directory: kernel
         run: |
           set -o pipefail
-          pixi run mojo run -I . brun4_census.mojo 9 2000000 200000 2>&1 | tee census-9.log
+          pixi run mojo run -I . brun_census.mojo 4 9 2000000 200000 2>&1 | tee census-9.log
           grep -Fx 'period 9: words 29120  not-primitive 8400  irreducible:0 312  irreducible:-1 0  pisot:0 168  pisot:-1 0  bpa:terminates 20240  bpa:fails 0  bpa:capped 0  overflow 0' census-9.log

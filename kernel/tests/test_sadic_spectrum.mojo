@@ -45,6 +45,11 @@ def test_charpoly() raises:
 def test_disc_zero_count() raises:
     var cases: List[List[Int]] = [[-1, -1, 1], [-1, -1, 0, 1], [-1, -1, -1, 1], [-1, -1, -1, -1, 1], [-2, 0, 0, 1], [-2, -2, -1, 1]]
     var counts: List[Int] = [1, 2, 2, 3, 0, 2]
+    # a Brun d = 6 period-7 characteristic polynomial whose recursion passes
+    # 64-bit coefficients (|a_0 p_i| ~ 1.5e19): exact only in BigZ
+    var wide: List[Int] = [1, -6, 16, -24, 20, -9, 1]
+    assert_equal(disc_zero_count(wide), 5)
+    assert_equal(pisot_verdict(wide), 1)
     for i in range(len(cases)):
         assert_equal(disc_zero_count(cases[i]), counts[i])
     var singular: List[List[Int]] = [[1, -1, -1, -1, 1], [1, 0, 1], [1, -3, 1]]
@@ -61,9 +66,16 @@ def test_pisot_verdict() raises:
 
 
 def test_irreducibility_verdict() raises:
-    var polys: List[List[Int]] = [[-1, -1, -1, 1], [-1, -1, -1, -1, 1], [1, -4, 6, -5, 1], [-1, 0, 1], [0, 1, 1], [1, 0, 0, 0, 1]]
-    var verdicts: List[Int] = [1, 1, 1, 0, 0, -1]
-    var witnesses: List[Int] = [0, 2, 2, -1, 0, 0]
+    # z^4 + 1 has no prime certificate (it splits mod every p); the factor
+    # search excludes every quadratic factor. The quintic is a Brun d = 5
+    # characteristic polynomial, (z^2 - z + 1)(z^3 - 5z^2 + 4z - 1); the sextic
+    # is (z^3 - z - 1)(z^3 - z^2 - 1).
+    var polys: List[List[Int]] = [
+        [-1, -1, -1, 1], [-1, -1, -1, -1, 1], [1, -4, 6, -5, 1], [-1, 0, 1], [0, 1, 1],
+        [1, 0, 0, 0, 1], [-1, 5, -10, 10, -6, 1], [1, 1, 1, -1, -1, -1, 1],
+    ]
+    var verdicts: List[Int] = [1, 1, 1, 0, 0, 1, 0, 0]
+    var witnesses: List[Int] = [0, 2, 2, 1, 1, 0, 2, 3]
     for i in range(len(polys)):
         var v = irreducibility_verdict(polys[i])
         assert_equal(v.verdict, verdicts[i])

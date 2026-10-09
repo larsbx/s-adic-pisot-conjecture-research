@@ -13,11 +13,20 @@ from sadic_reference.spectrum import (
     charpoly,
     disc_zero_count,
     irreducibility_verdict,
+    kronecker_factor,
     pisot_verdict,
     primitivity_exponent,
 )
 
 TRIBONACCI = (-1, -1, -1, 1)
+
+
+def _product(a, b):
+    out = [0] * (len(a) + len(b) - 1)
+    for i, x in enumerate(a):
+        for j, y in enumerate(b):
+            out[i + j] += x * y
+    return tuple(out)
 BRUN4 = brun_unordered(4)
 TAU = (0, 4, 8, 9)  # beta_12 o beta_23 o beta_34 o beta_41 (BST23 section 6.5), 0-based labels
 
@@ -56,10 +65,16 @@ def test_irreducibility_verdict():
     assert irreducibility_verdict(TRIBONACCI) == (1, 0)
     assert irreducibility_verdict((-1, -1, -1, -1, 1)) == (1, 2)
     assert irreducibility_verdict((1, -4, 6, -5, 1)) == (1, 2)
-    assert irreducibility_verdict((-1, 0, 1)) == (0, -1)
-    assert irreducibility_verdict((0, 1, 1)) == (0, 0)
-    # z^4 + 1 is irreducible over Q but splits modulo every prime: no certificate
-    assert irreducibility_verdict((1, 0, 0, 0, 1)) == (-1, 0)
+    assert irreducibility_verdict((-1, 0, 1)) == (0, 1)
+    assert irreducibility_verdict((0, 1, 1)) == (0, 1)
+    # z^4 + 1 splits modulo every prime, so no prime certifies it; the
+    # exhaustive factor search does
+    assert irreducibility_verdict((1, 0, 0, 0, 1)) == (1, 0)
+    # a Brun d = 5 period-5 characteristic polynomial: (z^2 - z + 1)(z^3 - 5z^2 + 4z - 1)
+    assert irreducibility_verdict((-1, 5, -10, 10, -6, 1)) == (0, 2)
+    assert kronecker_factor((-1, 5, -10, 10, -6, 1), 2) == (1, -1, 1)
+    # a product of two irreducible cubics: no root, no quadratic factor
+    assert irreducibility_verdict(_product((-1, -1, 0, 1), (-1, 0, -1, 1))) == (0, 3)
 
 
 def test_primitivity_exponent():

@@ -5,7 +5,8 @@ and an overflow raises (inconclusive, never a wrong verdict). Specification
 and proofs: docs/sadic-kernel-g2-spectrum.md.
 
 - `charpoly`: `det(zI - M)` by Faddeev-LeVerrier; every division is exact.
-- `disc_zero_count`: zeros in the open unit disc by the Schur-Cohn reduction
+- `disc_zero_count`: zeros in the open unit disc by the Schur-Cohn reduction,
+  in arbitrary-precision integers (`finite_exact.bigint_z`)
   `Tp = p(0) p - a_n p*`, with `p*(z) = z^n p(1/z)` (Rouche on the circle,
   where `|p*| = |p|`). A degenerate step `|p(0)| = |a_n|` is removed, exactly,
   by multiplying by `2z - 1` (one more zero in the disc). Zeros on the circle
@@ -13,20 +14,23 @@ and proofs: docs/sadic-kernel-g2-spectrum.md.
   and make the count raise.
 - `pisot_verdict`: one root outside the closed disc, the rest inside the open
   disc, for a monic irreducible polynomial; reciprocal polynomials by Lemma R.
-- `irreducibility_verdict`: rational roots refute; degree <= 3 without one is
-  irreducible; otherwise the least prime `p < 200` with `f mod p` irreducible
-  (Rabin's test) certifies irreducibility over Q, and no such prime is
-  inconclusive.
+- `irreducibility_verdict`: a monic integer factor refutes (rational roots
+  first); degree <= 3 without a root is irreducible; otherwise the least prime
+  `p < 200` with `f mod p` irreducible (Rabin's test) certifies
+  irreducibility over Q, and failing that an exhaustive search for monic
+  factors of degree 2..d/2, bounded by Fujiwara's root bound, decides; a
+  search beyond its budget is inconclusive.
 
 Reference oracle: `reference/sadic_reference/spectrum.py` (independent
-algorithms: interpolation, a Routh array on the Cayley transform, and
-enumeration of monic divisors mod p).
+algorithms: interpolation, a Routh array on the Cayley transform,
+enumeration of monic divisors mod p, and Kronecker's factor search).
 """
 
+from finite_exact.bigint_z import BigZ, bigz_add, bigz_div_exact, bigz_from_i64, bigz_gcd, bigz_mul, bigz_neg, bigz_sub, bigz_zero
 from finite_exact.checked_int import checked_add, checked_mul, checked_neg, checked_sub
 from sadic.cocycle import matmul
 
-comptime ROOT_CANDIDATE_CAP = 1_000_000
+comptime FACTOR_SEARCH_BUDGET = 20_000_000
 comptime SCHUR_COHN_BUDGET = 64
 comptime PRIME_LIMIT = 200
 
@@ -58,69 +62,61 @@ def charpoly(m: List[Int], d: Int) raises -> List[Int]:
     return coeffs^
 
 
-def _trim(p: List[Int]) -> List[Int]:
+def _big_trim(p: List[BigZ]) -> List[BigZ]:
     var out = p.copy()
-    while len(out) > 1 and out[len(out) - 1] == 0:
+    while len(out) > 1 and out[len(out) - 1].is_zero():
         _ = out.pop()
     return out^
 
 
-def _gcd(a: Int, b: Int) -> Int:
-    var x = a if a >= 0 else -a
-    var y = b if b >= 0 else -b
-    while y != 0:
-        var t = x % y
-        x = y
-        y = t
-    return x
-
-
-def _primitive(p: List[Int]) -> List[Int]:
-    var g = 0
+def _big_primitive(p: List[BigZ]) raises -> List[BigZ]:
+    var g = bigz_zero()
     for c in p:
-        g = _gcd(g, c)
-    if g <= 1:
+        g = bigz_gcd(g, c)
+    if g.is_zero():
         return p.copy()
-    var out = List[Int]()
+    var out = List[BigZ]()
     for c in p:
-        out.append(c // g)
+        var q = bigz_div_exact(c, g)
+        if q.rejected:
+            raise Error("content division is not exact")
+        out.append(q.quotient.copy())
     return out^
 
 
-def _disc_count(p0: List[Int], budget: Int) raises -> Int:
+def _disc_count(p0: List[BigZ], budget: Int) raises -> Int:
     if budget <= 0:
         raise Error("Schur-Cohn budget exhausted: inconclusive")
-    var p = _trim(p0)
+    var p = _big_trim(p0)
     var extra = 0
-    var n = len(p) - 1
-    while n > 0 and p[0] == 0:
+    while len(p) > 1 and p[0].is_zero():
         # a zero at the origin lies in the disc
         extra += 1
-        var tail = List[Int]()
+        var tail = List[BigZ]()
         for i in range(1, len(p)):
-            tail.append(p[i])
+            tail.append(p[i].copy())
         p = tail^
-        n -= 1
+    var n = len(p) - 1
     if n == 0:
-        if p[0] == 0:
+        if p[0].is_zero():
             raise Error("zero polynomial: inconclusive")
         return extra
-    var a0 = p[0]
-    var an = p[n]
-    var gamma = checked_sub(checked_mul(a0, a0), checked_mul(an, an))
+    var a0 = p[0].copy()
+    var an = p[n].copy()
+    var gamma = bigz_sub(bigz_mul(a0, a0), bigz_mul(an, an)).sign
     if gamma == 0:
         # (2z - 1) p has the extra zero 1/2 and |q(0)| != |q_lead|
-        var q = List[Int]()
-        q.append(-p[0])
+        var q = List[BigZ]()
+        q.append(bigz_neg(p[0]))
         for i in range(1, n + 1):
-            q.append(checked_sub(checked_mul(2, p[i - 1]), p[i]))
-        q.append(checked_mul(2, p[n]))
+            q.append(bigz_sub(bigz_add(p[i - 1], p[i - 1]), p[i]))
+        q.append(bigz_add(p[n], p[n]))
         return extra + _disc_count(q, budget - 1) - 1
-    var t = List[Int]()
+    var t = List[BigZ]()
     for i in range(n + 1):
-        t.append(checked_sub(checked_mul(a0, p[i]), checked_mul(an, p[n - i])))
-    t = _primitive(_trim(t))
-    if len(t) == 1 and t[0] == 0:
+        t.append(bigz_sub(bigz_mul(a0, p[i]), bigz_mul(an, p[n - i])))
+    t = _big_primitive(_big_trim(t))
+    if len(t) == 1 and t[0].is_zero():
         raise Error("Schur-Cohn transform vanishes: inconclusive")
     var z = _disc_count(t, budget - 1)
     # |a_n| > |a_0|: Tp has the zeros of p* in the disc, n - Z(p) of them
@@ -128,8 +124,13 @@ def _disc_count(p0: List[Int], budget: Int) raises -> Int:
 
 
 def disc_zero_count(p: List[Int]) raises -> Int:
-    """Zeros of p in the open unit disc; raises when inconclusive."""
-    return _disc_count(p, SCHUR_COHN_BUDGET)
+    """Zeros of p in the open unit disc; raises when inconclusive. The
+    recursion runs on arbitrary-precision integers: its coefficients grow
+    quadratically per step before the content division."""
+    var big = List[BigZ]()
+    for c in p:
+        big.append(bigz_from_i64(Int64(c)))
+    return _disc_count(big, SCHUR_COHN_BUDGET)
 
 
 def is_reciprocal(p: List[Int]) -> Bool:
@@ -295,22 +296,118 @@ def irreducible_mod(f: List[Int], p: Int) -> Bool:
     return True
 
 
-def irreducibility_verdict(f: List[Int]) raises -> IrreducibilityVerdict:
-    """f monic of degree >= 1."""
+def _iroot_ceil(n: Int, k: Int) raises -> Int:
+    """Least r >= 0 with r^k >= n, for n >= 0."""
+    var r = 0
+    while True:
+        var power = 1
+        for _ in range(k):
+            power = checked_mul(power, r)
+        if power >= n:
+            return r
+        r += 1
+
+
+def fujiwara_bound(f: List[Int]) raises -> Int:
+    """An integer F >= 1 with |z| <= F for every root z of the monic f:
+    `2 max_i ceil(|f[d-i]|^(1/i))` (Fujiwara 1916, with |a_0| for |a_0|/2)."""
     var d = len(f) - 1
-    var c0 = f[0]
-    if d > 1:
-        if c0 == 0:
-            return IrreducibilityVerdict(0, 0)
-        var bound = c0 if c0 > 0 else -c0
-        if bound > ROOT_CANDIDATE_CAP:
-            return IrreducibilityVerdict(-1, 0)
-        for k in range(1, bound + 1):
-            if bound % k != 0:
+    var best = 0
+    for i in range(1, d + 1):
+        var c = f[d - i]
+        best = max(best, _iroot_ceil(c if c >= 0 else -c, i))
+    return max(1, checked_mul(2, best))
+
+
+def _divides(f: List[Int], g: List[Int]) raises -> Bool:
+    """Whether the monic g divides f over Z."""
+    var r = f.copy()
+    var dg = len(g) - 1
+    while len(r) - 1 >= dg:
+        var c = r[len(r) - 1]
+        var shift = len(r) - 1 - dg
+        for i in range(dg + 1):
+            r[shift + i] = checked_sub(r[shift + i], checked_mul(c, g[i]))
+        _ = r.pop()
+    for x in r:
+        if x != 0:
+            return False
+    return True
+
+
+def _binomial(n: Int, k: Int) -> Int:
+    var out = 1
+    for i in range(k):
+        out = out * (n - i) // (i + 1)
+    return out
+
+
+def _factor_search(f: List[Int], k: Int, bound: Int) raises -> Int:
+    """1 when f has a monic integer factor of degree k, 0 when it has none,
+    -1 when the search space exceeds FACTOR_SEARCH_BUDGET. A root of a factor
+    is a root of f, so |e_j| <= C(k, j) bound^j bounds the coefficient
+    `g[k-j] = (-1)^j e_j`; the constant term divides f(0)."""
+    var c0 = f[0] if f[0] >= 0 else -f[0]
+    var top = 1
+    for _ in range(k):
+        top = checked_mul(top, bound)
+    var constants = List[Int]()
+    for q in range(1, min(c0, top) + 1):
+        if c0 % q == 0:
+            constants.append(q)
+            constants.append(-q)
+    var limits = List[Int]()
+    var size = len(constants)
+    for j in range(1, k):
+        var lim = _binomial(k, k - j)
+        for _ in range(k - j):
+            lim = checked_mul(lim, bound)
+        limits.append(lim)
+        size = checked_mul(size, checked_add(checked_mul(2, lim), 1))
+        if size > FACTOR_SEARCH_BUDGET:
+            return -1
+    var f1 = _eval(f, 1)
+    var fm1 = _eval(f, -1)
+    # odometer over g[1..k-1], each in [-lim, lim]
+    var g = List[Int]()
+    for _ in range(k + 1):
+        g.append(0)
+    g[k] = 1
+    for c in constants:
+        g[0] = c
+        for j in range(1, k):
+            g[j] = -limits[j - 1]
+        while True:
+            var g1 = _eval(g, 1)
+            var gm1 = _eval(g, -1)
+            if g1 != 0 and gm1 != 0 and f1 % g1 == 0 and fm1 % gm1 == 0 and _divides(f, g):
+                return 1
+            var j = 1
+            while j < k and g[j] == limits[j - 1]:
+                g[j] = -limits[j - 1]
+                j += 1
+            if j >= k:
+                break
+            g[j] += 1
+    return 0
+
+
+def irreducibility_verdict(f: List[Int]) raises -> IrreducibilityVerdict:
+    """f monic of degree d >= 1. `verdict` 0 with `witness` the least degree of
+    a monic integer factor; 1 with `witness` a certifying prime, or 0 when
+    every factor of degree <= d/2 is excluded; -1 inconclusive."""
+    var d = len(f) - 1
+    if d >= 2:
+        if f[0] == 0:
+            return IrreducibilityVerdict(0, 1)
+        var c0 = f[0] if f[0] > 0 else -f[0]
+        var bound = fujiwara_bound(f)
+        for k in range(1, min(c0, bound) + 1):
+            if c0 % k != 0:
                 continue
             for r in [-k, k]:
                 if _eval(f, r) == 0:
-                    return IrreducibilityVerdict(0, r)
+                    return IrreducibilityVerdict(0, 1)
     if d <= 3:
         return IrreducibilityVerdict(1, 0)
     for p in range(2, PRIME_LIMIT):
@@ -322,4 +419,11 @@ def irreducibility_verdict(f: List[Int]) raises -> IrreducibilityVerdict:
                 prime = False
         if prime and irreducible_mod(f, p):
             return IrreducibilityVerdict(1, p)
-    return IrreducibilityVerdict(-1, 0)
+    var bound = fujiwara_bound(f)
+    for k in range(2, d // 2 + 1):
+        var found = _factor_search(f, k, bound)
+        if found == 1:
+            return IrreducibilityVerdict(0, k)
+        if found == -1:
+            return IrreducibilityVerdict(-1, 0)
+    return IrreducibilityVerdict(1, 0)

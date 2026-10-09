@@ -69,10 +69,24 @@ rather than everywhere. One representative is
 `(β₁₂, β₂₁, β₁₂, β₂₁, β₁₃, β₃₄, β₄₃, β₃₁)`, labels `0,3,0,3,1,8,11,6` in the
 0-based pair order.
 
-## 3. Evidence beyond period 8
+## 3. Evidence: period 9
 
-Period 9 is run by the driver and recorded in the PR that introduces this
-document. It is evidence only until a regression test pins it.
+Recorded with `mojo run -I . brun4_census.mojo 9 2000000 200000`, which runs
+the balanced pair algorithm with budgets of 2,000,000 states and length
+200,000. The CI job `brun4-census-period-9` repeats the run and checks its
+summary line.
+
+| period | words | not primitive | reducible `χ` | not Pisot | BPA terminates | open |
+|---:|---:|---:|---:|---:|---:|---:|
+| 9 | 29,120 | 8,400 | 312 | 168 | 20,240 | 0 |
+
+At the default budgets (200,000 states, length 20,000), 60 of the 20,240
+composites are capped. All 60 terminate at the larger budgets. A first kernel
+version overflowed on 48 non-primitive words, which led to the zero-pattern
+primitivity test (`docs/sadic-kernel-g2-spectrum.md` §3).
+
+Through period 9 the totals are 26,626 PIP composites, all terminating, and
+192 certified non-Pisot points.
 
 ## 4. What this calibrates, and what it does not
 

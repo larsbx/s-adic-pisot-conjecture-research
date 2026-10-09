@@ -59,3 +59,21 @@ jobs:
           set -o pipefail
           (cd kernel && pixi run vectors > build/vectors.txt)
           python3 tools/cross_check.py kernel/build/vectors.txt
+
+  brun4-census-period-9:
+    name: Brun d=4 census, period 9 (evidence)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pixi
+        run: |
+          set -o pipefail
+          curl --retry 5 --retry-all-errors --retry-delay 3 -fsSL https://pixi.sh/install.sh | PIXI_VERSION=v0.81.0 PIXI_NO_PATH_UPDATE=1 bash
+          echo "$HOME/.pixi/bin" >> "$GITHUB_PATH"
+      - name: Census through period 9 (docs/sadic-g3-brun4-census.md section 3)
+        working-directory: kernel
+        run: |
+          set -o pipefail
+          pixi run mojo run -I . brun4_census.mojo 9 2000000 200000 2>&1 | tee census-9.log
+          grep -Fx 'period 9: words 29120  not-primitive 8400  irreducible:0 312  irreducible:-1 0  pisot:0 168  pisot:-1 0  bpa:terminates 20240  bpa:fails 0  bpa:capped 0  overflow 0' census-9.log

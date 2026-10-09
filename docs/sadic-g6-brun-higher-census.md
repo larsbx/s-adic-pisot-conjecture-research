@@ -139,6 +139,12 @@ periods 7–11. The balanced pair algorithm then gives:
 The pinned point is the terminating class with the fewest states (2,095).
 The capped runs are inconclusive (R3).
 
+The same search for `d = 8` finds 62, 1,838 and 35,072 primitive irreducible
+Pisot classes at periods 11, 12 and 13; it finds none at period ≤ 10. Every
+one of them is capped at 100,000 states and length 10,000, so `d = 8` has no
+balanced-pair witness yet. This result is inconclusive (R3); Theorem C′
+(§5) covers `d = 8` through the transfer.
+
 For `8 ≤ d ≤ 10` Theorem C′ (§5) replaces the balanced pair algorithm by
 the gated flow-to-symbolic transfer (Sirvent–Solomyak 2002 Corollary 5.2).
 Theorem C is the import-free version, one balanced-pair certificate per

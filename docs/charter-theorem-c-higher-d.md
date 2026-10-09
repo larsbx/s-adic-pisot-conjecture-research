@@ -5,7 +5,10 @@
 **Progress (2026-10-09).**
 - `d = 7`: witness found at period 11 and pinned. Theorem C now covers
   `d ∈ {5, 6, 7}` (`docs/sadic-g6-brun-higher-census.md` §3).
-- `d = 8..10`: the search is running.
+- `d = 8`: every primitive irreducible Pisot class of period ≤ 13 (36,972
+  of them) is capped at 100,000 states and length 10,000. The next step is
+  period 14, or larger budgets on the classes with the smallest `|λ₂|`.
+- `d = 9, 10`: not yet searched with balanced pairs.
 - The symbolic-transfer branch has since given Theorem C′ for every
   `5 ≤ d ≤ 10` by import. This branch keeps supplying balanced-pair
   certificates, which need no transfer import.

@@ -123,8 +123,9 @@ pipeline is therefore the **replication** of BST23 §6.5 (Brun `d = 4`), in
 
 **Verified:** BST19 arXiv:1410.0331v5, Definition 5.8, Lemma 5.9, and the
 proof of Lemma 5.11 were read directly. PRICE (P) places the same positive
-matrix B at the end of every selected recurring prefix; (R) repeats that
-prefix; (C) supplies balance at its return endpoint. Footnote 3 explicitly
+matrix B at the end of every selected recurring prefix; (R) repeats each
+substitution of that prefix, `σ_{n_k+r} = σ_r` for `0 ≤ r < ℓ_k`; (C)
+supplies balance at `n_k + ℓ_k`. Footnote 3 explicitly
 distinguishes this from recurrence of a positive block alone. Lemma 5.9
 derives PRICE from Theorem 3.1's hypotheses. Lemma 5.11 already uses the
 suffix to compare image sizes.
@@ -133,6 +134,8 @@ Source: [BST19, arXiv v5](https://arxiv.org/pdf/1410.0331v5), §5.2,
 printed pp. 17–18. The repository's T1′ applies this import to its
 swap-pair type triples; its proof and scope are in
 [`t1-uniform-overlap-finiteness.md`](t1-uniform-overlap-finiteness.md).
+The independent source audit and validation reconciliation are recorded in
+[`t1-prime-audit-2026-10-09.md`](t1-prime-audit-2026-10-09.md).
 
 ## 7. Arnoux–Rauzy balance for the anchor example (2026-10-09)
 

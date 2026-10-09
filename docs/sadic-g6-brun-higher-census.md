@@ -119,10 +119,8 @@ condition are:
 Every hypothesis except the Pisot condition is therefore met. ∎
 
 The Pisot condition for Brun `d = 5, 6` has numerical support only (BST21).
-For `7 ≤ d ≤ 10` the same argument needs a periodic point on which the
-balanced pair algorithm terminates. Corollary B′ gives the flow version for every Pisot
-point, but the transfer to the symbolic system (Barge 2016 Remark 4.2,
-citing Clark–Sadun) has not been verified here.
+For `7 ≤ d ≤ 10` Theorem C′ (§5) replaces the balanced pair algorithm by
+the gated flow-to-symbolic transfer (Sirvent–Solomyak 2002 Corollary 5.2).
 
 ## 4. Census evidence (`kernel/brun_census.mojo … orbits`)
 

@@ -1,9 +1,11 @@
 """Contracts of the oracle's spectral, periodic and balanced-pair layers.
 Literals are pinned independently by kernel/tests/test_sadic_spectrum.mojo."""
 
+import hashlib
 from itertools import product
+from pathlib import Path
 
-from sadic_reference import compose_all, incidence, prefix_matrix
+from sadic_reference import compose_all, full_shift, prefix_matrix
 from sadic_reference.bpa import CAPPED, FAILS, TERMINATES, balanced_pair_algorithm, split
 from sadic_reference.periodic import brun_unordered, is_lyndon, periodic_admissible, periodic_words
 from sadic_reference.spectrum import (
@@ -89,20 +91,32 @@ def test_balanced_pair_algorithm():
     assert split((0, 1, 1, 0), (1, 0, 0, 1), 2) == [((0, 1), (1, 0)), ((0, 1), (1, 0))]
 
 
+PSC_CORPUS = Path(__file__).parent / "data" / "psc-pip-corpus.txt"
+
+
+def psc_corpus_lines() -> list[str]:
+    """The pinned PSC corpus, its data lines checked against the digest in its header."""
+    lines = PSC_CORPUS.read_text(encoding="utf-8").splitlines()
+    digest = next(l.split(": ")[1] for l in lines if l.startswith("# sha256 of the data lines: "))
+    data = [l for l in lines if not l.startswith("#")]
+    assert hashlib.sha256("".join(l + "\n" for l in data).encode()).hexdigest() == digest
+    return data
+
+
 def test_iota_embedding_reproduces_the_psc_corpus():
-    # PSC's standing corpus: 4,554 primitive irreducible Pisot substitutions on
-    # three letters with images of length 1 to 3
+    # Per instance, in PSC's enumeration order: embed each substitution as the
+    # periodic directive sequence of a one-label full shift and certify it
+    # through the S-adic verdicts; the result is PSC's pinned corpus line by line.
     words = [w for n in (1, 2, 3) for w in product(range(3), repeat=n)]
-    verdicts = {}
-    count = 0
+    certified = []
     for images in product(words, repeat=3):
-        m = incidence(images)
-        if m not in verdicts:
-            f = charpoly(m)
-            verdicts[m] = (primitivity_exponent(m) > 0 and irreducibility_verdict(f)[0] == 1
-                           and pisot_verdict(f) == 1)
-        count += verdicts[m]
-    assert count == 4554
+        shift = full_shift("iota", (images,))
+        m = prefix_matrix(shift, (0,))
+        f = charpoly(m)
+        if primitivity_exponent(m) > 0 and irreducibility_verdict(f)[0] == 1 and pisot_verdict(f) == 1:
+            certified.append("|".join("".join(map(str, w)) for w in images))
+    assert certified == psc_corpus_lines()
+    assert len(certified) == 4554
 
 
 def _joint_balance(words, size):

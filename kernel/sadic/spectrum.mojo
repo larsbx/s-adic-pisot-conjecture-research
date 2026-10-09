@@ -23,7 +23,7 @@ algorithms: interpolation, a Routh array on the Cayley transform, and
 enumeration of monic divisors mod p).
 """
 
-from finite_exact.checked_int import checked_add, checked_mul, checked_sub
+from finite_exact.checked_int import checked_add, checked_mul, checked_neg, checked_sub
 from sadic.cocycle import matmul
 
 comptime ROOT_CANDIDATE_CAP = 1_000_000
@@ -54,7 +54,7 @@ def charpoly(m: List[Int], d: Int) raises -> List[Int]:
             trace = checked_add(trace, am[i * d + i])
         if trace % k != 0:
             raise Error("Faddeev-LeVerrier division is not exact")
-        coeffs[d - k] = -(trace // k)
+        coeffs[d - k] = checked_neg(trace // k)
     return coeffs^
 
 

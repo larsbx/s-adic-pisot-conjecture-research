@@ -7,7 +7,7 @@ from std.testing import assert_equal, assert_false, assert_raises, assert_true
 from mojo_smoke.claims import require_claim
 from substitution_dynamics.substitution import Substitution
 from sadic.cocycle import prefix_matrix
-from sadic.directive import words_of_length
+from sadic.directive import DirectiveShift, words_of_length
 from sadic.periodic import (
     BPA_CAPPED, BPA_FAILS, BPA_TERMINATES, brun_unordered, bpa_verdict, is_lyndon,
     periodic_admissible, periodic_verdict, periodic_words, primitivity_exponent,
@@ -37,6 +37,9 @@ def test_charpoly() raises:
     assert_true(same(charpoly(fib, 2), e1))
     assert_true(same(charpoly(trib, 3), e2))
     assert_true(same(charpoly(prefix_matrix(brun_unordered(4), tau()), 4), e3))
+    var extreme: List[Int] = [Int.MIN]
+    with assert_raises():
+        _ = charpoly(extreme, 1)  # -Int.MIN is not representable: refuse
 
 
 def test_disc_zero_count() raises:
@@ -110,25 +113,52 @@ def test_bpa_verdict() raises:
     require_claim("BrunFourPeriodicPointBPA")
 
 
+def digits(w: List[Int]) -> String:
+    var out = String("")
+    for x in w:
+        out += String(x)
+    return out
+
+
+def psc_corpus_lines() raises -> List[String]:
+    """Data lines of tests/data/psc-pip-corpus.txt (PSC's pinned corpus; the
+    pytest twin also checks their digest)."""
+    var out = List[String]()
+    with open("../tests/data/psc-pip-corpus.txt", "r") as f:
+        for line in f.read().split("\n"):
+            if line.byte_length() > 0 and not line.startswith("#"):
+                out.append(String(line))
+    return out^
+
+
 def test_iota_embedding_reproduces_the_psc_corpus() raises:
-    # PSC's standing corpus: 4,554 primitive irreducible Pisot substitutions
-    # on three letters with images of length 1 to 3
+    # Per instance, in PSC's enumeration order: each substitution is embedded
+    # as the periodic directive sequence of a one-label full shift and certified
+    # through the S-adic verdicts; the result is PSC's pinned corpus line by line.
     var words = List[List[Int]]()
     for n in range(1, 4):
         for w in words_of_length(3, n):
             words.append(w.copy())
-    var count = 0
+    var expected = psc_corpus_lines()
+    var certified = List[String]()
+    var one: List[Int] = [0]
     for a in words:
         for b in words:
             for c in words:
                 var images: List[List[Int]] = [a.copy(), b.copy(), c.copy()]
-                var m = Substitution.checked(images).incidence()
+                var subs = List[Substitution]()
+                subs.append(Substitution.checked(images))
+                var shift = DirectiveShift.full("iota", subs)
+                var m = prefix_matrix(shift, one)
                 if primitivity_exponent(m, 3) < 0:
                     continue
                 var f = charpoly(m, 3)
                 if irreducibility_verdict(f).verdict == 1 and pisot_verdict(f) == 1:
-                    count += 1
-    assert_equal(count, 4554)
+                    certified.append(digits(a) + "|" + digits(b) + "|" + digits(c))
+    assert_equal(len(expected), 4554)
+    assert_equal(len(certified), len(expected))
+    for i in range(len(expected)):
+        assert_equal(certified[i], expected[i])
     require_claim("IotaEmbeddingPSCCorpus")
 
 

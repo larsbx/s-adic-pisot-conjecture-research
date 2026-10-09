@@ -29,7 +29,9 @@ Then read:
 - [`docs/sadic-g6-brun-higher-census.md`](docs/sadic-g6-brun-higher-census.md):
   Brun in every dimension. Every primitive composite is in the mirror Barge
   class (Theorem B). For `d = 5, 6` only the Pisot condition is missing
-  (Theorem C). Census for `d = 5, 6`;
+  (Theorem C). Every such Pisot point also has symbolic pure discrete spectrum
+  (Corollary B″), so for every `5 ≤ d ≤ 10` the Pisot condition is the only
+  missing input (Theorem C′). Census for `d = 5, 6`;
 - [`docs/t1-uniform-overlap-finiteness.md`](docs/t1-uniform-overlap-finiteness.md):
   the swap-walk and uniform overlap bounds (T1), and the finite pool of
   overlap types at selected PRICE return depths (T1′). The all-depth

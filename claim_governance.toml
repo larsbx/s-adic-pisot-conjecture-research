@@ -313,3 +313,39 @@ aliases = ["Brun seven periodic point BPA"]
 path = "CLAIMS.md"
 anchor = "| Brun seven periodic point BPA |"
 window_lines = 0
+
+[[claim]]
+name = "SirventSolomyakTransfer"
+status = "imported"
+aliases = ["Sirvent Solomyak transfer"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Sirvent Solomyak transfer |"
+window_lines = 0
+
+[[claim]]
+name = "BrunPeriodicPointsSymbolicPDS"
+status = "proved"
+aliases = ["Brun periodic points symbolic spectrum"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun periodic points symbolic spectrum |"
+window_lines = 0
+
+[[claim]]
+name = "BrunPisotPeriodicPoints"
+status = "finite-domain"
+aliases = ["Brun Pisot periodic points"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun Pisot periodic points |"
+window_lines = 0
+
+[[claim]]
+name = "BrunPisotConditionSuffices"
+status = "conditional"
+aliases = ["Brun Pisot condition suffices"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun Pisot condition suffices |"
+window_lines = 0

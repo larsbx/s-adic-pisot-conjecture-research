@@ -257,6 +257,34 @@ def test_brun_seven_periodic_point() raises:
     require_claim("BrunSevenPeriodicPointBPA")
 
 
+def test_brun_pisot_periodic_points() raises:
+    # Corollary B'' and Theorem C' (docs/sadic-g6-brun-higher-census.md §5):
+    # for d = 7..10 a periodic Brun point whose composite is primitive, with an
+    # irreducible Pisot characteristic polynomial, in the mirror Barge class
+    var words = List[List[Int]]()
+    var polys = List[List[Int]]()
+    words.append([0, 7, 12, 2, 21, 24, 4, 35, 36])
+    polys.append([-1, 7, -24, 47, -56, 39, -14, 1])
+    words.append([0, 0, 8, 16, 24, 28, 1, 18, 40, 48, 49])
+    polys.append([1, -8, 28, -57, 77, -73, 45, -16, 1])
+    words.append([0, 9, 16, 2, 27, 32, 4, 45, 48, 6, 63, 64])
+    polys.append([-1, 9, -40, 108, -192, 230, -184, 92, -24, 1])
+    words.append([0, 9, 1, 20, 27, 3, 40, 50, 54, 6, 67, 43, 80, 81])
+    polys.append([1, -11, 54, -158, 309, -425, 417, -286, 127, -30, 1])
+    for k in range(len(words)):
+        var d = 7 + k
+        var b = brun_unordered(d)
+        assert_true(periodic_admissible(b, words[k]))
+        var m = prefix_matrix(b, words[k])
+        assert_true(primitivity_exponent(m, d) >= 0)
+        var f = charpoly(m, d)
+        assert_true(same(f, polys[k]))
+        assert_equal(irreducibility_verdict(f).verdict, 1)
+        assert_equal(pisot_verdict(f), 1)
+        assert_true(in_mirror_class(b.composite(words[k])))
+    require_claim("BrunPisotPeriodicPoints")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -270,5 +298,6 @@ def main() raises:
     test_brun_five_periodic_point()
     test_brun_six_periodic_point()
     test_brun_seven_periodic_point()
+    test_brun_pisot_periodic_points()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

@@ -167,10 +167,34 @@ Barge's theorem concerns the tiling **flow**. BST23 Theorem 3.1 asks for pure
 discrete spectrum of the **symbolic** system `(X_σ, Σ)` of a periodic point.
 The repository uses Barge only for the flow. The symbolic statement it takes
 from BST23 Proposition 6.1 (balanced pairs, verified) wherever that applies,
-and it does not import the transfer between the two.
+and §8 does not import the transfer between the two; §9 gates it.
 
 **Consequence for §5.** For Brun with `5 ≤ d ≤ 10` the realization exists in
 every dimension. The periodic-point input of BST23 Theorem 3.1 is now
 supplied for `d = 5, 6` by points that pass the balanced pair algorithm
 (`docs/sadic-g6-brun-higher-census.md`, Theorem C). So for those two
 dimensions the Pisot condition is the only missing input.
+
+## 9. Flow-to-symbolic transfer (2026-10-09)
+
+The transfer that §8 left as "cited only" is gated here from primary texts.
+
+| Key | Statement | Check |
+|---|---|---|
+| SS02-def | Sirvent–Solomyak, *Pure discrete spectrum for one-dimensional substitution systems of Pisot type*, Canad. Math. Bull. 45 (2002) 697–710, [doi:10.4153/CMB-2002-062-3](https://doi.org/10.4153/CMB-2002-062-3), p. 699: "The substitution ζ is said to be of Pisot type if the Perron-Frobenius eigenvalue of the matrix Mζ is a Pisot number and the characteristic polynomial is irreducible". Such a substitution is primitive. | verified |
+| SS02-§4 | p. 703: the prototiles are intervals whose lengths form a left Perron–Frobenius eigenvector `(t₁, …, t_d)`. `X_T` is the tiling space of the self-similar tiling `T` built from the fixed point, and `(X_T, Γ_x)` is the translation R-action. This R-action is conjugate to the suspension flow over `(Ω_ζ, σ)` with height `t_i` on the cylinder of `i`. | verified |
+| SS02-5.2 | Corollary 5.2: "Let ζ be a substitution of Pisot type. If the R-action (X_T, Γ_x) has pure discrete spectrum, then the Z-action (Ω_ζ, σ) has pure discrete spectrum." Unimodularity is not assumed. | verified |
+| Barge16-§2 | Barge's prototiles are `ρ_i = ([0, ω_i], i)`, with `ω` the positive left eigenvector of the abelianization. The inflation is its eigenvalue `λ`. These are the self-similar lengths of SS02-§4, so `(Ω_φ, R)` and `(X_T, Γ_x)` are the same translation action on the same tiling space. | verified |
+| CS03-3.1 | Clark–Sadun, *When size matters*, ETDS 23 (2003), arXiv:math/0201152. Theorem 3.1 and Corollary 3.2 give topological conjugacy of suspension flows with different roof functions. The equivalence of Z- and R-action spectra for irreducible Pisot substitutions is drawn from it in the introduction and in the Akiyama–Barge–Berthé–Lee–Siegel survey (2015), §3.4 and §4. | read by a delegated reader; not load-bearing |
+
+Irreducibility is essential for this direction. For reducible
+β-substitutions, Ei–Ito give flows with pure discrete spectrum whose
+substitutive systems do not have it (Barge 2016 Remark 4.2; survey §4).
+
+**Consequence for §5.** Corollary B′ (§8) and SS02-5.2 together give pure
+discrete spectrum of the symbolic system for every primitive Brun composite
+with an irreducible Pisot characteristic polynomial, in every dimension
+(`docs/sadic-g6-brun-higher-census.md` §5). The periodic-point hypothesis of
+BST23 Theorem 3.1 therefore needs only one exact certificate: primitivity,
+irreducibility and the Pisot property of one admissible periodic word. The
+balanced pair algorithm is no longer needed for it.

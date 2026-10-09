@@ -6,6 +6,10 @@
 - Theorem C: conditional theorem. Its only open hypothesis is the Pisot
   condition for Brun with `d = 5`, `6` or `7`.
 - §4: census evidence for `d = 5, 6`.
+- Corollary B″: repository-proved. It rests on Corollary B′ and the imported
+  Sirvent–Solomyak 2002 Corollary 5.2.
+- Theorem C′: conditional theorem. It extends Theorem C to `5 ≤ d ≤ 10`, and
+  its only open hypothesis is again the Pisot condition.
 
 Nothing here proves the Pisot condition, nor the S-adic Pisot conjecture for
 any algorithm.
@@ -135,10 +139,10 @@ periods 7–11. The balanced pair algorithm then gives:
 The pinned point is the terminating class with the fewest states (2,095).
 The capped runs are inconclusive (R3).
 
-For `8 ≤ d ≤ 10` the same argument needs a periodic point on which the
-balanced pair algorithm terminates. Corollary B′ gives the flow version for every Pisot
-point, but the transfer to the symbolic system (Barge 2016 Remark 4.2,
-citing Clark–Sadun) has not been verified here.
+For `8 ≤ d ≤ 10` Theorem C′ (§5) replaces the balanced pair algorithm by
+the gated flow-to-symbolic transfer (Sirvent–Solomyak 2002 Corollary 5.2).
+Theorem C is the import-free version, one balanced-pair certificate per
+dimension.
 
 ## 4. Census evidence (`kernel/brun_census.mojo … orbits`)
 
@@ -181,3 +185,63 @@ Observations:
 - Irreducibility is never inconclusive. The `d = 5` period-5 polynomial
   `(z² − z + 1)(z³ − 5z² + 4z − 1)` is refuted by the factor search; no prime
   certificate exists for it.
+
+## 5. Corollary B″ and Theorem C′ (symbolic spectrum without balanced pairs)
+
+**Corollary B″.** In every dimension `d`, let `σ_w` be the composite of an
+admissible Brun word. If `σ_w` is primitive and its characteristic
+polynomial is irreducible and Pisot, then the substitutive system
+`(X_{σ_w}, Σ)` has pure discrete spectrum.
+
+*Proof.*
+1. Corollary B′ gives pure discrete spectrum of the tiling flow
+   `(Ω_{σ_w}, R)`, with Barge's prototiles `[0, ω_i]`.
+2. Barge's lengths `ω` form the positive left eigenvector, and these are the
+   self-similar lengths of Sirvent–Solomyak §4. So the flow is their R-action
+   `(X_T, Γ_x)` (gate §9, Barge16-§2).
+3. An irreducible characteristic polynomial with a Pisot root is exactly
+   their "Pisot type" (gate §9, SS02-def).
+4. Their Corollary 5.2 then gives pure discrete spectrum of the Z-action. ∎
+
+No unimodularity is used. Every Brun composite is unimodular anyway.
+
+**Remark (balanced pairs).** A Brun composite is unimodular, so BST23
+Proposition 6.1 applies to the composites of Corollary B″: pure discrete
+spectrum holds iff the balanced pair algorithm from the swap seeds
+terminates. Hence that algorithm terminates on every such composite. The
+capped runs of §4 are budget limits, not failures.
+
+**Theorem C′ (conditional).** Let `5 ≤ d ≤ 10`, and suppose the unordered
+Brun algorithm in dimension `d` satisfies the Pisot condition. Then for
+`ν_B`-a.e. `x`, the S-adic system `(X_{φ_B(x)}, Σ)` is a bounded natural
+coding of a minimal translation on `T^{d−1}`. In particular it has pure
+discrete spectrum.
+
+*Proof.* As for Theorem C (§3). Hypotheses 1 and 2 hold for arbitrary `d`.
+For hypothesis 3, take the periodic point `w^∞` of the table below. `M_w` is
+primitive, irreducible and Pisot, certified by the kernel. Corollary B″
+gives pure discrete spectrum of `(X_{σ_w}, Σ)`. BST23 Theorem 3.1 applies. ∎
+
+| `d` | period | word `w` (1-based labels) | characteristic polynomial, lowest degree first | source |
+|---:|---:|---|---|---|
+| 5 | 6 | `β₁₂β₂₃β₃₁β₁₄β₄₅β₅₁` | (pinned in `test_brun_five_periodic_point`) | §3 |
+| 6 | 8 | `β₁₂β₂₃β₃₁β₁₄β₄₂β₂₅β₅₆β₆₁` | (pinned in `test_brun_six_periodic_point`) | §3 |
+| 7 | 9 | `β₁₂β₂₃β₃₁β₁₄β₄₅β₅₁β₁₆β₆₇β₇₁` | −1, 7, −24, 47, −56, 39, −14, 1 | `test_brun_pisot_periodic_points` |
+| 8 | 11 | `β₁₂β₁₂β₂₃β₃₄β₄₅β₅₁β₁₃β₃₆β₆₇β₇₈β₈₁` | 1, −8, 28, −57, 77, −73, 45, −16, 1 | same |
+| 9 | 12 | `β₁₂β₂₃β₃₁β₁₄β₄₅β₅₁β₁₆β₆₇β₇₁β₁₈β₈₉β₉₁` | −1, 9, −40, 108, −192, 230, −184, 92, −24, 1 | same |
+| 10 | 14 | `β₁,₂β₂,₁β₁,₃β₃,₄β₄,₁β₁,₅β₅,₆β₆,₇β₇,₁β₁,₈β₈,₅β₅,₉β₉,₁₀β₁₀,₁` | 1, −11, 54, −158, 309, −425, 417, −286, 127, −30, 1 | same |
+
+Each of the `d = 7..10` rows is checked in Mojo and Python. The checks are:
+admissibility of `w^∞`, primitivity, the characteristic polynomial,
+irreducibility, the Pisot property, and membership of `σ_w` in the mirror
+Barge class.
+
+The words were found by an exhaustive search over the classes of periodic
+words under rotation and letter permutation. In that search no shorter
+period yields a primitive irreducible Pisot composite for `d = 7..10`. This
+minimality is search evidence, not a registered claim.
+
+Theorem C′ discharges the periodic-point hypothesis for Brun in every
+dimension `5 ≤ d ≤ 10`. As before, nothing here proves the Pisot condition,
+which has numerical support only (BST21).
+

@@ -62,6 +62,12 @@ def test_prefix_matrix_is_the_incidence_of_the_composite():
             assert prefix_matrix(shift, word) == incidence(compose_all(shift, word))
 
 
+def test_empty_prefix_is_the_identity():
+    assert prefix_matrix(BRUN, ()) == ((1, 0, 0), (0, 1, 0), (0, 0, 1))
+    assert first_positive_prefix(AR3, ()) == -1
+    assert image_balance(AR3, (), 0) == 0
+
+
 def test_matmul_is_associative_on_cocycles():
     a, b, c = (incidence(s) for s in BRUN.substitutions)
     assert matmul(matmul(a, b), c) == matmul(a, matmul(b, c))

@@ -109,8 +109,13 @@ def matmul(a: Matrix, b: Matrix) -> Matrix:
     return tuple(tuple(sum(x * y for x, y in zip(row, col)) for col in zip(*b)) for row in a)
 
 
+def identity(d: int) -> Matrix:
+    return tuple(tuple(int(i == j) for j in range(d)) for i in range(d))
+
+
 def prefix_matrix(shift: DirectiveShift, word: Word) -> Matrix:
-    return reduce(matmul, (incidence(shift.substitutions[x]) for x in word))
+    """`M_{w_0} ... M_{w_{n-1}}`; the identity for the empty word."""
+    return reduce(matmul, (incidence(shift.substitutions[x]) for x in word), identity(shift.size))
 
 
 def is_positive(m: Matrix) -> bool:

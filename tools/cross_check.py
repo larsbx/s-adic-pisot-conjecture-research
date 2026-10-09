@@ -34,7 +34,7 @@ def battery() -> list[str]:
     out = []
     for shift in (arnoux_rauzy(2), arnoux_rauzy(3), brun3()):
         key = shift.name
-        for n in range(1, MAX_LEN + 1):
+        for n in range(MAX_LEN + 1):
             for w in product(range(shift.labels), repeat=n):
                 digits = "".join(map(str, w))
                 m = prefix_matrix(shift, w)

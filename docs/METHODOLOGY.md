@@ -98,7 +98,16 @@ G0 result can calibrate.
 
 G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status matrix, and the open cells the lever reaches (Selmer d = 4; Brun and Jacobi–Perron 5 ≤ d ≤ 10).
 
-**First unit of work (done):** G0 gate document and G1 scaffold, then a G2 slice (`docs/sadic-kernel-g2-slice.md`). The
-slice holds `SoficDirectiveShift` for Brun and Arnoux–Rauzy in d = 3 together
-with the C-balance and cone-contraction predicates, oracle-paired and calibrated
-against the known a.e. results.
+**First unit of work (G0 and G1 done, G2 partial):** the G0 gate document, the
+G1 scaffold, and a first G2 slice (`docs/sadic-kernel-g2-slice.md`). The slice
+holds directive shifts for Arnoux–Rauzy and Brun, the checked incidence cocycle,
+positive blocks, the exact Hilbert cross-ratio bound `Θ`, and balance *lower*
+bounds. It is oracle-paired. Still open in G2:
+
+- C-balance can only be refuted by a finite run, never certified;
+- a cone-contraction certificate (a positive block recurring along a sequence)
+  is not built yet;
+- prefix irreducibility and the Pisot predicates are not built yet;
+- the `ι` embedding regression against the PSC corpus is not built yet.
+
+No G3 work may treat these hypotheses as certified.

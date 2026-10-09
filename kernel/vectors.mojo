@@ -27,7 +27,7 @@ def joined(m: List[Int]) -> String:
 
 def emit(shift: DirectiveShift) raises:
     var d = shift.size()
-    for n in range(1, MAX_LEN + 1):
+    for n in range(MAX_LEN + 1):
         for w in words_of_length(shift.labels(), n):
             var m = prefix_matrix(shift, w)
             var key = shift.name + "|"

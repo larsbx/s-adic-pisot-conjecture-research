@@ -1,0 +1,61 @@
+name: S-adic research checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  policy:
+    name: policy (estate layout, vendoring, claim governance)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Estate audit (pinned public artifact)
+        run: |
+          set -eu
+          rev=$(python3 -c 'import tomllib; print(next(d["rev"] for d in tomllib.load(open("ESTATE.toml", "rb"))["dep"] if d["id"] == "estate-governance"))')
+          pin=$(python3 -c 'import tomllib; print(next(d["pin"] for d in tomllib.load(open("ESTATE.toml", "rb"))["dep"] if d["id"] == "estate-governance"))')
+          test "$rev" = "0833929ed82d42cf3674a1565681625a9622827b"
+          curl --fail --location --proto '=https' --tlsv1.2 --output /tmp/estate-audit.py "https://raw.githubusercontent.com/larsbx/finite-math-kernels/4485675c1ed5da52beafad98c5118dc0ffc22456/policy/estate-audits/$rev.py"
+          printf '%s  %s\n' "${pin#sha256:}" /tmp/estate-audit.py | sha256sum --check --strict -
+          python3 /tmp/estate-audit.py --root .
+      - run: python3 tools/vendoring/check_vendored_sync.py
+      - run: PYTHONPATH=tools python3 -m claim_governance.cli --root .
+
+  oracle:
+    name: Python oracle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - run: PYTHONPATH=reference python -m pytest -q tests
+
+  mojo-kernel:
+    name: Mojo kernel and cross-language check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pixi
+        run: |
+          set -o pipefail
+          curl --retry 5 --retry-all-errors --retry-delay 3 -fsSL https://pixi.sh/install.sh | PIXI_VERSION=v0.81.0 PIXI_NO_PATH_UPDATE=1 bash
+          echo "$HOME/.pixi/bin" >> "$GITHUB_PATH"
+      - name: Canonical Mojo regression tests
+        working-directory: kernel
+        run: pixi run test
+      - name: Every claim the policy requires guarded has a passing test (run receipts)
+        run: PYTHONPATH=tools python3 -m claim_governance.cli --root . --check coverage
+      - name: Mojo kernel agrees with the Python oracle (fails closed)
+        run: |
+          set -o pipefail
+          (cd kernel && pixi run vectors > build/vectors.txt)
+          python3 tools/cross_check.py kernel/build/vectors.txt

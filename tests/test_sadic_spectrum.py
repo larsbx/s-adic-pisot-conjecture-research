@@ -1,0 +1,134 @@
+"""Contracts of the oracle's spectral, periodic and balanced-pair layers.
+Literals are pinned independently by kernel/tests/test_sadic_spectrum.mojo."""
+
+from itertools import product
+
+from sadic_reference import compose_all, incidence, prefix_matrix
+from sadic_reference.bpa import CAPPED, FAILS, TERMINATES, balanced_pair_algorithm, split
+from sadic_reference.periodic import brun_unordered, is_lyndon, periodic_admissible, periodic_words
+from sadic_reference.spectrum import (
+    Inconclusive,
+    charpoly,
+    disc_zero_count,
+    irreducibility_verdict,
+    pisot_verdict,
+    primitivity_exponent,
+)
+
+TRIBONACCI = (-1, -1, -1, 1)
+BRUN4 = brun_unordered(4)
+TAU = (0, 4, 8, 9)  # beta_12 o beta_23 o beta_34 o beta_41 (BST23 section 6.5), 0-based labels
+
+
+def test_charpoly():
+    assert charpoly(((1, 1), (1, 0))) == (-1, -1, 1)
+    assert charpoly(((1, 1, 1), (1, 0, 0), (0, 1, 0))) == TRIBONACCI
+    assert charpoly(prefix_matrix(BRUN4, TAU)) == (1, -4, 6, -5, 1)
+
+
+def test_disc_zero_count():
+    assert disc_zero_count((-1, -1, 1)) == 1
+    assert disc_zero_count((-1, -1, 0, 1)) == 2  # plastic number
+    assert disc_zero_count(TRIBONACCI) == 2
+    assert disc_zero_count((-1, -1, -1, -1, 1)) == 3
+    assert disc_zero_count((-2, 0, 0, 1)) == 0
+    assert disc_zero_count((-2, -2, -1, 1)) == 2  # a first-column zero, removed by w + k
+    for p in ((1, -1, -1, -1, 1), (1, 0, 1), (1, -3, 1)):  # Salem, circle, reciprocal pair
+        try:
+            disc_zero_count(p)
+        except Inconclusive:
+            continue
+        raise AssertionError(f"{p} must be inconclusive")
+
+
+def test_pisot_verdict():
+    assert pisot_verdict(TRIBONACCI) == 1
+    assert pisot_verdict((1, -4, 6, -5, 1)) == 1
+    assert pisot_verdict((1, -3, 1)) == 1  # reciprocal quadratic, |t| > 2
+    assert pisot_verdict((1, -1, 1)) == 0  # reciprocal quadratic, roots on the circle
+    assert pisot_verdict((1, -1, -1, -1, 1)) == 0  # Salem quartic, Lemma R
+    assert pisot_verdict((-2, 0, 0, 1)) == 0
+
+
+def test_irreducibility_verdict():
+    assert irreducibility_verdict(TRIBONACCI) == (1, 0)
+    assert irreducibility_verdict((-1, -1, -1, -1, 1)) == (1, 2)
+    assert irreducibility_verdict((1, -4, 6, -5, 1)) == (1, 2)
+    assert irreducibility_verdict((-1, 0, 1)) == (0, -1)
+    assert irreducibility_verdict((0, 1, 1)) == (0, 0)
+    # z^4 + 1 is irreducible over Q but splits modulo every prime: no certificate
+    assert irreducibility_verdict((1, 0, 0, 0, 1)) == (-1, 0)
+
+
+def test_primitivity_exponent():
+    wielandt = ((0, 1, 0), (0, 0, 1), (1, 1, 0))
+    assert primitivity_exponent(wielandt) == 5  # attains (d - 1)^2 + 1
+    assert primitivity_exponent(((0, 1), (1, 0))) == -1
+    assert primitivity_exponent(prefix_matrix(BRUN4, TAU)) == 2
+
+
+def test_brun_unordered_family():
+    assert BRUN4.labels == 12
+    assert compose_all(BRUN4, TAU) == ((0, 1, 2, 3, 0), (0, 1), (0, 1, 2), (0, 1, 2, 3))
+    assert BRUN4.admits(TAU) and periodic_admissible(BRUN4, TAU)
+    assert not periodic_admissible(BRUN4, (0, 8))  # beta_01 then beta_23: (6.10) forbids
+    assert [len(periodic_words(BRUN4, n)) for n in range(1, 6)] == [12, 6, 20, 60, 204]
+
+
+def test_lyndon():
+    assert is_lyndon((0, 1)) and not is_lyndon((1, 0)) and not is_lyndon((0, 0))
+
+
+def test_balanced_pair_algorithm():
+    fibonacci = ((0, 1), (0,))
+    thue_morse = ((0, 1), (1, 0))
+    assert balanced_pair_algorithm(fibonacci) == TERMINATES
+    assert balanced_pair_algorithm(thue_morse) == FAILS
+    assert balanced_pair_algorithm(compose_all(BRUN4, TAU)) == TERMINATES
+    assert balanced_pair_algorithm(fibonacci, max_states=1) == CAPPED
+    assert split((0, 1, 1, 0), (1, 0, 0, 1), 2) == [((0, 1), (1, 0)), ((0, 1), (1, 0))]
+
+
+def test_iota_embedding_reproduces_the_psc_corpus():
+    # PSC's standing corpus: 4,554 primitive irreducible Pisot substitutions on
+    # three letters with images of length 1 to 3
+    words = [w for n in (1, 2, 3) for w in product(range(3), repeat=n)]
+    verdicts = {}
+    count = 0
+    for images in product(words, repeat=3):
+        m = incidence(images)
+        if m not in verdicts:
+            f = charpoly(m)
+            verdicts[m] = (primitivity_exponent(m) > 0 and irreducibility_verdict(f)[0] == 1
+                           and pisot_verdict(f) == 1)
+        count += verdicts[m]
+    assert count == 4554
+
+
+def _joint_balance(words, size):
+    """Balance of the set of all factors of the given words."""
+    best = 0
+    for length in range(1, max(map(len, words)) + 1):
+        for a in range(size):
+            counts = [w[s:s + length].count(a) for w in words for s in range(len(w) - length + 1)]
+            if counts:
+                best = max(best, max(counts) - min(counts))
+    return best
+
+
+def _swap_walk_sup(x, y, size):
+    u, v = x + y, y + x
+    return max(max(abs(u[:j].count(a) - v[:j].count(a)) for a in range(size)) for j in range(len(u) + 1))
+
+
+def test_lemma_s_on_arnoux_rauzy_and_brun_images():
+    # docs/t1-uniform-overlap-finiteness.md, Lemma S: the swap walk of (xy, yx)
+    # is bounded by the balance of the factors of x and y
+    from sadic_reference import arnoux_rauzy, brun3, image
+    for shift in (arnoux_rauzy(3), brun3()):
+        for n in range(1, 5):
+            for w in product(range(shift.labels), repeat=n):
+                for a in range(3):
+                    for b in range(a + 1, 3):
+                        x, y = image(shift, w, a), image(shift, w, b)
+                        assert _swap_walk_sup(x, y, 3) <= _joint_balance([x, y], 3)

@@ -5,6 +5,7 @@ tests/test_sadic_spectrum.py against the Python oracle."""
 from std.testing import assert_equal, assert_false, assert_raises, assert_true
 
 from mojo_smoke.claims import require_claim
+from substitution_dynamics.barge_class import in_mirror_class
 from substitution_dynamics.substitution import Substitution
 from sadic.cocycle import prefix_matrix
 from sadic.directive import DirectiveShift, words_of_length
@@ -188,6 +189,53 @@ def test_brun_orbits() raises:
         assert_equal(len(orbits), orbit_counts[n - 1])
 
 
+def test_theorem_b() raises:
+    # docs/sadic-g6-brun-higher-census.md, Theorem B: an admissible unordered
+    # Brun word using every letter has a composite constant on initial letters
+    # (all images start with the first label's p) whose final-letter map is the
+    # identity; so its reversal is in Barge's class.
+    for d in range(3, 6):
+        var shift = brun_unordered(d)
+        var top = 7 if d == 3 else (6 if d == 4 else 5)
+        var checked = 0
+        for n in range(1, top + 1):
+            for w in periodic_words(shift, n):
+                var used = List[Bool]()
+                for _ in range(d):
+                    used.append(False)
+                for t in w:
+                    var i = t // (d - 1)
+                    var j0 = t % (d - 1)
+                    used[i] = True
+                    used[j0 if j0 < i else j0 + 1] = True
+                var all_used = True
+                for u in used:
+                    if not u:
+                        all_used = False
+                var sigma = shift.composite(w)
+                for a in range(d):
+                    assert_equal(sigma.images[a][len(sigma.images[a]) - 1], a)
+                if all_used:
+                    var first = w[0] // (d - 1)
+                    for a in range(d):
+                        assert_equal(sigma.images[a][0], first)
+                    assert_true(in_mirror_class(sigma))
+                    checked += 1
+        assert_true(checked > 0)
+    require_claim("BrunCompositesMirrorBargeClass")
+
+
+def test_brun_five_periodic_point() raises:
+    # docs/sadic-g6-brun-higher-census.md, Theorem C: a d = 5 periodic Pisot
+    # point whose composite passes the balanced pair algorithm,
+    # beta_12 beta_23 beta_31 beta_14 beta_45 beta_51 (1-based)
+    var w: List[Int] = [0, 5, 8, 2, 15, 16]
+    var b = brun_unordered(5)
+    assert_true(periodic_admissible(b, w))
+    assert_equal(periodic_verdict(b, w, 200000, 20000), "bpa:terminates")
+    require_claim("BrunFivePeriodicPointBPA")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -197,5 +245,7 @@ def main() raises:
     test_brun_unordered()
     test_bpa_verdict()
     test_brun_orbits()
+    test_theorem_b()
+    test_brun_five_periodic_point()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

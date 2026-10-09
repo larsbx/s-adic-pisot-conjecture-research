@@ -176,3 +176,41 @@ def test_brun_orbits_partition_the_periodic_words():
         weighted[v] = weighted.get(v, 0) + size
     assert weighted == {"not-primitive": 410, "irreducible:0": 12, "bpa:terminates": 248}
     assert [len(brun_orbit_words(4, n)) for n in range(1, 7)] == [1, 1, 2, 5, 10, 35]
+
+
+def test_theorem_b_brun_composites_are_in_the_mirror_barge_class():
+    # docs/sadic-g6-brun-higher-census.md, Theorem B: for every admissible
+    # unordered Brun word w using every letter, sigma_w is constant on initial
+    # letters (all images start with the first label's p) and its final-letter
+    # map is the identity. Checked exhaustively on periodic words.
+    from sadic_reference.periodic import brun_pairs, final_letters, in_mirror_barge_class, initial_letters
+    for d, top in ((3, 7), (4, 6), (5, 5)):
+        shift = brun_unordered(d)
+        pairs = brun_pairs(d)
+        checked = 0
+        for n in range(1, top + 1):
+            for w in periodic_words(shift, n):
+                letters = {x for t in w for x in pairs[t]}
+                sigma = compose_all(shift, w)
+                assert final_letters(sigma) == tuple(range(d))
+                if len(letters) == d:
+                    assert initial_letters(sigma) == (pairs[w[0]][0],) * d
+                    assert in_mirror_barge_class(sigma)
+                    checked += 1
+        assert checked > 0
+    # the converse direction of primitivity: a primitive composite uses every letter
+    from sadic_reference.spectrum import primitivity_exponent
+    shift = brun_unordered(4)
+    for w in periodic_words(shift, 6):
+        if primitivity_exponent(prefix_matrix(shift, w)) > 0:
+            assert {x for t in w for x in brun_pairs(4)[t]} == set(range(4))
+
+
+def test_brun_five_periodic_point():
+    # Theorem C witness: beta_12 beta_23 beta_31 beta_14 beta_45 beta_51 (1-based)
+    from sadic_reference.periodic import periodic_verdict
+    shift = brun_unordered(5)
+    w = (0, 5, 8, 2, 15, 16)
+    assert periodic_admissible(shift, w)
+    assert compose_all(shift, w)[1] == (0, 1)
+    assert periodic_verdict(shift, w, 200000, 20000) == "bpa:terminates"

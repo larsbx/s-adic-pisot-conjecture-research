@@ -108,3 +108,17 @@ def brun_orbit_words(d: int, n: int) -> list[tuple[tuple[int, ...], int]]:
         if w == min(orbit):
             out.append((w, len(orbit)))
     return out
+
+
+def initial_letters(sigma) -> tuple[int, ...]:
+    return tuple(image[0] for image in sigma)
+
+
+def final_letters(sigma) -> tuple[int, ...]:
+    return tuple(image[-1] for image in sigma)
+
+
+def in_mirror_barge_class(sigma) -> bool:
+    """Constant on initial letters and injective on final letters: the
+    reversal of sigma is then in Barge's class (Barge 2016, Theorem 3.13)."""
+    return len(set(initial_letters(sigma))) == 1 and len(set(final_letters(sigma))) == len(sigma)

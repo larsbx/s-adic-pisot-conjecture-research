@@ -16,6 +16,7 @@ size, so the totals equal those of the full census. Specification: docs/sadic-g3
 
 from std.sys import argv
 
+from substitution_dynamics.barge_class import in_mirror_class
 from sadic.periodic import brun_orbit_words, brun_unordered, is_open_verdict, periodic_verdict, periodic_words, verdict_index, verdict_names
 
 def joined(w: List[Int]) -> String:
@@ -56,11 +57,19 @@ def main() raises:
                 e.append(1)
                 entries.append(e^)
         var covered = 0
+        var pip = 0
+        var barge = 0
         for e in entries:
             var weight = e[len(e) - 1]
             var w = List[Int](e[0 : len(e) - 1])
             var v = periodic_verdict(shift, w, max_states, max_length)
             var i = verdict_index(v)
+            if v.startswith("bpa:"):
+                # primitive, irreducible and Pisot: Theorem B places the
+                # composite's reversal in Barge's class
+                pip += weight
+                if in_mirror_class(shift.composite(w)):
+                    barge += weight
             counts[i] += weight
             total[i] += weight
             covered += weight
@@ -71,6 +80,7 @@ def main() raises:
             line += " (orbits " + String(len(entries)) + ")"
         for i in range(stages):
             line += "  " + names[i] + " " + String(counts[i])
+        line += "  pip " + String(pip) + "  barge-mirror " + String(barge)
         print(line)
     var line = "total:"
     for i in range(stages):

@@ -13,11 +13,20 @@ from sadic_reference.spectrum import (
     charpoly,
     disc_zero_count,
     irreducibility_verdict,
+    kronecker_factor,
     pisot_verdict,
     primitivity_exponent,
 )
 
 TRIBONACCI = (-1, -1, -1, 1)
+
+
+def _product(a, b):
+    out = [0] * (len(a) + len(b) - 1)
+    for i, x in enumerate(a):
+        for j, y in enumerate(b):
+            out[i + j] += x * y
+    return tuple(out)
 BRUN4 = brun_unordered(4)
 TAU = (0, 4, 8, 9)  # beta_12 o beta_23 o beta_34 o beta_41 (BST23 section 6.5), 0-based labels
 
@@ -56,10 +65,16 @@ def test_irreducibility_verdict():
     assert irreducibility_verdict(TRIBONACCI) == (1, 0)
     assert irreducibility_verdict((-1, -1, -1, -1, 1)) == (1, 2)
     assert irreducibility_verdict((1, -4, 6, -5, 1)) == (1, 2)
-    assert irreducibility_verdict((-1, 0, 1)) == (0, -1)
-    assert irreducibility_verdict((0, 1, 1)) == (0, 0)
-    # z^4 + 1 is irreducible over Q but splits modulo every prime: no certificate
-    assert irreducibility_verdict((1, 0, 0, 0, 1)) == (-1, 0)
+    assert irreducibility_verdict((-1, 0, 1)) == (0, 1)
+    assert irreducibility_verdict((0, 1, 1)) == (0, 1)
+    # z^4 + 1 splits modulo every prime, so no prime certifies it; the
+    # exhaustive factor search does
+    assert irreducibility_verdict((1, 0, 0, 0, 1)) == (1, 0)
+    # a Brun d = 5 period-5 characteristic polynomial: (z^2 - z + 1)(z^3 - 5z^2 + 4z - 1)
+    assert irreducibility_verdict((-1, 5, -10, 10, -6, 1)) == (0, 2)
+    assert kronecker_factor((-1, 5, -10, 10, -6, 1), 2) == (1, -1, 1)
+    # a product of two irreducible cubics: no root, no quadratic factor
+    assert irreducibility_verdict(_product((-1, -1, 0, 1), (-1, 0, -1, 1))) == (0, 3)
 
 
 def test_primitivity_exponent():
@@ -146,3 +161,67 @@ def test_lemma_s_on_arnoux_rauzy_and_brun_images():
                     for b in range(a + 1, 3):
                         x, y = image(shift, w, a), image(shift, w, b)
                         assert _swap_walk_sup(x, y, 3) <= _joint_balance([x, y], 3)
+
+
+def test_brun_orbits_partition_the_periodic_words():
+    # relabelling letters permutes the Brun family and preserves admissibility,
+    # so orbit sizes sum to the word counts, and the budget-free verdicts are
+    # orbit invariants. Balanced-pair outcomes depend on the budgets; here
+    # every Pisot representative terminates, matching the full d = 4 census
+    from sadic_reference.periodic import brun_orbit_words, periodic_verdict
+    for n, count in zip(range(1, 7), [12, 6, 20, 60, 204, 670]):
+        orbits = brun_orbit_words(4, n)
+        assert sum(size for _, size in orbits) == count
+    weighted = {}
+    for w, size in brun_orbit_words(4, 6):
+        v = periodic_verdict(BRUN4, w, 20000, 2000)
+        weighted[v] = weighted.get(v, 0) + size
+    assert weighted == {"not-primitive": 410, "irreducible:0": 12, "bpa:terminates": 248}
+    assert [len(brun_orbit_words(4, n)) for n in range(1, 7)] == [1, 1, 2, 5, 10, 35]
+
+
+def test_theorem_b_brun_composites_are_in_the_mirror_barge_class():
+    # docs/sadic-g6-brun-higher-census.md, Theorem B: for every admissible
+    # unordered Brun word w using every letter, sigma_w is constant on initial
+    # letters (all images start with the first label's p) and its final-letter
+    # map is the identity. Checked exhaustively on periodic words.
+    from sadic_reference.periodic import brun_pairs, final_letters, in_mirror_barge_class, initial_letters
+    for d, top in ((3, 7), (4, 6), (5, 5)):
+        shift = brun_unordered(d)
+        pairs = brun_pairs(d)
+        checked = 0
+        for n in range(1, top + 1):
+            for w in periodic_words(shift, n):
+                letters = {x for t in w for x in pairs[t]}
+                sigma = compose_all(shift, w)
+                assert final_letters(sigma) == tuple(range(d))
+                if len(letters) == d:
+                    assert initial_letters(sigma) == (pairs[w[0]][0],) * d
+                    assert in_mirror_barge_class(sigma)
+                    checked += 1
+        assert checked > 0
+    # the converse direction of primitivity: a primitive composite uses every letter
+    from sadic_reference.spectrum import primitivity_exponent
+    shift = brun_unordered(4)
+    for w in periodic_words(shift, 6):
+        if primitivity_exponent(prefix_matrix(shift, w)) > 0:
+            assert {x for t in w for x in brun_pairs(4)[t]} == set(range(4))
+
+
+def test_brun_five_periodic_point():
+    # Theorem C witness: beta_12 beta_23 beta_31 beta_14 beta_45 beta_51 (1-based)
+    from sadic_reference.periodic import periodic_verdict
+    shift = brun_unordered(5)
+    w = (0, 5, 8, 2, 15, 16)
+    assert periodic_admissible(shift, w)
+    assert compose_all(shift, w)[1] == (0, 1)
+    assert periodic_verdict(shift, w, 200000, 20000) == "bpa:terminates"
+
+
+def test_brun_six_periodic_point():
+    # Theorem C witness for d = 6: beta_12 beta_23 beta_31 beta_14 beta_42 beta_25 beta_56 beta_61
+    from sadic_reference.periodic import periodic_verdict
+    shift = brun_unordered(6)
+    w = (0, 6, 10, 2, 16, 8, 24, 25)
+    assert periodic_admissible(shift, w)
+    assert periodic_verdict(shift, w, 200000, 20000) == "bpa:terminates"

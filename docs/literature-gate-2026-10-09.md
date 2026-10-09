@@ -149,3 +149,28 @@ in [`all-depth-bounded-anchors.md`](all-depth-bounded-anchors.md).
 Source: [BST19, arXiv v5](https://arxiv.org/pdf/1410.0331), §9.1.
 The example's primitivity, positive suffixes, bounded anchor gaps, and
 nonperiodicity are checked separately in its proof.
+
+## 8. Barge's class (2026-10-09)
+
+Both entries were read in the arXiv text,
+[arXiv:1403.7826](https://arxiv.org/abs/1403.7826). The paper is M. Barge,
+*Pure discrete spectrum for a class of one-dimensional substitution tiling
+systems*, Discrete Contin. Dyn. Syst. 36 (2016) 1159–1173.
+
+| Key | Statement | Check |
+|---|---|---|
+| Barge16-3.13 | Theorem 3.13: if `φ` is primitive, Pisot (Pisot inflation), injective on initial letters and constant on final letters, then the tiling dynamical system `(Ω_φ, R)` has pure discrete spectrum. Remark 3.14: "constant on final letters" may be weakened to "eventually constant". No irreducibility or unimodularity is assumed. | verified |
+| Barge16-§4.2 | Arnoux–Rauzy substitutions, the 3-letter Brun substitutions of [BBJS] and the Jacobi–Perron substitutions satisfy the hypotheses (Brun and Jacobi–Perron "follow immediately from Theorem 3.13 and Remark 3.14"). | verified |
+| Barge16-R4.2 | Remark 4.2: for an irreducible unit β-substitution, pure discrete spectrum of the tiling flow transfers to the symbolic `Z`-action, citing [BKw] and Clark–Sadun [CS]. | cited only; the primary sources are not read here |
+
+Barge's theorem concerns the tiling **flow**. BST23 Theorem 3.1 asks for pure
+discrete spectrum of the **symbolic** system `(X_σ, Σ)` of a periodic point.
+The repository uses Barge only for the flow. The symbolic statement it takes
+from BST23 Proposition 6.1 (balanced pairs, verified) wherever that applies,
+and it does not import the transfer between the two.
+
+**Consequence for §5.** For Brun with `5 ≤ d ≤ 10` the realization exists in
+every dimension. The periodic-point input of BST23 Theorem 3.1 is now
+supplied for `d = 5, 6` by points that pass the balanced pair algorithm
+(`docs/sadic-g6-brun-higher-census.md`, Theorem C). So for those two
+dimensions the Pisot condition is the only missing input.

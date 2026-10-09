@@ -76,3 +76,49 @@ def periodic_verdict(shift: DirectiveShift, w, max_states: int, max_length: int)
     if pv != 1:
         return f"pisot:{pv}"
     return "bpa:" + balanced_pair_algorithm(compose_all(shift, w), max_states, max_length)
+
+
+def brun_pairs(d: int) -> list[tuple[int, int]]:
+    """The labels of brun_unordered(d): pairs (i, j), i != j, lexicographically."""
+    return [(i, j) for i in range(d) for j in range(d) if i != j]
+
+
+def _least_rotation(w):
+    return min(w[i:] + w[:i] for i in range(len(w)))
+
+
+def brun_relabelings(d: int, w) -> set:
+    """The rotation classes (least rotations) of w under every letter
+    permutation pi, acting on labels by beta_{i,j} -> beta_{pi(i),pi(j)}."""
+    from itertools import permutations
+    pairs = brun_pairs(d)
+    index = {pair: t for t, pair in enumerate(pairs)}
+    return {_least_rotation(tuple(index[(pi[pairs[t][0]], pi[pairs[t][1]])] for t in w))
+            for pi in permutations(range(d))}
+
+
+def brun_orbit_words(d: int, n: int) -> list[tuple[tuple[int, ...], int]]:
+    """One representative per orbit of the periodic words of length n under
+    rotation and letter permutation: the least word of its orbit, with the
+    orbit size (number of rotation classes it contains)."""
+    shift = brun_unordered(d)
+    out = []
+    for w in periodic_words(shift, n):
+        orbit = brun_relabelings(d, w)
+        if w == min(orbit):
+            out.append((w, len(orbit)))
+    return out
+
+
+def initial_letters(sigma) -> tuple[int, ...]:
+    return tuple(image[0] for image in sigma)
+
+
+def final_letters(sigma) -> tuple[int, ...]:
+    return tuple(image[-1] for image in sigma)
+
+
+def in_mirror_barge_class(sigma) -> bool:
+    """Constant on initial letters and injective on final letters: the
+    reversal of sigma is then in Barge's class (Barge 2016, Theorem 3.13)."""
+    return len(set(initial_letters(sigma))) == 1 and len(set(final_letters(sigma))) == len(sigma)

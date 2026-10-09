@@ -241,3 +241,66 @@ aliases = ["Thue Morse Arnoux Rauzy overlap"]
 path = "CLAIMS.md"
 anchor = "| Thue Morse Arnoux Rauzy overlap |"
 window_lines = 0
+
+[[claim]]
+name = "BargeClassTheorem"
+status = "imported"
+aliases = ["Barge class theorem"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Barge class theorem |"
+window_lines = 0
+
+[[claim]]
+name = "BrunCompositesMirrorBargeClass"
+status = "proved"
+aliases = ["Brun composites mirror Barge class"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun composites mirror Barge class |"
+window_lines = 0
+
+[[claim]]
+name = "BrunPeriodicPointsFlowPDS"
+status = "proved"
+aliases = ["Brun periodic points flow spectrum"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun periodic points flow spectrum |"
+window_lines = 0
+
+[[claim]]
+name = "BrunFivePeriodicPointBPA"
+status = "finite-domain"
+aliases = ["Brun five periodic point BPA"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five periodic point BPA |"
+window_lines = 0
+
+[[claim]]
+name = "BrunFiveSixPisotConditionSuffices"
+status = "conditional"
+aliases = ["Brun five six Pisot condition suffices"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five six Pisot condition suffices |"
+window_lines = 0
+
+[[claim]]
+name = "BrunHigherPeriodicCensus"
+status = "evidence"
+aliases = ["Brun higher periodic census"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun higher periodic census |"
+window_lines = 0
+
+[[claim]]
+name = "BrunSixPeriodicPointBPA"
+status = "finite-domain"
+aliases = ["Brun six periodic point BPA"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun six periodic point BPA |"
+window_lines = 0

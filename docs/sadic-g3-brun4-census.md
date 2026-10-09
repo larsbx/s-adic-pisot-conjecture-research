@@ -37,7 +37,7 @@ and in the Python oracle. Guarded by `kernel/tests/test_sadic_spectrum.mojo`
 
 Every primitive periodic point of the unordered Brun shift, `d = 4`, up to
 rotation. Guarded by `kernel/tests/test_brun4_census.mojo`
-(`BrunFourPeriodicCensus`); driver: `pixi run brun4-census`.
+(`BrunFourPeriodicCensus`); driver: `pixi run brun-census 4 8`.
 
 | period | words | not primitive | reducible `χ` | not Pisot | BPA terminates | open |
 |---:|---:|---:|---:|---:|---:|---:|
@@ -71,7 +71,7 @@ rather than everywhere. One representative is
 
 ## 3. Evidence: period 9
 
-Recorded with `mojo run -I . brun4_census.mojo 9 2000000 200000`, which runs
+Recorded with `mojo run -I . brun_census.mojo 4 9 2000000 200000`, which runs
 the balanced pair algorithm with budgets of 2,000,000 states and length
 200,000. The CI job `brun4-census-period-9` repeats the run and checks its
 summary line.

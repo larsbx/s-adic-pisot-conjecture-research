@@ -5,10 +5,12 @@ tests/test_sadic_spectrum.py against the Python oracle."""
 from std.testing import assert_equal, assert_false, assert_raises, assert_true
 
 from mojo_smoke.claims import require_claim
+from substitution_dynamics.barge_class import in_mirror_class
 from substitution_dynamics.substitution import Substitution
 from sadic.cocycle import prefix_matrix
 from sadic.directive import DirectiveShift, words_of_length
 from sadic.periodic import (
+    brun_orbit_words,
     BPA_CAPPED, BPA_FAILS, BPA_TERMINATES, brun_unordered, bpa_verdict, is_lyndon,
     periodic_admissible, periodic_verdict, periodic_words, primitivity_exponent,
 )
@@ -45,6 +47,11 @@ def test_charpoly() raises:
 def test_disc_zero_count() raises:
     var cases: List[List[Int]] = [[-1, -1, 1], [-1, -1, 0, 1], [-1, -1, -1, 1], [-1, -1, -1, -1, 1], [-2, 0, 0, 1], [-2, -2, -1, 1]]
     var counts: List[Int] = [1, 2, 2, 3, 0, 2]
+    # a Brun d = 6 period-7 characteristic polynomial whose recursion passes
+    # 64-bit coefficients (|a_0 p_i| ~ 1.5e19): exact only in BigZ
+    var wide: List[Int] = [1, -6, 16, -24, 20, -9, 1]
+    assert_equal(disc_zero_count(wide), 5)
+    assert_equal(pisot_verdict(wide), 1)
     for i in range(len(cases)):
         assert_equal(disc_zero_count(cases[i]), counts[i])
     var singular: List[List[Int]] = [[1, -1, -1, -1, 1], [1, 0, 1], [1, -3, 1]]
@@ -61,9 +68,16 @@ def test_pisot_verdict() raises:
 
 
 def test_irreducibility_verdict() raises:
-    var polys: List[List[Int]] = [[-1, -1, -1, 1], [-1, -1, -1, -1, 1], [1, -4, 6, -5, 1], [-1, 0, 1], [0, 1, 1], [1, 0, 0, 0, 1]]
-    var verdicts: List[Int] = [1, 1, 1, 0, 0, -1]
-    var witnesses: List[Int] = [0, 2, 2, -1, 0, 0]
+    # z^4 + 1 has no prime certificate (it splits mod every p); the factor
+    # search excludes every quadratic factor. The quintic is a Brun d = 5
+    # characteristic polynomial, (z^2 - z + 1)(z^3 - 5z^2 + 4z - 1); the sextic
+    # is (z^3 - z - 1)(z^3 - z^2 - 1).
+    var polys: List[List[Int]] = [
+        [-1, -1, -1, 1], [-1, -1, -1, -1, 1], [1, -4, 6, -5, 1], [-1, 0, 1], [0, 1, 1],
+        [1, 0, 0, 0, 1], [-1, 5, -10, 10, -6, 1], [1, 1, 1, -1, -1, -1, 1],
+    ]
+    var verdicts: List[Int] = [1, 1, 1, 0, 0, 1, 0, 0]
+    var witnesses: List[Int] = [0, 2, 2, 1, 1, 0, 2, 3]
     for i in range(len(polys)):
         var v = irreducibility_verdict(polys[i])
         assert_equal(v.verdict, verdicts[i])
@@ -162,6 +176,76 @@ def test_iota_embedding_reproduces_the_psc_corpus() raises:
     require_claim("IotaEmbeddingPSCCorpus")
 
 
+def test_brun_orbits() raises:
+    # orbit sizes partition the periodic words; pinned with the oracle
+    var words: List[Int] = [12, 6, 20, 60, 204, 670]
+    var orbit_counts: List[Int] = [1, 1, 2, 5, 10, 35]
+    for n in range(1, 7):
+        var orbits = brun_orbit_words(4, n)
+        var covered = 0
+        for e in orbits:
+            covered += e[len(e) - 1]
+        assert_equal(covered, words[n - 1])
+        assert_equal(len(orbits), orbit_counts[n - 1])
+
+
+def test_theorem_b() raises:
+    # docs/sadic-g6-brun-higher-census.md, Theorem B: an admissible unordered
+    # Brun word using every letter has a composite constant on initial letters
+    # (all images start with the first label's p) whose final-letter map is the
+    # identity; so its reversal is in Barge's class.
+    for d in range(3, 6):
+        var shift = brun_unordered(d)
+        var top = 7 if d == 3 else (6 if d == 4 else 5)
+        var checked = 0
+        for n in range(1, top + 1):
+            for w in periodic_words(shift, n):
+                var used = List[Bool]()
+                for _ in range(d):
+                    used.append(False)
+                for t in w:
+                    var i = t // (d - 1)
+                    var j0 = t % (d - 1)
+                    used[i] = True
+                    used[j0 if j0 < i else j0 + 1] = True
+                var all_used = True
+                for u in used:
+                    if not u:
+                        all_used = False
+                var sigma = shift.composite(w)
+                for a in range(d):
+                    assert_equal(sigma.images[a][len(sigma.images[a]) - 1], a)
+                if all_used:
+                    var first = w[0] // (d - 1)
+                    for a in range(d):
+                        assert_equal(sigma.images[a][0], first)
+                    assert_true(in_mirror_class(sigma))
+                    checked += 1
+        assert_true(checked > 0)
+    require_claim("BrunCompositesMirrorBargeClass")
+
+
+def test_brun_five_periodic_point() raises:
+    # docs/sadic-g6-brun-higher-census.md, Theorem C: a d = 5 periodic Pisot
+    # point whose composite passes the balanced pair algorithm,
+    # beta_12 beta_23 beta_31 beta_14 beta_45 beta_51 (1-based)
+    var w: List[Int] = [0, 5, 8, 2, 15, 16]
+    var b = brun_unordered(5)
+    assert_true(periodic_admissible(b, w))
+    assert_equal(periodic_verdict(b, w, 200000, 20000), "bpa:terminates")
+    require_claim("BrunFivePeriodicPointBPA")
+
+
+def test_brun_six_periodic_point() raises:
+    # Theorem C, d = 6: beta_12 beta_23 beta_31 beta_14 beta_42 beta_25
+    # beta_56 beta_61 (1-based) passes the balanced pair algorithm
+    var w: List[Int] = [0, 6, 10, 2, 16, 8, 24, 25]
+    var b = brun_unordered(6)
+    assert_true(periodic_admissible(b, w))
+    assert_equal(periodic_verdict(b, w, 200000, 20000), "bpa:terminates")
+    require_claim("BrunSixPeriodicPointBPA")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -170,5 +254,9 @@ def main() raises:
     test_primitivity_exponent()
     test_brun_unordered()
     test_bpa_verdict()
+    test_brun_orbits()
+    test_theorem_b()
+    test_brun_five_periodic_point()
+    test_brun_six_periodic_point()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

@@ -67,19 +67,42 @@ pairs also defeat the Routh array of the oracle.
 
 ## 2. Irreducibility certificate
 
-`irreducibility_verdict(f)` works as follows:
-1. **Refute.** An integer root `r | f(0)` refutes irreducibility; candidates
-   are tried in the order `−1, 1, −2, 2, …`. If `|f(0)|` exceeds `10⁶`, the
-   verdict is inconclusive.
-2. **Degree ≤ 3.** With no rational root, `f` is irreducible.
-3. **Degree ≥ 4.** If `f mod p` is irreducible over `F_p` for some prime
-   `p < 200`, then `f` is irreducible over `Q`. Since `f` is monic, a
-   factorization over `Z` (Gauss) would reduce to one mod `p` with the same
-   degrees. The certificate is the least such prime, found with Rabin's test.
-   If there is none, the verdict is inconclusive.
+`irreducibility_verdict(f)` returns `(verdict, witness)`, in this order:
+1. **Linear factors.** An integer root `r | f(0)` refutes irreducibility,
+   reported as `(0, 1)`. A root also satisfies `|r| ≤ F`, where `F` is the
+   integer Fujiwara bound below.
+2. **Degree ≤ 3.** With no rational root, `f` is irreducible: `(1, 0)`.
+3. **Prime certificate (degree ≥ 4).** If `f mod p` is irreducible over `F_p`
+   for some prime `p < 200`, then `f` is irreducible over `Q`, reported as
+   `(1, p)` with the least such prime. Since `f` is monic, a factorization
+   over `Z` (Gauss) would reduce to one mod `p` with the same degrees. The
+   test is Rabin's.
+4. **Exhaustive factor search (degree ≥ 4).** Otherwise every monic integer
+   factor `g` of degree `k = 2, …, ⌊d/2⌋` is searched for:
+   - Every root of `f` has `|z| ≤ F := 2·max_i ⌈|a_{d−i}|^{1/i}⌉`
+     (Fujiwara 1916, using `|a₀|` for `|a₀|/2`).
+   - So the coefficients of `g` satisfy `|e_j| ≤ C(k, j)·F^j`, and its
+     constant term divides `f(0)`.
+   - The least `k` with a factor gives `(0, k)`. If none exists, `f` is
+     irreducible: `(1, 0)`.
+   - If the search space exceeds 2·10⁷ candidates, the verdict is
+     inconclusive: `(−1, 0)`.
 
-`z⁴ + 1` is irreducible over `Q` yet splits modulo every prime. The kernel
-reports it inconclusive, and a test pins that.
+Two examples:
+- `z⁴ + 1` splits modulo every prime, so no prime certifies it. The search
+  excludes every quadratic factor, giving `(1, 0)`.
+- The Brun `d = 5` period-5 polynomial `z⁵ − 6z⁴ + 10z³ − 10z² + 5z − 1`
+  has no rational root and no prime certificate. The search finds
+  `z² − z + 1`, giving `(0, 2)`. In fact it equals
+  `(z² − z + 1)(z³ − 5z² + 4z − 1)`.
+
+Both cases are pinned by tests.
+
+**Arbitrary precision.** The Schur–Cohn recursion squares coefficient sizes
+at each step before the content division. A Brun `d = 6` period-7 polynomial
+(`z⁶ − 9z⁵ + 20z⁴ − 24z³ + 16z² − 6z + 1`) produces intermediate products
+near `1.5·10¹⁹`. So the recursion runs on the vendored `finite_exact.BigZ`,
+and that polynomial is pinned with its exact count of 5 zeros in the disc.
 
 ## 3. Periodic points
 
@@ -108,6 +131,7 @@ reports it inconclusive, and a test pins that.
 | characteristic polynomial | Faddeev–LeVerrier | `det(tI − M)` by elimination, then Lagrange interpolation |
 | disc count | Schur–Cohn with the `2z − 1` step | Routh array of the Cayley transform `q(w) = (1−w)ⁿ p((1+w)/(1−w))`, first-column zeros removed by `(w + k)` factors |
 | irreducible mod `p` | Rabin's test | enumeration of monic divisors of degree ≤ `d/2` |
+| integer factors | coefficient-bounded search (Fujiwara bound, divisors of `f(0)`) | Kronecker's method (divisors of `f(t)` at `k + 1` points, interpolation) |
 | BPA | vendored `substitution_dynamics` | `reference/sadic_reference/bpa.py` |
 
 ## 5. Claims guarded by `kernel/tests/test_sadic_spectrum.mojo`

@@ -133,3 +133,16 @@ Source: [BST19, arXiv v5](https://arxiv.org/pdf/1410.0331v5), §5.2,
 printed pp. 17–18. The repository's T1′ applies this import to its
 swap-pair type triples; its proof and scope are in
 [`t1-uniform-overlap-finiteness.md`](t1-uniform-overlap-finiteness.md).
+
+## 7. Arnoux–Rauzy balance for the anchor example (2026-10-09)
+
+**Verified:** BST19 arXiv:1410.0331v5, Proposition 9.3 (printed p. 33)
+states that, on three letters, if every Arnoux–Rauzy label occurs infinitely
+often and no run of `h+1` identical labels occurs, every shifted language
+is `(2h+1)`-balanced. The source attributes this to BCS13 Theorem 7 and
+its proof. Setting `h = 1` supplies the `C = 3` bound used by Corollary A
+in [`all-depth-bounded-anchors.md`](all-depth-bounded-anchors.md).
+
+Source: [BST19, arXiv v5](https://arxiv.org/pdf/1410.0331), §9.1.
+The example's primitivity, positive suffixes, bounded anchor gaps, and
+nonperiodicity are checked separately in its proof.

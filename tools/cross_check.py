@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "reference"))
 
 from sadic_reference.periodic import brun_unordered, periodic_verdict, periodic_words  # noqa: E402
-from sadic_reference.overlap import positive_suffix_ratio, return_overlap_bound  # noqa: E402
+from sadic_reference.overlap import morphic_balance_bound, positive_suffix_ratio, return_overlap_bound, window_overlap_bound  # noqa: E402
 from sadic_reference.spectrum import charpoly, irreducibility_verdict, pisot_verdict, primitivity_exponent  # noqa: E402
 from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
@@ -38,7 +38,9 @@ BPA_LENGTH = 2000
 
 
 def battery() -> list[str]:
-    out = []
+    out = [f"balance|morphic-{d}-{c}-{j}||{morphic_balance_bound(d, c, j)}"
+           for d in range(1, 5) for c in range(4) for j in range(1, 5)]
+    out.append(f"anchor-ar3|window||{window_overlap_bound(prefix_matrix(arnoux_rauzy(3), (0, 1, 2)), 3, 2, 9)}")
     for shift in (arnoux_rauzy(2), arnoux_rauzy(3), brun3()):
         key = shift.name
         for n in range(MAX_LEN + 1):
@@ -54,6 +56,8 @@ def battery() -> list[str]:
                     out.append(f"{key}|suffix-ratio|{digits}|{suffix.numerator}/{suffix.denominator}")
                     for c in range(4):
                         out.append(f"{key}|return-overlap-{c}|{digits}|{return_overlap_bound(m, c)}")
+                        for window in range(3):
+                            out.append(f"{key}|window-overlap-{c}-{window}|{digits}|{window_overlap_bound(m, c, 2, window)}")
                 for a in range(shift.size):
                     out.append(f"{key}|image-balance-{a}|{digits}|{image_balance(shift, w, a)}")
         out += [f"{key}|positive-block|{''.join(map(str, w))}|1" for w in positive_blocks(shift, MAX_LEN)]

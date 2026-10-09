@@ -30,6 +30,10 @@ Then read:
   the swap-walk and uniform overlap bounds (T1), and the finite pool of
   overlap types at selected PRICE return depths (T1′). The all-depth
   extension remains open.
+- [`docs/all-depth-bounded-anchors.md`](docs/all-depth-bounded-anchors.md):
+  a conditional all-depth bound using balanced positive-suffix anchors,
+  and the obstruction that bounded gaps in growing prefix returns force
+  periodicity. The anchor condition is an additional assumption.
 
 Layout and authority: [`ARCHITECTURE.md`](ARCHITECTURE.md). Working rules and
 the pre-push checks: [`AGENTS.md`](AGENTS.md).

@@ -5,7 +5,7 @@ digit strings; any disagreement fails closed."""
 from sadic.balance import image_balance
 from sadic.cocycle import cross_ratio_bound, first_positive_prefix, is_positive, positive_blocks, prefix_matrix
 from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, words_of_length
-from sadic.overlap import positive_suffix_ratio, return_overlap_bound
+from sadic.overlap import morphic_balance_bound, positive_suffix_ratio, return_overlap_bound, window_overlap_bound
 from sadic.periodic import brun_unordered, periodic_verdict, periodic_words, primitivity_exponent
 from sadic.spectrum import charpoly, irreducibility_verdict, pisot_verdict
 
@@ -47,6 +47,8 @@ def emit(shift: DirectiveShift) raises:
                 print(key + "suffix-ratio|" + digits(w) + "|" + String(suffix.num) + "/" + String(suffix.den))
                 for c in range(4):
                     print(key + "return-overlap-" + String(c) + "|" + digits(w) + "|" + String(return_overlap_bound(m, d, c)))
+                    for window in range(3):
+                        print(key + "window-overlap-" + String(c) + "-" + String(window) + "|" + digits(w) + "|" + String(window_overlap_bound(m, d, c, 2, window)))
             for a in range(d):
                 print(key + "image-balance-" + String(a) + "|" + digits(w) + "|" + String(image_balance(shift, w, a)))
     for w in positive_blocks(shift, MAX_LEN):
@@ -75,6 +77,12 @@ def emit_periodic(shift: DirectiveShift) raises:
 
 
 def main() raises:
+    for d in range(1, 5):
+        for c in range(4):
+            for j in range(1, 5):
+                print("balance|morphic-" + String(d) + "-" + String(c) + "-" + String(j) + "||" + String(morphic_balance_bound(d, c, j)))
+    var anchor_word: List[Int] = [0, 1, 2]
+    print("anchor-ar3|window||" + String(window_overlap_bound(prefix_matrix(arnoux_rauzy(3), anchor_word), 3, 3, 2, 9)))
     emit(arnoux_rauzy(2))
     emit(arnoux_rauzy(3))
     emit(brun3())

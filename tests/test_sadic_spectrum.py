@@ -161,3 +161,18 @@ def test_lemma_s_on_arnoux_rauzy_and_brun_images():
                     for b in range(a + 1, 3):
                         x, y = image(shift, w, a), image(shift, w, b)
                         assert _swap_walk_sup(x, y, 3) <= _joint_balance([x, y], 3)
+
+
+def test_brun_orbits_partition_the_periodic_words():
+    # relabelling letters permutes the Brun family and preserves admissibility,
+    # so orbit sizes sum to the word counts, and verdicts are orbit invariants
+    from sadic_reference.periodic import brun_orbit_words, periodic_verdict
+    for n, count in zip(range(1, 7), [12, 6, 20, 60, 204, 670]):
+        orbits = brun_orbit_words(4, n)
+        assert sum(size for _, size in orbits) == count
+    weighted = {}
+    for w, size in brun_orbit_words(4, 6):
+        v = periodic_verdict(BRUN4, w, 20000, 2000)
+        weighted[v] = weighted.get(v, 0) + size
+    assert weighted == {"not-primitive": 410, "irreducible:0": 12, "bpa:terminates": 248}
+    assert [len(brun_orbit_words(4, n)) for n in range(1, 7)] == [1, 1, 2, 5, 10, 35]

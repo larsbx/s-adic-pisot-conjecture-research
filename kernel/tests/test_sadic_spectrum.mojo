@@ -9,6 +9,7 @@ from substitution_dynamics.substitution import Substitution
 from sadic.cocycle import prefix_matrix
 from sadic.directive import DirectiveShift, words_of_length
 from sadic.periodic import (
+    brun_orbit_words,
     BPA_CAPPED, BPA_FAILS, BPA_TERMINATES, brun_unordered, bpa_verdict, is_lyndon,
     periodic_admissible, periodic_verdict, periodic_words, primitivity_exponent,
 )
@@ -174,6 +175,19 @@ def test_iota_embedding_reproduces_the_psc_corpus() raises:
     require_claim("IotaEmbeddingPSCCorpus")
 
 
+def test_brun_orbits() raises:
+    # orbit sizes partition the periodic words; pinned with the oracle
+    var words: List[Int] = [12, 6, 20, 60, 204, 670]
+    var orbit_counts: List[Int] = [1, 1, 2, 5, 10, 35]
+    for n in range(1, 7):
+        var orbits = brun_orbit_words(4, n)
+        var covered = 0
+        for e in orbits:
+            covered += e[len(e) - 1]
+        assert_equal(covered, words[n - 1])
+        assert_equal(len(orbits), orbit_counts[n - 1])
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -182,5 +196,6 @@ def main() raises:
     test_primitivity_exponent()
     test_brun_unordered()
     test_bpa_verdict()
+    test_brun_orbits()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

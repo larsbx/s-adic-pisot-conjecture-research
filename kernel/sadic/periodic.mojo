@@ -194,3 +194,85 @@ def is_open_verdict(v: String) -> Bool:
     """Neither a certified exclusion nor `bpa:terminates`: inconclusive or a
     BPA failure, which a census must report individually."""
     return v == "irreducible:-1" or v == "pisot:-1" or v == "bpa:fails" or v == "bpa:capped" or v == "overflow"
+
+
+def _permutations(d: Int) -> List[List[Int]]:
+    """Every permutation of 0..d-1, lexicographically."""
+    var out = List[List[Int]]()
+    out.append(List[Int]())
+    for _ in range(d):
+        var next = List[List[Int]]()
+        for p in out:
+            for a in range(d):
+                var used = False
+                for x in p:
+                    if x == a:
+                        used = True
+                if not used:
+                    var q = p.copy()
+                    q.append(a)
+                    next.append(q^)
+        out = next^
+    return out^
+
+
+def _brun_label(i: Int, j: Int, d: Int) -> Int:
+    """The label of beta_{i,j} in brun_unordered(d): pairs i != j, lexicographic."""
+    return i * (d - 1) + (j if j < i else j - 1)
+
+
+def _less(a: List[Int], b: List[Int]) -> Bool:
+    for i in range(len(a)):
+        if a[i] != b[i]:
+            return a[i] < b[i]
+    return False
+
+
+def _least_rotation(w: List[Int]) -> List[Int]:
+    var best = w.copy()
+    var n = len(w)
+    for s in range(1, n):
+        var r = List[Int]()
+        for i in range(n):
+            r.append(w[(i + s) % n])
+        if _less(r, best):
+            best = r^
+    return best^
+
+
+def brun_orbit(d: Int, w: List[Int]) -> List[List[Int]]:
+    """The distinct rotation classes (least rotations) of w under every letter
+    permutation pi, acting on labels by beta_{i,j} -> beta_{pi(i),pi(j)}."""
+    var out = List[List[Int]]()
+    for pi in _permutations(d):
+        var r = List[Int]()
+        for t in w:
+            var i = t // (d - 1)
+            var j0 = t % (d - 1)
+            var j = j0 if j0 < i else j0 + 1
+            r.append(_brun_label(pi[i], pi[j], d))
+        var c = _least_rotation(r)
+        var seen = False
+        for x in out:
+            if not _less(x, c) and not _less(c, x):
+                seen = True
+        if not seen:
+            out.append(c^)
+    return out^
+
+
+def brun_orbit_words(d: Int, n: Int) raises -> List[List[Int]]:
+    """The least word of each orbit of periodic words of length n under
+    rotation and letter permutation, followed by its orbit size as a last entry."""
+    var out = List[List[Int]]()
+    for w in periodic_words(brun_unordered(d), n):
+        var orbit = brun_orbit(d, w)
+        var least = True
+        for x in orbit:
+            if _less(x, w):
+                least = False
+        if least:
+            var entry = w.copy()
+            entry.append(len(orbit))
+            out.append(entry^)
+    return out^

@@ -7,11 +7,12 @@ from sadic.cocycle import cross_ratio_bound, first_positive_prefix, is_positive,
 from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, words_of_length
 from sadic.overlap import morphic_balance_bound, positive_suffix_ratio, return_overlap_bound, window_overlap_bound
 from sadic.periodic import brun_unordered, periodic_verdict, periodic_words, primitivity_exponent
-from sadic.spectrum import charpoly, irreducibility_verdict, pisot_verdict
+from sadic.spectrum import charpoly, disc_zero_count, irreducibility_verdict, pisot_verdict
 
 comptime MAX_LEN = 5
 comptime SPECTRAL_LEN = 4
 comptime PERIODIC_LEN = 6
+comptime BRUN5_LEN = 6
 comptime BPA_STATES = 20000
 comptime BPA_LENGTH = 2000
 
@@ -70,6 +71,37 @@ def emit_spectral(shift: DirectiveShift) raises:
                 print(key + "pisot|" + digits(w) + "|" + String(pisot_verdict(f)))
 
 
+def emit_polynomial(f: List[Int]) raises:
+    """Exact facts on one monic polynomial (coefficients lowest first)."""
+    var key = "poly|"
+    var irr = irreducibility_verdict(f)
+    print(key + "irreducible|" + joined(f) + "|" + String(irr.verdict) + "," + String(irr.witness))
+    var disc = String("inc")
+    try:
+        disc = String(disc_zero_count(f))
+    except:
+        pass
+    print(key + "disc|" + joined(f) + "|" + disc)
+    if irr.verdict == 1:
+        print(key + "pisot|" + joined(f) + "|" + String(pisot_verdict(f)))
+
+
+def emit_periodic_spectral(shift: DirectiveShift, max_period: Int) raises:
+    """Budget-free facts on the periodic composites: no balanced pairs."""
+    var d = shift.size()
+    for n in range(1, max_period + 1):
+        for w in periodic_words(shift, n):
+            var m = prefix_matrix(shift, w)
+            var key = shift.name + "|"
+            var f = charpoly(m, d)
+            print(key + "charpoly|" + joined(w) + "|" + joined(f))
+            print(key + "primitivity|" + joined(w) + "|" + String(primitivity_exponent(m, d)))
+            var irr = irreducibility_verdict(f)
+            print(key + "irreducible|" + joined(w) + "|" + String(irr.verdict) + "," + String(irr.witness))
+            if irr.verdict == 1:
+                print(key + "pisot|" + joined(w) + "|" + String(pisot_verdict(f)))
+
+
 def emit_periodic(shift: DirectiveShift) raises:
     for n in range(1, PERIODIC_LEN + 1):
         for w in periodic_words(shift, n):
@@ -89,3 +121,17 @@ def main() raises:
     emit_spectral(arnoux_rauzy(3))
     emit_spectral(brun3())
     emit_periodic(brun_unordered(4))
+    # the polynomial battery: a reducible quintic and sextic refuted only by
+    # the factor search, z^4 + 1 (zeros on the circle), irreducible quartics,
+    # and a sextic whose Schur-Cohn recursion overflows 64 bits
+    var polys: List[List[Int]] = [
+        [-1, 5, -10, 10, -6, 1],
+        [1, 0, 0, 0, 1],
+        [1, -4, 6, -5, 1],
+        [-1, -1, -1, -1, 1],
+        [1, 1, 1, -1, -1, -1, 1],
+        [1, -6, 16, -24, 20, -9, 1],
+    ]
+    for f in polys:
+        emit_polynomial(f)
+    emit_periodic_spectral(brun_unordered(5), BRUN5_LEN)

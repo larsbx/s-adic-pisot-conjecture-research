@@ -165,7 +165,9 @@ def test_lemma_s_on_arnoux_rauzy_and_brun_images():
 
 def test_brun_orbits_partition_the_periodic_words():
     # relabelling letters permutes the Brun family and preserves admissibility,
-    # so orbit sizes sum to the word counts, and verdicts are orbit invariants
+    # so orbit sizes sum to the word counts, and the budget-free verdicts are
+    # orbit invariants. Balanced-pair outcomes depend on the budgets; here
+    # every Pisot representative terminates, matching the full d = 4 census
     from sadic_reference.periodic import brun_orbit_words, periodic_verdict
     for n, count in zip(range(1, 7), [12, 6, 20, 60, 204, 670]):
         orbits = brun_orbit_words(4, n)

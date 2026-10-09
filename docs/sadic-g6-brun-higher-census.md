@@ -122,31 +122,35 @@ citing Clark–Sadun) has not been verified here.
 
 ## 4. Census evidence (`kernel/brun_census.mojo … orbits`)
 
-The census counts one word per orbit under rotation and letter permutation,
-weighted by orbit size. A relabelling permutes the family and conjugates the
-composite, so every verdict is an orbit invariant. On `d = 4` the weighted
-orbit census reproduces the full census exactly.
+The census takes one word per orbit under rotation and letter permutation. A
+relabelling permutes the family and conjugates the composite, so the
+budget-free verdicts are orbit invariants: primitivity, irreducibility, the
+Pisot property and the mirror Barge class. They are weighted by orbit size
+and give word counts. Balanced-pair outcomes depend on the budgets, which a
+conjugate may exhaust differently, so they are reported per orbit
+representative, unweighted (the `BPA` columns count orbits, not words). On
+`d = 4` the weighted budget-free counts reproduce the full census exactly.
 
 **`d = 5`, BPA budgets 2,000,000 states and length 200,000:**
 
-| period | words | orbits | not primitive | reducible `χ` | not Pisot | PIP | BPA terminates | BPA capped | in mirror Barge class |
+| period | words | orbits | not primitive | reducible `χ` | not Pisot | PIP (words) | in mirror Barge class (words) | BPA terminates (orbits) | BPA capped (orbits) |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | ≤ 5 | 844 | 20 | 820 | 24 | 0 | 0 | 0 | 0 | 0 |
-| 6 | 2,580 | 38 | 2,280 | 0 | 0 | 300 | 60 | 240 | 300 |
-| 7 | 11,160 | 122 | 8,760 | 240 | 0 | 2,160 | 1,800 | 360 | 2,160 |
-| 8 | 48,750 | 496 | 33,000 | 840 | 300 | 14,610 | 12,390 | 2,220 | 14,610 |
+| 6 | 2,580 | 38 | 2,280 | 0 | 0 | 300 | 300 | 1 | 2 |
+| 7 | 11,160 | 122 | 8,760 | 240 | 0 | 2,160 | 2,160 | 15 | 3 |
+| 8 | 48,750 | 496 | 33,000 | 840 | 300 | 14,610 | 14,610 | 106 | 19 |
 
 **`d = 6`, BPA budgets 200,000 states and length 20,000:**
 
-| period | words | orbits | not primitive | reducible `χ` | not Pisot | PIP | BPA terminates | BPA capped | in mirror Barge class |
+| period | words | orbits | not primitive | reducible `χ` | not Pisot | PIP (words) | in mirror Barge class (words) | BPA terminates (orbits) | BPA capped (orbits) |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | ≤ 5 | 1,984 | 20 | 1,984 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 6 | 7,735 | 39 | 7,615 | 0 | 120 | 0 | 0 | 0 | 0 |
-| 7 | 39,990 | 125 | 37,830 | 0 | 1,440 | 720 | 0 | 720 | 720 |
-| 8 | 209,790 | 532 | 185,850 | 1,800 | 14,400 | 7,740 | 1,440 | 6,300 | 7,740 |
+| 7 | 39,990 | 125 | 37,830 | 0 | 1,440 | 720 | 720 | 0 | 1 |
+| 8 | 209,790 | 532 | 185,850 | 1,800 | 14,400 | 7,740 | 7,740 | 2 | 10 |
 
 Observations:
-- No balanced-pair run **fails**. Every capped run hits the **length**
+- No balanced-pair run on an orbit representative **fails**. Every capped run hits the **length**
   budget, not the state budget: all 24 capped `d = 5` orbits and all 11
   capped `d = 6` orbits were re-run and report the length budget. One `d = 5` period-6 composite reaches a
   reachable irreducible pair of length 112,328 with only 423 states.

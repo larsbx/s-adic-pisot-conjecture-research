@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "reference"))
 
 from sadic_reference.periodic import brun_unordered, periodic_verdict, periodic_words  # noqa: E402
 from sadic_reference.overlap import morphic_balance_bound, positive_suffix_ratio, return_overlap_bound, window_overlap_bound  # noqa: E402
-from sadic_reference.spectrum import charpoly, irreducibility_verdict, pisot_verdict, primitivity_exponent  # noqa: E402
+from sadic_reference.spectrum import Inconclusive, charpoly, disc_zero_count, irreducibility_verdict, pisot_verdict, primitivity_exponent  # noqa: E402
 from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
     brun3,
@@ -33,8 +33,41 @@ from sadic_reference import (  # noqa: E402
 MAX_LEN = 5
 SPECTRAL_LEN = 4
 PERIODIC_LEN = 6
+BRUN5_LEN = 6
+POLYNOMIALS = (
+    (-1, 5, -10, 10, -6, 1),
+    (1, 0, 0, 0, 1),
+    (1, -4, 6, -5, 1),
+    (-1, -1, -1, -1, 1),
+    (1, 1, 1, -1, -1, -1, 1),
+    (1, -6, 16, -24, 20, -9, 1),
+)
 BPA_STATES = 20000
 BPA_LENGTH = 2000
+
+
+def spectral_lines(key: str, word: str, m) -> list[str]:
+    f = charpoly(m)
+    verdict, witness = irreducibility_verdict(f)
+    out = [f"{key}|charpoly|{word}|" + ",".join(map(str, f)),
+           f"{key}|primitivity|{word}|{primitivity_exponent(m)}",
+           f"{key}|irreducible|{word}|{verdict},{witness}"]
+    if verdict == 1:
+        out.append(f"{key}|pisot|{word}|{pisot_verdict(f)}")
+    return out
+
+
+def polynomial_lines(f) -> list[str]:
+    word = ",".join(map(str, f))
+    verdict, witness = irreducibility_verdict(f)
+    try:
+        disc = str(disc_zero_count(f))
+    except Inconclusive:
+        disc = "inc"
+    out = [f"poly|irreducible|{word}|{verdict},{witness}", f"poly|disc|{word}|{disc}"]
+    if verdict == 1:
+        out.append(f"poly|pisot|{word}|{pisot_verdict(f)}")
+    return out
 
 
 def battery() -> list[str]:
@@ -62,23 +95,20 @@ def battery() -> list[str]:
                     out.append(f"{key}|image-balance-{a}|{digits}|{image_balance(shift, w, a)}")
         out += [f"{key}|positive-block|{''.join(map(str, w))}|1" for w in positive_blocks(shift, MAX_LEN)]
     for shift in (arnoux_rauzy(3), brun3()):
-        key = shift.name
         for n in range(1, SPECTRAL_LEN + 1):
             for w in product(range(shift.labels), repeat=n):
-                digits = "".join(map(str, w))
-                m = prefix_matrix(shift, w)
-                f = charpoly(m)
-                out.append(f"{key}|charpoly|{digits}|" + ",".join(map(str, f)))
-                out.append(f"{key}|primitivity|{digits}|{primitivity_exponent(m)}")
-                verdict, witness = irreducibility_verdict(f)
-                out.append(f"{key}|irreducible|{digits}|{verdict},{witness}")
-                if verdict == 1:
-                    out.append(f"{key}|pisot|{digits}|{pisot_verdict(f)}")
+                out += spectral_lines(shift.name, "".join(map(str, w)), prefix_matrix(shift, w))
     shift = brun_unordered(4)
     for n in range(1, PERIODIC_LEN + 1):
         for w in periodic_words(shift, n):
             verdict = periodic_verdict(shift, w, BPA_STATES, BPA_LENGTH)
             out.append(f"{shift.name}|periodic|" + ",".join(map(str, w)) + f"|{verdict}")
+    for f in POLYNOMIALS:
+        out += polynomial_lines(f)
+    shift = brun_unordered(5)
+    for n in range(1, BRUN5_LEN + 1):
+        for w in periodic_words(shift, n):
+            out += spectral_lines(shift.name, ",".join(map(str, w)), prefix_matrix(shift, w))
     return out
 
 

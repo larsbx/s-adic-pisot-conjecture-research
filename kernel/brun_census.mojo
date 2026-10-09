@@ -10,7 +10,10 @@ Usage: mojo run -I . brun_census.mojo [d] [L] [max_states] [max_length] [orbits]
 (defaults 4 7 200000 20000). With `orbits`, one word per orbit under rotation
 and letter permutation is classified (verdicts are orbit invariants: a
 relabelling conjugates the composite) and its count is weighted by the orbit
-size, so the totals equal those of the full census. Specification: docs/sadic-g3-brun4-census.md
+size. Primitivity, irreducibility, Pisot and the mirror Barge class are
+budget-free, so they are weighted. Balanced-pair outcomes depend on the
+budgets, which a conjugate may exhaust differently, so they are reported per
+orbit representative (`bpa-reps`), unweighted. Specification: docs/sadic-g3-brun4-census.md
 (d = 4) and docs/sadic-g6-brun-higher-census.md (d >= 5).
 """
 
@@ -40,12 +43,16 @@ def main() raises:
     var names = verdict_names()
     var stages = len(names)
     var total = List[Int]()
+    var total_reps = List[Int]()
     for _ in range(stages):
         total.append(0)
+        total_reps.append(0)
     for n in range(1, max_len + 1):
         var counts = List[Int]()
+        var reps = List[Int]()
         for _ in range(stages):
             counts.append(0)
+            reps.append(0)
         # (word, weight): every word with weight 1, or one word per orbit
         # weighted by the orbit size
         var entries = List[List[Int]]()
@@ -70,8 +77,13 @@ def main() raises:
                 pip += weight
                 if in_mirror_class(shift.composite(w)):
                     barge += weight
-            counts[i] += weight
-            total[i] += weight
+            if orbits and v.startswith("bpa:"):
+                # budget-dependent: one count per representative
+                reps[i] += 1
+                total_reps[i] += 1
+            else:
+                counts[i] += weight
+                total[i] += weight
             covered += weight
             if is_open_verdict(v):
                 print("  open: period " + String(n) + " word " + joined(w) + " (weight " + String(weight) + ") -> " + v)
@@ -79,10 +91,22 @@ def main() raises:
         if orbits:
             line += " (orbits " + String(len(entries)) + ")"
         for i in range(stages):
-            line += "  " + names[i] + " " + String(counts[i])
+            if not (orbits and names[i].startswith("bpa:")):
+                line += "  " + names[i] + " " + String(counts[i])
         line += "  pip " + String(pip) + "  barge-mirror " + String(barge)
+        if orbits:
+            line += "  bpa-reps"
+            for i in range(stages):
+                if names[i].startswith("bpa:"):
+                    line += " " + names[i] + " " + String(reps[i])
         print(line)
     var line = "total:"
     for i in range(stages):
-        line += "  " + names[i] + " " + String(total[i])
+        if not (orbits and names[i].startswith("bpa:")):
+            line += "  " + names[i] + " " + String(total[i])
+    if orbits:
+        line += "  bpa-reps"
+        for i in range(stages):
+            if names[i].startswith("bpa:"):
+                line += " " + names[i] + " " + String(total_reps[i])
     print(line)

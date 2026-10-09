@@ -90,23 +90,24 @@ G0 result can calibrate.
 | `Ω` | Directive sequences `σ ∈ 𝒮^ℕ` over a finite set 𝒮 of unimodular substitutions, possibly restricted to a sofic directive shift (Brun, Arnoux–Rauzy, Cassaigne, Jacobi–Perron, Selmer, …) |
 | `ι` | Periodic directive sequences ↦ substitutive systems, via composites `σ_[k,k+ℓ)` |
 | Standing hypotheses (R4) | Primitivity, recognizability, algebraic irreducibility, C-balance, the Pisot condition. Negative controls: unbalanced Arnoux–Rauzy words (Cassaigne–Ferenczi–Zamboni) and non-Pisot algorithms (Poincaré) |
-| G3 lever (candidate import) | Berthé–Steiner–Thuswaldner (2019): pure discrete spectrum follows from a coincidence condition on a recurring block plus balance; there is an a.e. version under the Pisot Lyapunov condition |
+| G3 lever (gated, `docs/literature-gate-2026-10-09.md`) | BST23 Theorems 3.1/3.5: the Pisot condition plus one periodic point whose substitution has pure discrete spectrum gives a.e. pure discrete spectrum for the algorithm. The periodic-point input is a balanced-pair decision on a composite. BST19 Theorem 3.1 (tiling iff geometric coincidence) is the every-sequence counterpart |
 | G4 first targets | **T1:** C-balance ⇒ an overlap graph that is finite uniformly along the shift orbit (lift of PSC PR #72, with bounded discrepancy replaced by C-balance). **T2:** does "PDS ⇒ G1" lift to "PDS ⇒ the uniform graph is finite"? |
 | G5 object | Uniform S-adic balanced-pair graph on (directive-automaton state, irreducible balanced pair); it restricts to the stationary BPA at periodic points |
 | G2 exact predicates | Prefix primitivity, irreducibility and the Pisot property of `M_[0,n)`, C-balance, cone-contraction certificates. Lyapunov exponents are evidence only |
 | G6 censuses | Periodic directive words up to length L per algorithm; uniform graphs on the algorithms' sofic shifts |
 
-Literature to gate in G0 (all candidate, unverified):
+G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status matrix, and the open cells the lever reaches (Selmer d = 4; Brun and Jacobi–Perron 5 ≤ d ≤ 10).
 
-- Berthé–Steiner–Thuswaldner 2019;
-- Berthé–Minervino–Steiner–Thuswaldner, two-letter S-adic Pisot;
-- Berthé–Steiner–Thuswaldner–Yassawi, recognizability;
-- Avila–Hubert–Skripchenko, Arnoux–Rauzy;
-- Cassaigne–Labbé–Leroy, the Cassaigne algorithm;
-- Lyapunov results for Brun in d ≥ 4;
-- Berthé–Delecroix 2014, survey.
+**First unit of work (G0 and G1 done, G2 partial):** the G0 gate document, the
+G1 scaffold, and a first G2 slice (`docs/sadic-kernel-g2-slice.md`). The slice
+holds directive shifts for Arnoux–Rauzy and Brun, the checked incidence cocycle,
+positive blocks, the exact Hilbert cross-ratio bound `Θ`, and balance *lower*
+bounds. It is oracle-paired. Still open in G2:
 
-**First unit of work:** G0 gate document and G1 scaffold, then a G2 slice. The
-slice holds `SoficDirectiveShift` for Brun and Arnoux–Rauzy in d = 3 together
-with the C-balance and cone-contraction predicates, oracle-paired and calibrated
-against the known a.e. results.
+- C-balance can only be refuted by a finite run, never certified;
+- a cone-contraction certificate (a positive block recurring along a sequence)
+  is not built yet;
+- prefix irreducibility and the Pisot predicates are not built yet;
+- the `ι` embedding regression against the PSC corpus is not built yet.
+
+No G3 work may treat these hypotheses as certified.

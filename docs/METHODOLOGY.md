@@ -122,6 +122,10 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
   - Theorem C: for Brun with `d = 5, 6`, the Pisot condition is the only
     missing input of BST23 Theorem 3.1. A periodic point that passes the
     balanced pair algorithm is pinned for each `d`.
+  - Corollary B″: Sirvent–Solomyak 2002 Corollary 5.2 (gate §9) transfers
+    B′ to the symbolic system for every irreducible Pisot composite.
+    Theorem C′ extends Theorem C to every `5 ≤ d ≤ 10`, using one pinned
+    primitive irreducible Pisot periodic point per dimension.
 - **G4:**
   - Lemma S and Theorem T1 are proved under uniform balance and a bounded
     length ratio (`docs/t1-uniform-overlap-finiteness.md`).

@@ -225,3 +225,25 @@ def test_brun_six_periodic_point():
     w = (0, 6, 10, 2, 16, 8, 24, 25)
     assert periodic_admissible(shift, w)
     assert periodic_verdict(shift, w, 200000, 20000) == "bpa:terminates"
+
+
+def test_brun_pisot_periodic_points():
+    # Corollary B'' and Theorem C' (docs/sadic-g6-brun-higher-census.md §5):
+    # for d = 7..10 a periodic Brun point whose composite is primitive, with an
+    # irreducible Pisot characteristic polynomial, in the mirror Barge class
+    from sadic_reference.periodic import in_mirror_barge_class
+    from sadic_reference.spectrum import primitivity_exponent
+    for d, w, f in (
+        (7, (0, 7, 12, 2, 21, 24, 4, 35, 36), (-1, 7, -24, 47, -56, 39, -14, 1)),
+        (8, (0, 0, 8, 16, 24, 28, 1, 18, 40, 48, 49), (1, -8, 28, -57, 77, -73, 45, -16, 1)),
+        (9, (0, 9, 16, 2, 27, 32, 4, 45, 48, 6, 63, 64), (-1, 9, -40, 108, -192, 230, -184, 92, -24, 1)),
+        (10, (0, 9, 1, 20, 27, 3, 40, 50, 54, 6, 67, 43, 80, 81), (1, -11, 54, -158, 309, -425, 417, -286, 127, -30, 1)),
+    ):
+        shift = brun_unordered(d)
+        assert periodic_admissible(shift, w)
+        m = prefix_matrix(shift, w)
+        assert primitivity_exponent(m) >= 0
+        assert charpoly(m) == f
+        assert irreducibility_verdict(f)[0] == 1
+        assert pisot_verdict(f) == 1
+        assert in_mirror_barge_class(compose_all(shift, w))

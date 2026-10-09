@@ -30,3 +30,33 @@ def return_overlap_bound(matrix: Matrix, balance_constant: int) -> int:
         raise ValueError("balance constant must be nonnegative")
     value = balance_constant + positive_suffix_ratio(matrix) * (1 + len(matrix) * balance_constant)
     return -(-value.numerator // value.denominator)
+
+
+def morphic_balance_bound(d: int, balance_constant: int, max_image_len: int) -> int:
+    """An upper bound for factors of images of a C-balanced language.
+
+The source alphabet has d letters and every nonempty image has length <= J.
+This is conditional on the supplied infinite-language balance constant.
+"""
+    if d < 1 or balance_constant < 0 or max_image_len < 1:
+        raise ValueError("need d >= 1, C >= 0 and J >= 1")
+    # An independent grouping of the proof's full-image and boundary terms.
+    j = max_image_len
+    full_image_error = d * balance_constant * j
+    unmatched_image_length = full_image_error + 2 * j
+    return full_image_error + unmatched_image_length + 2 * j
+
+
+def window_overlap_bound(matrix: Matrix, balance_constant: int, image_max: int, window: int) -> int:
+    """All-depth box conditional on balanced positive-suffix anchors.
+
+image_max bounds the length of every substitution image. window bounds
+both anchor gaps and the initial gap. Neither infinite condition is checked.
+"""
+    if balance_constant < 0 or image_max < 1 or window < 0:
+        raise ValueError("need C >= 0, L >= 1 and D >= 0")
+    ratio = positive_suffix_ratio(matrix)
+    j = image_max ** window
+    c = morphic_balance_bound(len(matrix), balance_constant, j)
+    value = c + ratio * j * (1 + len(matrix) * c)
+    return -(-value.numerator // value.denominator)

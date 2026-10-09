@@ -179,6 +179,12 @@ single fixed block: that product is `σ_{[t_k,t_{k+1})}` and may vary with
 `k`. Extending the bound to every depth, or constructing a finite
 presentation for return transitions, requires a further argument.
 
+[`all-depth-bounded-anchors.md`](all-depth-bounded-anchors.md) gives a
+conditional all-depth type bound from bounded-gap balanced positive-suffix
+anchors. Those are additional depths, not necessarily growing PRICE
+prefix returns: bounded gaps in the latter force periodicity (Lemma G).
+The unrestricted target above remains open.
+
 ## Executable checks
 
 `kernel/sadic/overlap.mojo` computes `R_B` and the integer bound `b` in

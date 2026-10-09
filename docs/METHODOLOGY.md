@@ -123,4 +123,12 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
     ratios from PRICE's fixed positive suffix.
     The finite pool does not yet give a closed finite transition graph,
     and the all-depth extension is open.
+  - Theorem W gives a conditional all-depth type pool from bounded-gap
+    balanced positive-suffix anchors (`docs/all-depth-bounded-anchors.md`).
+    Lemma M propagates balance across the bounded windows. Lemma G shows
+    that bounding gaps in growing PRICE returns would force periodicity,
+    so those returns cannot supply the desired nonperiodic extension that
+    way. The additional anchor condition is not derived from BST19.
+    Corollary A supplies a nonperiodic Arnoux–Rauzy calibration, using
+    Thue–Morse-directed blocks 012 and 021 and BST19's uniform balance bound.
   - T2 is not started.

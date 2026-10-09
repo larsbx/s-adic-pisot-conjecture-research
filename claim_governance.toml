@@ -196,3 +196,48 @@ aliases = ["All-depth overlap finiteness"]
 path = "CLAIMS.md"
 anchor = "| All-depth overlap finiteness |"
 window_lines = 0
+
+[[claim]]
+name = "MorphicImageBalanceBound"
+status = "proved"
+aliases = ["Morphic image balance bound"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Morphic image balance bound |"
+window_lines = 0
+
+[[claim]]
+name = "DenseGrowingReturnsPeriodic"
+status = "proved"
+aliases = ["Dense growing returns force periodicity"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Dense growing returns force periodicity |"
+window_lines = 0
+
+[[claim]]
+name = "BoundedAnchorOverlapFiniteness"
+status = "conditional"
+aliases = ["Bounded anchor all-depth overlap"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Bounded anchor all-depth overlap |"
+window_lines = 0
+
+[[claim]]
+name = "BST19ArnouxRauzyTailBalance"
+status = "imported"
+aliases = ["BST19 Arnoux Rauzy tail balance"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| BST19 Arnoux Rauzy tail balance |"
+window_lines = 0
+
+[[claim]]
+name = "ThueMorseArnouxRauzyOverlap"
+status = "proved"
+aliases = ["Thue Morse Arnoux Rauzy overlap"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Thue Morse Arnoux Rauzy overlap |"
+window_lines = 0

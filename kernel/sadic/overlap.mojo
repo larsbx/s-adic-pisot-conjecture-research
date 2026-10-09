@@ -4,6 +4,9 @@ The supplied matrix must be the positive suffix at the selected depth and
 the supplied C must be justified separately. These routines certify neither
 an infinite language's balance nor PRICE recurrence. Overflow raises and
 makes a computation inconclusive. Reference: sadic_reference/overlap.py.
+
+The bounded-anchor extension also takes a supplied image-length cap and
+window bound. It does not infer them from PRICE or finite samples.
 """
 
 from finite_exact.checked_int import checked_add, checked_mul
@@ -52,3 +55,43 @@ def return_overlap_bound(matrix: List[Int], d: Int, balance_constant: Int) raise
     if numerator % ratio.den != 0:
         rounded = checked_add(rounded, 1)
     return checked_add(balance_constant, rounded)
+
+
+def morphic_balance_bound(d: Int, balance_constant: Int, max_image_len: Int) raises -> Int:
+    """F(d,C,J) = 2 J (d C + 2), for non-erasing images."""
+    if d <= 0 or balance_constant < 0 or max_image_len <= 0:
+        raise Error("need d >= 1, C >= 0 and J >= 1")
+    return checked_mul(checked_mul(2, max_image_len), checked_add(checked_mul(d, balance_constant), 2))
+
+
+def _checked_power(base: Int, exponent: Int) raises -> Int:
+    """Nonnegative powers, with checked products and logarithmic work."""
+    var result = 1
+    var factor = base
+    var remaining = exponent
+    while remaining > 0:
+        if remaining % 2 == 1:
+            result = checked_mul(result, factor)
+        remaining //= 2
+        if remaining > 0:
+            factor = checked_mul(factor, factor)
+    return result
+
+
+def window_overlap_bound(matrix: List[Int], d: Int, balance_constant: Int, image_max: Int, window: Int) raises -> Int:
+    """F + ceil(R_B J (1+d F)), J=L^D, conditional on anchor hypotheses.
+
+The window covers both consecutive balanced-anchor gaps and the initial
+gap from depth zero. It is not a bound on growing PRICE prefix returns.
+"""
+    if balance_constant < 0 or image_max <= 0 or window < 0:
+        raise Error("need C >= 0, L >= 1 and D >= 0")
+    var ratio = positive_suffix_ratio(matrix, d)
+    var j = _checked_power(image_max, window)
+    var c = morphic_balance_bound(d, balance_constant, j)
+    var scale = checked_add(1, checked_mul(d, c))
+    var numerator = checked_mul(checked_mul(ratio.num, j), scale)
+    var rounded = numerator // ratio.den
+    if numerator % ratio.den != 0:
+        rounded = checked_add(rounded, 1)
+    return checked_add(c, rounded)

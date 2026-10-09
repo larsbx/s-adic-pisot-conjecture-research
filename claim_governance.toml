@@ -349,3 +349,12 @@ aliases = ["Brun Pisot condition suffices"]
 path = "CLAIMS.md"
 anchor = "| Brun Pisot condition suffices |"
 window_lines = 0
+
+[[claim]]
+name = "BrunClassEnumeration"
+status = "finite-domain"
+aliases = ["Brun class enumeration"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun class enumeration |"
+window_lines = 0

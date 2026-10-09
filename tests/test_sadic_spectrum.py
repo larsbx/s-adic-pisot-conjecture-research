@@ -257,3 +257,16 @@ def test_brun_pisot_periodic_points():
         assert irreducibility_verdict(f)[0] == 1
         assert pisot_verdict(f) == 1
         assert in_mirror_barge_class(compose_all(shift, w))
+
+
+def test_brun_full_classes_and_pip_counts():
+    # kernel/brun_witness.mojo `pip`: classes of periodic words using every
+    # letter, and those whose composite is primitive, irreducible and Pisot;
+    # the Mojo enumeration (brun_classes) pins the same counts
+    from sadic_reference.periodic import brun_full_classes, is_pip
+    shift = brun_unordered(5)
+    counts = []
+    for n in range(1, 8):
+        classes = brun_full_classes(5, n)
+        counts.append((len(classes), sum(is_pip(shift, w) for w in classes)))
+    assert counts == [(0, 0), (0, 0), (0, 0), (0, 0), (1, 0), (3, 3), (20, 18)]

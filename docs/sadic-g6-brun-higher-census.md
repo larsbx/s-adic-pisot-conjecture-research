@@ -121,7 +121,8 @@ Every hypothesis except the Pisot condition is therefore met. ∎
 
 The Pisot condition for Brun `d = 5, 6, 7` has numerical support only (BST21).
 
-**Finding the `d = 7` point** (`kernel/brun_witness.mojo`). The search takes
+**Finding the `d = 7` point** (`kernel/brun_witness.mojo`, enumeration
+`brun_classes` in `kernel/sadic/periodic.mojo`). The search takes
 one word per class under rotation and letter permutation. Among the words of
 period `n` that use every letter, it keeps those whose composite is
 primitive, irreducible and Pisot, all decided exactly. On `d = 5, 6` its class

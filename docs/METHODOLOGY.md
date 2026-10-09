@@ -117,11 +117,10 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
   algorithm.
 - **G4:**
   - Lemma S and Theorem T1 are proved under uniform balance and a bounded
-    length ratio (`docs/t1-uniform-overlap-finiteness.md`); human review is
-    pending.
+    length ratio (`docs/t1-uniform-overlap-finiteness.md`).
   - T1′ bounds the swap-pair overlap types at selected PRICE return depths
     using BST19 Theorem 3.1's hypotheses only. Lemma P bounds their length
-    ratios from PRICE's fixed positive suffix; human review is pending.
+    ratios from PRICE's fixed positive suffix.
     The finite pool does not yet give a closed finite transition graph,
     and the all-depth extension is open.
   - T2 is not started.

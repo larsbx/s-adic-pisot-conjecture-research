@@ -131,5 +131,5 @@ suffix to compare image sizes.
 
 Source: [BST19, arXiv v5](https://arxiv.org/pdf/1410.0331v5), §5.2,
 printed pp. 17–18. The repository's T1′ applies this import to its
-swap-pair type triples; its proof, scope, and pending human review are in
+swap-pair type triples; its proof and scope are in
 [`t1-uniform-overlap-finiteness.md`](t1-uniform-overlap-finiteness.md).

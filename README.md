@@ -28,8 +28,8 @@ Then read:
   of BST23's Brun `d = 4` certificate, and the periodic-point census;
 - [`docs/t1-uniform-overlap-finiteness.md`](docs/t1-uniform-overlap-finiteness.md):
   the swap-walk and uniform overlap bounds (T1), and the finite pool of
-  overlap types at selected PRICE return depths (T1′). Human review is
-  pending; the all-depth extension remains open.
+  overlap types at selected PRICE return depths (T1′). The all-depth
+  extension remains open.
 
 Layout and authority: [`ARCHITECTURE.md`](ARCHITECTURE.md). Working rules and
 the pre-push checks: [`AGENTS.md`](AGENTS.md).

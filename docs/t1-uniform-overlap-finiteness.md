@@ -1,7 +1,8 @@
 # T1: a uniform overlap bound from uniform balance
 
 **Status:** repository-proved statements (Lemma S, Lemma P, Theorems T1 and
-T1′) under explicitly named hypotheses, with *human review pending*. T1′
+T1′) under explicitly named hypotheses. The repository owner waived a separate
+human review on 2026-10-09; the proofs stand as written. T1′
 bounds the types at selected return depths; the all-depth extension remains
 open. This is the methodology's G4 target T1: the S-adic lift of
 PSC `docs/overlap-finiteness-and-coincidence-density-2026-09-13.md`,
@@ -101,7 +102,7 @@ using the depth-`k` lengths `ℓ = ℓ^{(k)}`.
 
 ## Lemma P (positive-suffix length ratio)
 
-**Status:** repository-proved; human review pending.
+**Status:** repository-proved.
 
 For a strictly positive `d × d` matrix `B`, define
 
@@ -122,7 +123,7 @@ For the level-0 lengths, a prefix product ending in `B` has
 
 ## Theorem T1′ (overlap finiteness along selected return times)
 
-**Status:** repository-proved; human review pending. This is the return-time
+**Status:** repository-proved. This is the return-time
 version of T1′, with no extra hypothesis beyond BST19 Theorem 3.1.
 
 Assume precisely the hypotheses of BST19 Theorem 3.1: a primitive,

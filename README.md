@@ -5,7 +5,7 @@ infrastructure of
 [`pisot-substitution-conjecture-research`](https://github.com/larsbx/pisot-substitution-conjecture-research)
 and [`finite-math-kernels`](https://github.com/larsbx/finite-math-kernels).
 
-**Status:** the S-adic Pisot conjecture is **open**. The repository's own results so far are a lemma and two finite-domain calibrations, listed in `CLAIMS.md`.
+**Status:** the S-adic Pisot conjecture is **open**. The repository's own results are a few elementary lemmas and finite-domain theorems, among them a census of the Brun `d = 4` periodic points. They are listed in `CLAIMS.md`.
 
 Start with [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md). It gives the general
 method for attacking a generalization from an existing programme (phases G0–G7
@@ -20,7 +20,15 @@ Then read:
 - [`docs/sadic-kernel-g2-slice.md`](docs/sadic-kernel-g2-slice.md): the exact
   Mojo kernel `kernel/sadic/` (directive shifts, checked incidence cocycle,
   positive blocks, Hilbert cross-ratio bound, balance lower bounds) and its
-  Python oracle.
+  Python oracle;
+- [`docs/sadic-kernel-g2-spectrum.md`](docs/sadic-kernel-g2-spectrum.md):
+  exact irreducibility and Pisot certificates, periodic points, and the `ι`
+  regression against the PSC corpus;
+- [`docs/sadic-g3-brun4-census.md`](docs/sadic-g3-brun4-census.md): replication
+  of BST23's Brun `d = 4` certificate, and the periodic-point census;
+- [`docs/t1-uniform-overlap-finiteness.md`](docs/t1-uniform-overlap-finiteness.md):
+  the swap-walk bound and the uniform overlap bound (target T1), plus the
+  open target T1′.
 
 Layout and authority: [`ARCHITECTURE.md`](ARCHITECTURE.md). Working rules and
 the pre-push checks: [`AGENTS.md`](AGENTS.md).

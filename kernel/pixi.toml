@@ -13,3 +13,5 @@ modular = "==26.6.0.dev2026090805"
 test = "bash run_tests.sh"
 # The battery tools/cross_check.py compares against the Python oracle.
 vectors = "mojo run -I . vectors.mojo"
+# G3/G6: census of the Brun d = 4 periodic points (docs/sadic-g3-brun4-census.md).
+brun4-census = "mojo run -I . brun4_census.mojo"

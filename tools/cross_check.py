@@ -16,6 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "reference"))
 
+from sadic_reference.periodic import brun_unordered, periodic_verdict, periodic_words  # noqa: E402
+from sadic_reference.spectrum import charpoly, irreducibility_verdict, pisot_verdict, primitivity_exponent  # noqa: E402
 from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
     brun3,
@@ -28,6 +30,10 @@ from sadic_reference import (  # noqa: E402
 )
 
 MAX_LEN = 5
+SPECTRAL_LEN = 4
+PERIODIC_LEN = 6
+BPA_STATES = 20000
+BPA_LENGTH = 2000
 
 
 def battery() -> list[str]:
@@ -46,6 +52,24 @@ def battery() -> list[str]:
                 for a in range(shift.size):
                     out.append(f"{key}|image-balance-{a}|{digits}|{image_balance(shift, w, a)}")
         out += [f"{key}|positive-block|{''.join(map(str, w))}|1" for w in positive_blocks(shift, MAX_LEN)]
+    for shift in (arnoux_rauzy(3), brun3()):
+        key = shift.name
+        for n in range(1, SPECTRAL_LEN + 1):
+            for w in product(range(shift.labels), repeat=n):
+                digits = "".join(map(str, w))
+                m = prefix_matrix(shift, w)
+                f = charpoly(m)
+                out.append(f"{key}|charpoly|{digits}|" + ",".join(map(str, f)))
+                out.append(f"{key}|primitivity|{digits}|{primitivity_exponent(m)}")
+                verdict, witness = irreducibility_verdict(f)
+                out.append(f"{key}|irreducible|{digits}|{verdict},{witness}")
+                if verdict == 1:
+                    out.append(f"{key}|pisot|{digits}|{pisot_verdict(f)}")
+    shift = brun_unordered(4)
+    for n in range(1, PERIODIC_LEN + 1):
+        for w in periodic_words(shift, n):
+            verdict = periodic_verdict(shift, w, BPA_STATES, BPA_LENGTH)
+            out.append(f"{shift.name}|periodic|" + ",".join(map(str, w)) + f"|{verdict}")
     return out
 
 

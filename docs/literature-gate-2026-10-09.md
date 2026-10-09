@@ -96,3 +96,25 @@ coincidence (BST19-3.1(v)).
    bounded weak partial quotients. A uniform balanced-pair graph over a sofic
    directive shift is the candidate route to every-sequence statements for
    other classes. It awaits a novelty gate (methodology R7).
+
+## 5. Addendum (2026-10-09, second pass)
+
+All entries below were read in the arXiv text of BST23 (arXiv:2005.13038).
+
+| Key | Statement | Check |
+|---|---|---|
+| BST23-P6.1 | Proposition 6.1 (after [BST10, Theorem 5.8.8]): a unimodular Pisot irreducible substitution has pure discrete spectrum **iff** the balanced pair algorithm started from `I₀ = {(ij, ji) : i ≠ j}` terminates. Terminates means: no new irreducible balanced pairs after finitely many steps, and every pair reached eventually contains a coincidence. | verified |
+| BST23-§6.5 | Unordered Brun family `β_{i,j}: j ↦ ij`, `k ↦ k` (6.9), with the sofic admissibility condition (6.10). The periodic point `τ = β₁₂∘β₂₃∘β₃₄∘β₄₁` (`1 ↦ 12341`, `2 ↦ 12`, `3 ↦ 123`, `4 ↦ 1234`) is a Pisot point; "using the balanced pair algorithm, one can show that τ has purely discrete spectrum". This is the finite input of Theorem 6.7. | verified |
+| BST23-§6.2 end | For Selmer in higher dimensions, "two problems occur": a substitutive realization of factor complexity `(d−1)n + 1` has to be found, and the second Lyapunov exponent seems to be negative only for `d ≤ 4`. | verified |
+
+**Correction to §4.1.** The Selmer `d = 4` cell is **not** reachable by the
+BST23 lever as it stands. Its Pisot input exists (BST21 Theorem 5.4), but the
+"faithful substitutive realization" hypothesis of BST23 Theorems 3.1/3.5 has
+no known instance for Selmer `d = 4`. Constructing one is a prior open
+problem. For Brun, the realization (6.9)/(6.10) is defined for every `d`, so for
+`5 ≤ d ≤ 10` the missing input is a certified Pisot condition: BST21 has only
+numerics there, and a periodic-point census in those dimensions is evidence
+until that input exists. A Jacobi–Perron realization for `d ≥ 4` is
+unverified. The first calibration of the G3
+pipeline is therefore the **replication** of BST23 §6.5 (Brun `d = 4`), in
+`docs/sadic-g3-brun4-census.md`.

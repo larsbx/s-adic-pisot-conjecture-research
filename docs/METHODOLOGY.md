@@ -98,16 +98,27 @@ G0 result can calibrate.
 
 G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status matrix, and the open cells the lever reaches (Selmer d = 4; Brun and Jacobi–Perron 5 ≤ d ≤ 10).
 
-**First unit of work (G0 and G1 done, G2 partial):** the G0 gate document, the
-G1 scaffold, and a first G2 slice (`docs/sadic-kernel-g2-slice.md`). The slice
-holds directive shifts for Arnoux–Rauzy and Brun, the checked incidence cocycle,
-positive blocks, the exact Hilbert cross-ratio bound `Θ`, and balance *lower*
-bounds. It is oracle-paired. Still open in G2:
+**Progress.**
 
-- C-balance can only be refuted by a finite run, never certified;
-- a cone-contraction certificate (a positive block recurring along a sequence)
-  is not built yet;
-- prefix irreducibility and the Pisot predicates are not built yet;
-- the `ι` embedding regression against the PSC corpus is not built yet.
-
-No G3 work may treat these hypotheses as certified.
+- **G0:** done (`docs/literature-gate-2026-10-09.md`), with a §5 addendum.
+  Selmer `d = 4` needs a substitutive realization before the BST23 lever
+  applies.
+- **G1:** done.
+- **G2:** done.
+  - `docs/sadic-kernel-g2-slice.md`: directive shifts, the cocycle, positive
+    blocks, `Θ`, balance lower bounds.
+  - `docs/sadic-kernel-g2-spectrum.md`: exact irreducibility and Pisot
+    certificates, primitivity by Wielandt, periodic admissibility. The `ι`
+    regression reproduces PSC's 4,554-substitution corpus.
+  - C-balance can still only be refuted, never certified, by a finite run.
+- **G3:** calibrated on Brun `d = 4` (`docs/sadic-g3-brun4-census.md`).
+  BST23's periodic-point certificate is replicated, and all 6,386 primitive
+  irreducible Pisot periodic points of period ≤ 8 pass the balanced pair
+  algorithm.
+- **G4:**
+  - Lemma S and Theorem T1 are proved under uniform balance and a bounded
+    length ratio (`docs/t1-uniform-overlap-finiteness.md`); human review is
+    pending.
+  - T1′, the version with BST19 Theorem 3.1's hypotheses only, is the open
+    target.
+  - T2 is not started.

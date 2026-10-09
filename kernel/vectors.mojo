@@ -5,6 +5,7 @@ digit strings; any disagreement fails closed."""
 from sadic.balance import image_balance
 from sadic.cocycle import cross_ratio_bound, first_positive_prefix, is_positive, positive_blocks, prefix_matrix
 from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, words_of_length
+from sadic.overlap import positive_suffix_ratio, return_overlap_bound
 from sadic.periodic import brun_unordered, periodic_verdict, periodic_words, primitivity_exponent
 from sadic.spectrum import charpoly, irreducibility_verdict, pisot_verdict
 
@@ -42,6 +43,10 @@ def emit(shift: DirectiveShift) raises:
             if is_positive(m):
                 var r = cross_ratio_bound(m, d)
                 print(key + "cross-ratio|" + digits(w) + "|" + String(r.num) + "/" + String(r.den))
+                var suffix = positive_suffix_ratio(m, d)
+                print(key + "suffix-ratio|" + digits(w) + "|" + String(suffix.num) + "/" + String(suffix.den))
+                for c in range(4):
+                    print(key + "return-overlap-" + String(c) + "|" + digits(w) + "|" + String(return_overlap_bound(m, d, c)))
             for a in range(d):
                 print(key + "image-balance-" + String(a) + "|" + digits(w) + "|" + String(image_balance(shift, w, a)))
     for w in positive_blocks(shift, MAX_LEN):

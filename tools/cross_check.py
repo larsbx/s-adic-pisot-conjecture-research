@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "reference"))
 
 from sadic_reference.periodic import brun_unordered, periodic_verdict, periodic_words  # noqa: E402
+from sadic_reference.overlap import positive_suffix_ratio, return_overlap_bound  # noqa: E402
 from sadic_reference.spectrum import charpoly, irreducibility_verdict, pisot_verdict, primitivity_exponent  # noqa: E402
 from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
@@ -49,6 +50,10 @@ def battery() -> list[str]:
                 if is_positive(m):
                     r = cross_ratio_bound(m)
                     out.append(f"{key}|cross-ratio|{digits}|{r.numerator}/{r.denominator}")
+                    suffix = positive_suffix_ratio(m)
+                    out.append(f"{key}|suffix-ratio|{digits}|{suffix.numerator}/{suffix.denominator}")
+                    for c in range(4):
+                        out.append(f"{key}|return-overlap-{c}|{digits}|{return_overlap_bound(m, c)}")
                 for a in range(shift.size):
                     out.append(f"{key}|image-balance-{a}|{digits}|{image_balance(shift, w, a)}")
         out += [f"{key}|positive-block|{''.join(map(str, w))}|1" for w in positive_blocks(shift, MAX_LEN)]

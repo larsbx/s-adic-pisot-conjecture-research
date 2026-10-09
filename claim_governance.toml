@@ -172,9 +172,27 @@ window_lines = 0
 
 [[claim]]
 name = "OverlapFinitenessReturnTimes"
-status = "open"
+status = "proved"
 aliases = ["Overlap finiteness along return times"]
 [[claim.surfaces]]
 path = "CLAIMS.md"
 anchor = "| Overlap finiteness along return times |"
+window_lines = 0
+
+[[claim]]
+name = "PositiveSuffixLengthRatio"
+status = "proved"
+aliases = ["Positive suffix length ratio"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Positive suffix length ratio |"
+window_lines = 0
+
+[[claim]]
+name = "AllDepthOverlapFiniteness"
+status = "open"
+aliases = ["All-depth overlap finiteness"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| All-depth overlap finiteness |"
 window_lines = 0

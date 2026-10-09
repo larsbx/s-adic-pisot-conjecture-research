@@ -91,7 +91,7 @@ G0 result can calibrate.
 | `ι` | Periodic directive sequences ↦ substitutive systems, via composites `σ_[k,k+ℓ)` |
 | Standing hypotheses (R4) | Primitivity, recognizability, algebraic irreducibility, C-balance, the Pisot condition. Negative controls: unbalanced Arnoux–Rauzy words (Cassaigne–Ferenczi–Zamboni) and non-Pisot algorithms (Poincaré) |
 | G3 lever (gated, `docs/literature-gate-2026-10-09.md`) | BST23 Theorems 3.1/3.5: the Pisot condition plus one periodic point whose substitution has pure discrete spectrum gives a.e. pure discrete spectrum for the algorithm. The periodic-point input is a balanced-pair decision on a composite. BST19 Theorem 3.1 (tiling iff geometric coincidence) is the every-sequence counterpart |
-| G4 first targets | **T1:** C-balance ⇒ an overlap graph that is finite uniformly along the shift orbit (lift of PSC PR #72, with bounded discrepancy replaced by C-balance). **T2:** does "PDS ⇒ G1" lift to "PDS ⇒ the uniform graph is finite"? |
+| G4 first targets | **T1:** uniform C-balance and a bounded length ratio ⇒ a finite pool of overlap type triples along the shift orbit (lift of PSC PR #72). **T1′:** BST19 Theorem 3.1 ⇒ a finite type pool at selected PRICE return depths. All-depth transition finiteness remains open. **T2:** does "PDS ⇒ G1" lift to "PDS ⇒ the uniform graph is finite"? |
 | G5 object | Uniform S-adic balanced-pair graph on (directive-automaton state, irreducible balanced pair); it restricts to the stationary BPA at periodic points |
 | G2 exact predicates | Prefix primitivity, irreducibility and the Pisot property of `M_[0,n)`, C-balance, cone-contraction certificates. Lyapunov exponents are evidence only |
 | G6 censuses | Periodic directive words up to length L per algorithm; uniform graphs on the algorithms' sofic shifts |
@@ -119,6 +119,9 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
   - Lemma S and Theorem T1 are proved under uniform balance and a bounded
     length ratio (`docs/t1-uniform-overlap-finiteness.md`); human review is
     pending.
-  - T1′, the version with BST19 Theorem 3.1's hypotheses only, is the open
-    target.
+  - T1′ bounds the swap-pair overlap types at selected PRICE return depths
+    using BST19 Theorem 3.1's hypotheses only. Lemma P bounds their length
+    ratios from PRICE's fixed positive suffix; human review is pending.
+    The finite pool does not yet give a closed finite transition graph,
+    and the all-depth extension is open.
   - T2 is not started.

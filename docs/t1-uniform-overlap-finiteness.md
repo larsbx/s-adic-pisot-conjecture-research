@@ -1,8 +1,9 @@
 # T1: a uniform overlap bound from uniform balance
 
-**Status:** two repository-proved statements (Lemma S, Theorem T1) under
-explicitly named hypotheses, with *human review pending*, followed by the open
-theorem target T1′. This is the methodology's G4 target T1: the S-adic lift of
+**Status:** repository-proved statements (Lemma S, Lemma P, Theorems T1 and
+T1′) under explicitly named hypotheses, with *human review pending*. T1′
+bounds the types at selected return depths; the all-depth extension remains
+open. This is the methodology's G4 target T1: the S-adic lift of
 PSC `docs/overlap-finiteness-and-coincidence-density-2026-09-13.md`,
 Theorem 2.1 (PSC PR #72). Nothing here proves finiteness of a balanced-pair
 graph, productivity, or the S-adic Pisot conjecture.
@@ -30,6 +31,11 @@ preserves these lengths. An **overlap type at depth `k`** is `(i, j, v)`:
   interiors meet;
 - `v = π(V[:q]) − π(U[:p])` is the integer vector between their starting
   vertices, at positions `p` and `q`.
+
+The finite object counted below is the pool of triples `(i, j, v)` arising
+from these swap pairs. The depth is an occurrence label, not an extra
+coordinate in that pool. Finitely many such triples do not by themselves
+give a finite graph with its directive base or transition data included.
 
 ## Lemma S (swap-walk bound)
 
@@ -60,7 +66,7 @@ Assume:
 - **(H3) bounded length ratio:** `ℓ^{(k)}_a ≤ R · ℓ^{(k)}_b` for all `k` and
   all letters `a, b`.
 
-Then every overlap type `(i, j, v)` occurring at any depth satisfies
+Then every overlap type `(i, j, v)` of the swap pairs occurring at any depth satisfies
 `‖v‖_∞ ≤ B := C + R(1 + dC)`. So at most `d²(2B + 1)^d` overlap types occur
 over the whole shift orbit.
 
@@ -86,16 +92,107 @@ using the depth-`k` lengths `ℓ = ℓ^{(k)}`.
    PSC Theorem 2.1 for the substitution `σ_w`, up to the choice of length
    functional.
 2. (H3) fails for Arnoux–Rauzy sequences with arbitrarily long runs of a
-   single `α_i`: one letter's image length grows along the run while another
-   letter's stays at 1. Such sequences have unbounded weak partial quotients,
+   single `α_i`: during a run of length `m`, the `i`-th image length stays
+   fixed and every other image length increases by `m` times that length.
+   Hence the ratio is at least `m`. Such sequences have unbounded weak partial quotients,
    so they lie outside the every-sequence class of BST19 Theorem 3.8.
 3. BST19 Theorem 3.1 assumes C-balance only along recurring return times,
    which is weaker than (H2).
 
-## T1′ (open theorem target)
+## Lemma P (positive-suffix length ratio)
 
-Find a finiteness statement for the depth-indexed overlap types that needs
-only the hypotheses of BST19 Theorem 3.1 (C-balance along the return times
-`n_k + ℓ_k`) in place of (H2) and (H3). Natural first step: restrict the
-graph to the depths `n_k + ℓ_k` and bound the types there. Between two such
-depths the recurring block `σ_{[0,ℓ)}` acts by a fixed inflation.
+**Status:** repository-proved; human review pending.
+
+For a strictly positive `d × d` matrix `B`, define
+
+`R_B := max_{r,a,b} B_{ra}/B_{rb} = max_r (max_a B_{ra})/(min_b B_{rb})`.
+
+If `w` is a nonzero nonnegative row, then every coordinate of `wB` is
+positive and `(wB)_a ≤ R_B (wB)_b` for all letters `a, b`.
+
+*Proof.* The entrywise inequalities `B_{ra} ≤ R_B B_{rb}` survive
+multiplication by `w_r ≥ 0` and summation over `r`. Positivity follows from
+one `w_r > 0` and all `B_{rb} > 0`. The bound is sharp over such rows: choose
+the coordinate row supported at an `r` attaining `R_B`. ∎
+
+For the level-0 lengths, a prefix product ending in `B` has
+`ℓ^{(t)ᵀ} = (1ᵀ M_{[0,t−h)}) B`. Thus its length ratio is bounded by
+`R_B`, regardless of the preceding product. A positive block at the
+*beginning* of the product has no such consequence.
+
+## Theorem T1′ (overlap finiteness along selected return times)
+
+**Status:** repository-proved; human review pending. This is the return-time
+version of T1′, with no extra hypothesis beyond BST19 Theorem 3.1.
+
+Assume precisely the hypotheses of BST19 Theorem 3.1: a primitive,
+algebraically irreducible directive sequence over a finite or infinite set
+of unimodular substitutions on `d` letters, and a constant `C` for the
+balanced recurring-prefix condition. Replace `C` by its integer ceiling
+if necessary. Then there exist strictly increasing sequences `(n_k)` and
+`(ℓ_k)`, an integer `h`, and a single positive matrix `B` such that, at
+`t_k := n_k + ℓ_k`, every swap-pair overlap type obeys
+
+`‖v‖_∞ ≤ C + R_B(1 + dC) ≤ b := C + ⌈R_B(1 + dC)⌉`.
+
+Consequently, the union of type triples over all these depths and all
+levels `N > t_k` has cardinality at most `d²(2b + 1)^d`.
+
+*Proof.* BST19 Lemma 5.9 supplies PRICE subsequences. We use just the
+following parts of Definition 5.8:
+
+- (P): `M_{[ℓ_k−h,ℓ_k)} = B > 0`, independently of `k`;
+- (R): `σ_{[n_k,n_k+ℓ_k)} = σ_{[0,ℓ_k)}`;
+- (C): `L^{(n_k+ℓ_k)}` is `C`-balanced.
+
+By (R), the terminal `h` matrices of the repeated prefix at `t_k` have
+product `B`, so
+
+`M_{[t_k−h,t_k)} = B`, and
+`ℓ^{(t_k)ᵀ} = ℓ^{(t_k−h)ᵀ} B`.
+
+The left row is positive because all substitutions are non-erasing.
+Lemma P therefore gives `ℓ_max^{(t_k)}/ℓ_min^{(t_k)} ≤ R_B`.
+Property (C) gives Lemma S at the same depth. Steps 1–5 of T1's proof use
+only these two bounds at the depth being considered, and yield
+`‖v‖_∞ ≤ C + R_B(1 + dC)`. The constant is independent of `k` and `N`.
+The integer box and its cardinality give the conclusion. ∎
+
+Unimodularity and algebraic irreducibility enter through the stated BST19
+regime and its PRICE import. The bound itself needs only (P), (R), and (C);
+it uses neither geometric coincidence nor pure discrete spectrum.
+
+**Source and novelty boundary.** This is an elementary consequence in the
+repository's swap-type encoding, not a novelty claim. BST19 already uses
+the fixed positive suffix to compare image sizes in the proof of Lemma
+5.11. The verified import is recorded in
+[`literature-gate-2026-10-09.md`](literature-gate-2026-10-09.md) §6.
+
+## All-depth overlap finiteness (open theorem target)
+
+**Status:** open. T1′ gives a common finite type pool at selected depths,
+not a closed finite transition graph across the intervening depths. PRICE
+does not assert uniform balance or uniformly bounded gaps there. Nor does
+prefix recurrence identify the inflation from `t_k` to `t_{k+1}` with a
+single fixed block: that product is `σ_{[t_k,t_{k+1})}` and may vary with
+`k`. Extending the bound to every depth, or constructing a finite
+presentation for return transitions, requires a further argument.
+
+## Executable checks
+
+`kernel/sadic/overlap.mojo` computes `R_B` and the integer bound `b` in
+checked arithmetic. The independent oracle in
+`reference/sadic_reference/overlap.py` enumerates column-pair ratios with
+`Fraction`; the Mojo implementation instead compares row extrema.
+
+`tests/test_return_overlap.py` and `kernel/tests/test_return_overlap.mojo`
+check the suffix inequality on every positive two-by-two matrix with
+entries in `{1,2,3}` and nonzero left rows in `{0,1,2,3,4}²`, then enumerate
+literal tile overlaps for short words, unequal image lengths, and skew
+left rows. The Python tests also cover Arnoux–Rauzy and Brun images.
+A prefix/suffix order negative control and refusal tests guard the precise
+hypotheses and arithmetic. `kernel/vectors.mojo` and
+`tools/cross_check.py` compare ratios and boxes on positive AR and Brun
+products. These finite checks guard the ingredients; the theorem is the
+proof above. No finite run certifies balance or PRICE for an infinite
+directive sequence.

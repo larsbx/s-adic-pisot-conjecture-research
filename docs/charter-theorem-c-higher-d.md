@@ -1,6 +1,14 @@
 # Branch charter: Theorem C for Brun `7 ≤ d ≤ 10`
 
-**Status:** planning charter. It states no theorem and moves no claim status.
+**Status:** planning charter, in execution. It states no theorem itself.
+
+**Progress (2026-10-09).**
+- `d = 7`: witness found at period 11 and pinned. Theorem C now covers
+  `d ∈ {5, 6, 7}` (`docs/sadic-g6-brun-higher-census.md` §3).
+- `d = 8..10`: the search is running.
+- The symbolic-transfer branch has since given Theorem C′ for every
+  `5 ≤ d ≤ 10` by import. This branch keeps supplying balanced-pair
+  certificates, which need no transfer import.
 Branch: `claude/brun-theorem-c-higher-d`. Phase: G3 on open cells, with G6
 censuses (`docs/METHODOLOGY.md` §3).
 

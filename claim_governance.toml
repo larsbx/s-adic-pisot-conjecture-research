@@ -304,3 +304,12 @@ aliases = ["Brun six periodic point BPA"]
 path = "CLAIMS.md"
 anchor = "| Brun six periodic point BPA |"
 window_lines = 0
+
+[[claim]]
+name = "BrunSevenPeriodicPointBPA"
+status = "finite-domain"
+aliases = ["Brun seven periodic point BPA"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun seven periodic point BPA |"
+window_lines = 0

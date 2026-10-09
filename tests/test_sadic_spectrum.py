@@ -214,3 +214,12 @@ def test_brun_five_periodic_point():
     assert periodic_admissible(shift, w)
     assert compose_all(shift, w)[1] == (0, 1)
     assert periodic_verdict(shift, w, 200000, 20000) == "bpa:terminates"
+
+
+def test_brun_six_periodic_point():
+    # Theorem C witness for d = 6: beta_12 beta_23 beta_31 beta_14 beta_42 beta_25 beta_56 beta_61
+    from sadic_reference.periodic import periodic_verdict
+    shift = brun_unordered(6)
+    w = (0, 6, 10, 2, 16, 8, 24, 25)
+    assert periodic_admissible(shift, w)
+    assert periodic_verdict(shift, w, 200000, 20000) == "bpa:terminates"

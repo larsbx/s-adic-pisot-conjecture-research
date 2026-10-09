@@ -4,8 +4,8 @@
 - Theorem B and Corollary B′: repository-proved. B′ rests on the imported
   Barge 2016 Theorem 3.13 and a reversal lemma proved here.
 - Theorem C: conditional theorem. Its only open hypothesis is the Pisot
-  condition for Brun with `d = 5`.
-- §4: finite-domain census evidence for `d = 5, 6`.
+  condition for Brun with `d = 5` or `d = 6`.
+- §4: census evidence for `d = 5, 6`.
 
 Nothing here proves the Pisot condition, nor the S-adic Pisot conjecture for
 any algorithm.
@@ -84,12 +84,12 @@ transfers it to `σ_w`. ∎
 This covers every Pisot composite the census caps, including the `d = 5, 6`
 ones whose balanced-pair graphs exceed every budget tried.
 
-## 3. Theorem C (Brun `d = 5`: only the Pisot condition is missing)
+## 3. Theorem C (Brun `d = 5, 6`: only the Pisot condition is missing)
 
-**Theorem C (conditional).** Suppose the unordered Brun algorithm
-`(Δ, T_B, A_B, ν_B)` with `d = 5` satisfies the Pisot condition. Then for
-`ν_B`-a.e. `x`, the S-adic system `(X_{φ_B(x)}, Σ)` is a bounded natural
-coding of a minimal translation on `T⁴`. In particular it has pure discrete
+**Theorem C (conditional).** Let `d ∈ {5, 6}` and suppose the unordered Brun
+algorithm `(Δ, T_B, A_B, ν_B)` in dimension `d` satisfies the Pisot
+condition. Then for `ν_B`-a.e. `x`, the S-adic system `(X_{φ_B(x)}, Σ)` is a
+bounded natural coding of a minimal translation on `T^{d−1}`. In particular it has pure discrete
 spectrum.
 
 *Proof.* Apply BST23 Theorem 3.1. Its hypotheses other than the Pisot
@@ -100,21 +100,23 @@ condition are:
    Brun algorithm in arbitrary dimension `d ≥ 3`, before it specializes to
    `d = 4`. They are verified in the arXiv text.
 3. **A periodic Pisot point with pure discrete spectrum.**
-   - Take `w = (0,5,8,2,15,16)`, that is `β₁₂β₂₃β₃₁β₁₄β₄₅β₅₁`, with `x₀` the
-     dominant right eigenvector of `M_w`.
+   - Take `w = (0,5,8,2,15,16)`, that is `β₁₂β₂₃β₃₁β₁₄β₄₅β₅₁`, for `d = 5`;
+     and `w = (0,6,10,2,16,8,24,25)`, that is `β₁₂β₂₃β₃₁β₁₄β₄₂β₂₅β₅₆β₆₁`,
+     for `d = 6`. Let `x₀` be the dominant right eigenvector of `M_w`.
    - As in BST23's argument for `τ` in §6.5, `φ_B(x₀) = w^∞` is admissible.
    - `M_w` is a Pisot matrix: irreducible and Pisot, certified by the
      kernel.
    - The balanced pair algorithm terminates on `σ_w`
-     (`test_brun_five_periodic_point`, in Mojo and Python).
+     (`test_brun_five_periodic_point` and `test_brun_six_periodic_point`, in
+     Mojo and Python).
    - BST23 Proposition 6.1 then gives pure discrete spectrum of the
      *symbolic* system.
 
 Every hypothesis except the Pisot condition is therefore met. ∎
 
-The Pisot condition for Brun `d = 5` has numerical support only (BST21). For
-`d ≥ 6` the same argument needs a periodic point on which the balanced pair
-algorithm terminates. Corollary B′ gives the flow version for every Pisot
+The Pisot condition for Brun `d = 5, 6` has numerical support only (BST21).
+For `7 ≤ d ≤ 10` the same argument needs a periodic point on which the
+balanced pair algorithm terminates. Corollary B′ gives the flow version for every Pisot
 point, but the transfer to the symbolic system (Barge 2016 Remark 4.2,
 citing Clark–Sadun) has not been verified here.
 
@@ -134,11 +136,19 @@ orbit census reproduces the full census exactly.
 | 7 | 11,160 | 122 | 8,760 | 240 | 0 | 2,160 | 1,800 | 360 | 2,160 |
 | 8 | 48,750 | 496 | 33,000 | 840 | 300 | 14,610 | 12,390 | 2,220 | 14,610 |
 
-**`d = 6`:** see the table below this section.
+**`d = 6`, BPA budgets 200,000 states and length 20,000:**
+
+| period | words | orbits | not primitive | reducible `χ` | not Pisot | PIP | BPA terminates | BPA capped | in mirror Barge class |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| ≤ 5 | 1,984 | 20 | 1,984 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 6 | 7,735 | 39 | 7,615 | 0 | 120 | 0 | 0 | 0 | 0 |
+| 7 | 39,990 | 125 | 37,830 | 0 | 1,440 | 720 | 0 | 720 | 720 |
+| 8 | 209,790 | 532 | 185,850 | 1,800 | 14,400 | 7,740 | 1,440 | 6,300 | 7,740 |
 
 Observations:
 - No balanced-pair run **fails**. Every capped run hits the **length**
-  budget, not the state budget. One `d = 5` period-6 composite reaches a
+  budget, not the state budget: all 24 capped `d = 5` orbits and all 11
+  capped `d = 6` orbits were re-run and report the length budget. One `d = 5` period-6 composite reaches a
   reachable irreducible pair of length 112,328 with only 423 states.
 - The capped composites have a second root of modulus about 0.89–0.94
   (numerical, for illustration only). Weak contraction makes the

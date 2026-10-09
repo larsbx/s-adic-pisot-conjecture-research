@@ -168,3 +168,9 @@ discrete spectrum of the **symbolic** system `(X_σ, Σ)` of a periodic point.
 The repository uses Barge only for the flow. The symbolic statement it takes
 from BST23 Proposition 6.1 (balanced pairs, verified) wherever that applies,
 and it does not import the transfer between the two.
+
+**Consequence for §5.** For Brun with `5 ≤ d ≤ 10` the realization exists in
+every dimension. The periodic-point input of BST23 Theorem 3.1 is now
+supplied for `d = 5, 6` by points that pass the balanced pair algorithm
+(`docs/sadic-g6-brun-higher-census.md`, Theorem C). So for those two
+dimensions the Pisot condition is the only missing input.

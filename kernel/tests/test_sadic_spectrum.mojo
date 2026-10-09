@@ -236,6 +236,16 @@ def test_brun_five_periodic_point() raises:
     require_claim("BrunFivePeriodicPointBPA")
 
 
+def test_brun_six_periodic_point() raises:
+    # Theorem C, d = 6: beta_12 beta_23 beta_31 beta_14 beta_42 beta_25
+    # beta_56 beta_61 (1-based) passes the balanced pair algorithm
+    var w: List[Int] = [0, 6, 10, 2, 16, 8, 24, 25]
+    var b = brun_unordered(6)
+    assert_true(periodic_admissible(b, w))
+    assert_equal(periodic_verdict(b, w, 200000, 20000), "bpa:terminates")
+    require_claim("BrunSixPeriodicPointBPA")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -247,5 +257,6 @@ def main() raises:
     test_brun_orbits()
     test_theorem_b()
     test_brun_five_periodic_point()
+    test_brun_six_periodic_point()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

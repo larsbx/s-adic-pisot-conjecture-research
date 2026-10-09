@@ -279,12 +279,12 @@ anchor = "| Brun five periodic point BPA |"
 window_lines = 0
 
 [[claim]]
-name = "BrunFivePisotConditionSuffices"
+name = "BrunFiveSixPisotConditionSuffices"
 status = "conditional"
-aliases = ["Brun five Pisot condition suffices"]
+aliases = ["Brun five six Pisot condition suffices"]
 [[claim.surfaces]]
 path = "CLAIMS.md"
-anchor = "| Brun five Pisot condition suffices |"
+anchor = "| Brun five six Pisot condition suffices |"
 window_lines = 0
 
 [[claim]]
@@ -294,4 +294,13 @@ aliases = ["Brun higher periodic census"]
 [[claim.surfaces]]
 path = "CLAIMS.md"
 anchor = "| Brun higher periodic census |"
+window_lines = 0
+
+[[claim]]
+name = "BrunSixPeriodicPointBPA"
+status = "finite-domain"
+aliases = ["Brun six periodic point BPA"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun six periodic point BPA |"
 window_lines = 0

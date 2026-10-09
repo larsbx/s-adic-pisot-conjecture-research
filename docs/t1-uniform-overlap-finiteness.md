@@ -143,11 +143,12 @@ levels `N > t_k` has cardinality at most `d²(2b + 1)^d`.
 following parts of Definition 5.8:
 
 - (P): `M_{[ℓ_k−h,ℓ_k)} = B > 0`, independently of `k`;
-- (R): `σ_{[n_k,n_k+ℓ_k)} = σ_{[0,ℓ_k)}`;
+- (R): `σ_{n_k+r} = σ_r` for every `0 ≤ r < ℓ_k`, that is, equality
+  of the directive tuples, not merely equality of their composed morphisms;
 - (C): `L^{(n_k+ℓ_k)}` is `C`-balanced.
 
 By (R), the terminal `h` matrices of the repeated prefix at `t_k` have
-product `B`, so
+product `M_{ℓ_k−h} ⋯ M_{ℓ_k−1} = B`, so
 
 `M_{[t_k−h,t_k)} = B`, and
 `ℓ^{(t_k)ᵀ} = ℓ^{(t_k−h)ᵀ} B`.
@@ -158,6 +159,12 @@ Property (C) gives Lemma S at the same depth. Steps 1–5 of T1's proof use
 only these two bounds at the depth being considered, and yield
 `‖v‖_∞ ≤ C + R_B(1 + dC)`. The constant is independent of `k` and `N`.
 The integer box and its cardinality give the conclusion. ∎
+
+Tuple equality matters for locating this suffix. For example, if `e` is
+the identity substitution and `β` has positive incidence matrix `B`, the
+blocks `(e, β)` and `(β, e)` have equal composites but different final
+matrices (`B` and the identity). Composite equality alone does not justify
+the displayed terminal-block identity.
 
 Unimodularity and algebraic irreducibility enter through the stated BST19
 regime and its PRICE import. The bound itself needs only (P), (R), and (C);
@@ -203,3 +210,7 @@ hypotheses and arithmetic. `kernel/vectors.mojo` and
 products. These finite checks guard the ingredients; the theorem is the
 proof above. No finite run certifies balance or PRICE for an infinite
 directive sequence.
+
+The endpoint and composite-equality controls, independent mathematical
+review, and reconciliation of PR #4's tree reference with its final commit
+are recorded in [`t1-prime-audit-2026-10-09.md`](t1-prime-audit-2026-10-09.md).

@@ -1,6 +1,11 @@
 # Branch charter: from flow to symbolic pure discrete spectrum
 
-**Status:** planning charter. It states no theorem and moves no claim status.
+**Status:** planning charter, now executed. It states no theorem itself.
+
+**Outcome (2026-10-09): success.** Sirvent–Solomyak 2002 Corollary 5.2 is
+(T), verified from the primary text, without unimodularity (gate §9).
+Corollary B″ and Theorem C′ are in `docs/sadic-g6-brun-higher-census.md` §5.
+The plan below is kept as written.
 Branch: `claude/brun-symbolic-transfer`. Phases: G0 (literature gate), then
 G3 on open cells (`docs/METHODOLOGY.md` §3).
 

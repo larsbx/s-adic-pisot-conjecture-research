@@ -32,6 +32,10 @@ Then read:
   with a balanced-pair certificate per dimension (Theorem C). Every such Pisot point also has symbolic pure discrete spectrum
   (Corollary B″), so for every `5 ≤ d ≤ 10` the Pisot condition is the only
   missing input (Theorem C′). Census for `d = 5, 6`;
+- [`docs/selmer4-pure-discrete-spectrum.md`](docs/selmer4-pure-discrete-spectrum.md):
+  Theorem S, a.e. pure discrete spectrum for the sorted Selmer algorithm with
+  four coordinates. It rests on BST21's computer-assisted Pisot condition,
+  the full-branch Lemma F, and one balanced-pair witness.
 - [`docs/brun-pisot-condition.md`](docs/brun-pisot-condition.md): what an
   unconditional Brun proof still needs. The Pisot condition is proved for
   `d = 3, 4` and open for `5 ≤ d ≤ 10`. The file also gives exact density

@@ -8,7 +8,7 @@ from mojo_smoke.claims import require_claim
 from substitution_dynamics.barge_class import in_mirror_class
 from substitution_dynamics.substitution import Substitution
 from sadic.cocycle import prefix_matrix
-from sadic.directive import DirectiveShift, words_of_length
+from sadic.directive import DirectiveShift, selmer4, words_of_length
 from sadic.periodic import (
     brun_classes, brun_orbit_words, is_pip,
     BPA_CAPPED, BPA_FAILS, BPA_TERMINATES, brun_unordered, bpa_verdict, is_lyndon,
@@ -333,6 +333,27 @@ def test_brun_five_non_pisot_points() raises:
     require_claim("BrunFiveNonPisotPoints")
 
 
+def test_selmer_four_periodic_point() raises:
+    # docs/selmer4-pure-discrete-spectrum.md: the incidence matrices of the
+    # realization are tS_a, tS_b (BST21 §5.1), and (a a b b)^infinity is
+    # primitive, irreducible, Pisot, and passes the balanced pair algorithm
+    var shift = selmer4()
+    var s_a: List[Int] = [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0]
+    var s_b: List[Int] = [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1]
+    for k in range(2):
+        var s = s_a.copy() if k == 0 else s_b.copy()
+        var inc = shift.substitutions[k].incidence()
+        for i in range(4):
+            for j in range(4):
+                # incidence entry (i, j) = number of letters i in sigma(j) = S[j][i]
+                assert_equal(inc[i * 4 + j], s[j * 4 + i])
+    var w: List[Int] = [0, 0, 1, 1]
+    var expected: List[Int] = [1, -1, 0, -2, 1]
+    assert_true(same(charpoly(prefix_matrix(shift, w), 4), expected))
+    assert_equal(periodic_verdict(shift, w, 50000, 5000), "bpa:terminates")
+    require_claim("SelmerFourPeriodicPointBPA")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -349,5 +370,6 @@ def main() raises:
     test_brun_seven_periodic_point()
     test_brun_pisot_periodic_points()
     test_brun_five_non_pisot_points()
+    test_selmer_four_periodic_point()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

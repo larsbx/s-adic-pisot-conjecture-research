@@ -289,3 +289,20 @@ def test_brun_five_non_pisot_points():
         assert irreducibility_verdict(f)[0] == 1
         assert pisot_verdict(f) == 0
 
+
+def test_selmer_four_periodic_point():
+    # docs/selmer4-pure-discrete-spectrum.md: the realization has incidence
+    # matrices tS_a, tS_b (BST21 §5.1, d = 3 projective), and the periodic
+    # point (a a b b)^infinity is primitive, irreducible, Pisot, and passes
+    # the balanced pair algorithm
+    from sadic_reference import incidence, selmer4
+    from sadic_reference.periodic import periodic_verdict
+    s_a = ((0, 1, 0, 0), (0, 0, 1, 0), (1, 0, 0, 1), (1, 0, 0, 0))
+    s_b = ((0, 1, 0, 0), (0, 0, 1, 0), (1, 0, 0, 0), (1, 0, 0, 1))
+    shift = selmer4()
+    for sigma, s in zip(shift.substitutions, (s_a, s_b)):
+        assert tuple(map(tuple, incidence(sigma))) == tuple(zip(*s))
+    w = (0, 0, 1, 1)
+    assert charpoly(prefix_matrix(shift, w)) == (1, -1, 0, -2, 1)
+    assert periodic_verdict(shift, w, 50000, 5000) == "bpa:terminates"
+

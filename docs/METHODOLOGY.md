@@ -126,6 +126,10 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
     B′ to the symbolic system for every irreducible Pisot composite.
     Theorem C′ extends Theorem C to every `5 ≤ d ≤ 10`, using one pinned
     primitive irreducible Pisot periodic point per dimension.
+- **G3, Selmer `d = 4`:** Theorem S
+  (`docs/selmer4-pure-discrete-spectrum.md`). A faithful realization only
+  needs one substitution per matrix (gate §11). Lemma F shows both branches
+  are full, and the witness `(aabb)^∞` passes the balanced pair algorithm.
 - **G4:**
   - Lemma S and Theorem T1 are proved under uniform balance and a bounded
     length ratio (`docs/t1-uniform-overlap-finiteness.md`).

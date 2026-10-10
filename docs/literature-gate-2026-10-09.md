@@ -65,7 +65,7 @@ Status of a.e. pure discrete spectrum for the natural measure.
 |---|---|---|---|
 | Arnoux–Rauzy | Sturmian classical; BMST16 under uniform C-balance | a.e. (BST19-3.7). Every sequence of a class (BST19-3.8). **False without a balance restriction** (CFZ00, CFM08) | a.e., every `d` (BST23-6.5) |
 | Brun | as above | a.e. (BST19-3.10) | `d=4` a.e. (BST23-6.7). `5 ≤ d ≤ 10`: numerical Pisot evidence only, **open**. `d ≥ 11`: Pisot numerically false |
-| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: `θ₂ < 0` computer-assisted (BST21), pure discrete spectrum **open**. `d ≥ 5`: Pisot numerically false |
+| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: a.e. (Theorem S, `docs/selmer4-pure-discrete-spectrum.md`; Pisot input from BST21). `d ≥ 5`: Pisot numerically false |
 | Jacobi–Perron | as above | a.e. (BST23-6.6) | `4 ≤ d ≤ 10`: numerical Pisot only, **open** |
 | Fully subtractive, Poincaré | — | unverified | unverified |
 
@@ -217,3 +217,21 @@ index by projective dimension, which is `d − 1`.
 
 No proof of the Brun Pisot condition for any `d ≥ 5` was found (searches to
 2026-10-10, not exhaustive).
+
+## 11. Selmer with four coordinates (2026-10-10)
+
+| Key | Statement | Check |
+|---|---|---|
+| BST21-5.1def | The sorted Selmer map `T_S(x) = κ(ord(1 − x_d, x₁, …, x_d))`, with matrices `S_a` on `{2x_d > 1}` and `S_b` on `{2x_d < 1 ≤ x_{d−1} + x_d}`. Almost every orbit enters the absorbing set `∆_{S_a} ∪ ∆_{S_b}`. The invariant measure there is `c dx₁⋯dx_d / (x₁⋯x_d)` (citing Schweiger, Theorem 22), and Selmer satisfies Lagarias's (H1)–(H5). | verified |
+| BST23-Def2.2 | A substitution selection `ϕ` is *faithful* if `ϕ(x) = ϕ(y)` whenever `A(x) = A(y)`; its incidence matrix is `ᵗA(x)`. | verified |
+| BST23-§2.1 | The domain is any `∆ ⊆ {x ∈ [0,1]^d : ‖x‖₁ = 1}`. *Positive* means `A(∆) ⊆ {M ∈ ℕ^{d×d} : |det M| = 1}`. | verified |
+| BST23-Def2.8 | `x` has positive range if `inf_n ν(Tⁿ∆⁽ⁿ⁾(x)) > 0`. | verified |
+| BST23-§6.2 end | The "realization of factor complexity `(d−1)n + 1`" concerns the dendric refinements (Corollary 6.3), not the hypotheses of Theorem 3.1. | verified |
+| ABMST-§18 | "While the Pisot property of the Brun and the Selmer continued fraction algorithms would suffice to apply our theory to these algorithms in higher dimensions, …". No Selmer four-coordinate theorem is stated. | verified |
+
+**Correction to the §5 correction.** The §5 note says that the "faithful
+substitutive realization" hypothesis has no known instance for Selmer
+`d = 4`. That is wrong. By BST23 Definition 2.2, any choice of one
+substitution per matrix is faithful, and the complexity remark in BST23 §6.2
+is not a hypothesis of Theorem 3.1. The Selmer `d = 4` cell is reachable. It
+is closed in `docs/selmer4-pure-discrete-spectrum.md` (Theorem S).

@@ -22,6 +22,7 @@ from sadic_reference.spectrum import Inconclusive, charpoly, disc_zero_count, ir
 from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
     brun3,
+    selmer4,
     cross_ratio_bound,
     first_positive_prefix,
     image_balance,
@@ -95,15 +96,15 @@ def battery() -> list[str]:
                 for a in range(shift.size):
                     out.append(f"{key}|image-balance-{a}|{digits}|{image_balance(shift, w, a)}")
         out += [f"{key}|positive-block|{''.join(map(str, w))}|1" for w in positive_blocks(shift, MAX_LEN)]
-    for shift in (arnoux_rauzy(3), brun3()):
+    for shift in (arnoux_rauzy(3), brun3(), selmer4()):
         for n in range(1, SPECTRAL_LEN + 1):
             for w in product(range(shift.labels), repeat=n):
                 out += spectral_lines(shift.name, "".join(map(str, w)), prefix_matrix(shift, w))
-    shift = brun_unordered(4)
-    for n in range(1, PERIODIC_LEN + 1):
-        for w in periodic_words(shift, n):
-            verdict = periodic_verdict(shift, w, BPA_STATES, BPA_LENGTH)
-            out.append(f"{shift.name}|periodic|" + ",".join(map(str, w)) + f"|{verdict}")
+    for shift in (brun_unordered(4), selmer4()):
+        for n in range(1, PERIODIC_LEN + 1):
+            for w in periodic_words(shift, n):
+                verdict = periodic_verdict(shift, w, BPA_STATES, BPA_LENGTH)
+                out.append(f"{shift.name}|periodic|" + ",".join(map(str, w)) + f"|{verdict}")
     for f in POLYNOMIALS:
         out += polynomial_lines(f)
     shift = brun_unordered(5)

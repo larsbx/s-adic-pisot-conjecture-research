@@ -403,3 +403,39 @@ aliases = ["Brun no uniform contraction"]
 path = "CLAIMS.md"
 anchor = "| Brun no uniform contraction |"
 window_lines = 0
+
+[[claim]]
+name = "BrunFivePisotCylinderExpandingReturn"
+status = "finite-domain"
+aliases = ["Brun five Pisot cylinder expanding return"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five Pisot cylinder expanding return |"
+window_lines = 0
+
+[[claim]]
+name = "BrunFiveCylinderNoUniformReturnContraction"
+status = "proved"
+aliases = ["Brun five cylinder no uniform return contraction"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five cylinder no uniform return contraction |"
+window_lines = 0
+
+[[claim]]
+name = "InducedPathwiseNegativeDriftCriterion"
+status = "proved"
+aliases = ["Induced pathwise negative drift criterion"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Induced pathwise negative drift criterion |"
+window_lines = 0
+
+[[claim]]
+name = "BrunFiveFiniteNormReturnBudget"
+status = "open"
+aliases = ["Brun five finite norm return budget"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five finite norm return budget |"
+window_lines = 0

@@ -113,6 +113,11 @@ def battery() -> list[str]:
     for n in range(1, BRUN5_CLASS_LEN + 1):
         classes = brun_full_classes(5, n)
         out.append(f"brun5|classes|{n}|{len(classes)},{sum(is_pip(shift, w) for w in classes)}")
+    return_word = (0, 5, 8, 2, 15, 16) + (0, 4, 1, 10, 15, 19, 14, 8) * 3
+    word = ",".join(map(str, return_word))
+    matrix = prefix_matrix(shift, return_word)
+    out += spectral_lines("brun5-return", word, matrix)
+    out.append(f"brun5-return|disc|{word}|{disc_zero_count(charpoly(matrix))}")
     return out
 
 

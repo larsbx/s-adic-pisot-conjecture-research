@@ -145,3 +145,16 @@ def main() raises:
             if is_pip(brun5, w):
                 kept += 1
         print("brun5|classes|" + String(n) + "|" + String(len(classes)) + "," + String(kept))
+    var return_word: List[Int] = [0, 5, 8, 2, 15, 16]
+    var expanding_word: List[Int] = [0, 4, 1, 10, 15, 19, 14, 8]
+    for _ in range(3):
+        for a in expanding_word:
+            return_word.append(a)
+    var return_matrix = prefix_matrix(brun5, return_word)
+    var return_poly = charpoly(return_matrix, 5)
+    var return_irr = irreducibility_verdict(return_poly)
+    print("brun5-return|charpoly|" + joined(return_word) + "|" + joined(return_poly))
+    print("brun5-return|primitivity|" + joined(return_word) + "|" + String(primitivity_exponent(return_matrix, 5)))
+    print("brun5-return|irreducible|" + joined(return_word) + "|" + String(return_irr.verdict) + "," + String(return_irr.witness))
+    print("brun5-return|pisot|" + joined(return_word) + "|" + String(pisot_verdict(return_poly)))
+    print("brun5-return|disc|" + joined(return_word) + "|" + String(disc_zero_count(return_poly)))

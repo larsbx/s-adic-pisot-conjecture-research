@@ -358,3 +358,30 @@ aliases = ["Brun class enumeration"]
 path = "CLAIMS.md"
 anchor = "| Brun class enumeration |"
 window_lines = 0
+
+[[claim]]
+name = "BrunPisotConditionThreeFour"
+status = "imported"
+aliases = ["Brun Pisot condition three four"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun Pisot condition three four |"
+window_lines = 0
+
+[[claim]]
+name = "BrunDensityBrackets"
+status = "proved"
+aliases = ["Brun density brackets"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun density brackets |"
+window_lines = 0
+
+[[claim]]
+name = "BrunPisotConditionFiveToTen"
+status = "open"
+aliases = ["Brun Pisot condition five to ten"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun Pisot condition five to ten |"
+window_lines = 0

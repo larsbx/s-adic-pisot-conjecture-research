@@ -32,6 +32,10 @@ Then read:
   with a balanced-pair certificate per dimension (Theorem C). Every such Pisot point also has symbolic pure discrete spectrum
   (Corollary B″), so for every `5 ≤ d ≤ 10` the Pisot condition is the only
   missing input (Theorem C′). Census for `d = 5, 6`;
+- [`docs/brun-pisot-condition.md`](docs/brun-pisot-condition.md): what an
+  unconditional Brun proof still needs. The Pisot condition is proved for
+  `d = 3, 4` and open for `5 ≤ d ≤ 10`. The file also gives exact density
+  brackets (Lemma D) and the cost of the known rigorous method at `d = 5`.
 - [`docs/t1-uniform-overlap-finiteness.md`](docs/t1-uniform-overlap-finiteness.md):
   the swap-walk and uniform overlap bounds (T1), and the finite pool of
   overlap types at selected PRICE return depths (T1′). The all-depth

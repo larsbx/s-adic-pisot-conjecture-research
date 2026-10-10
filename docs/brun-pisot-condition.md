@@ -167,17 +167,22 @@ Perron root.
   along the periodic orbit. Then the spectral radius is `≤ 1`, a
   contradiction. ∎
 
-**Remark (induced systems).** Inducing does not avoid this. If `[v]` is a
-cylinder inside the inducing set, the periodic words `(w^m v)` return to it.
-For generic `v` their restricted products grow like `|λ₂|^m`. (The argument
-is sketched only; it needs a non-degeneracy condition on `v`.)
+**Remark (induced systems; open, not claimed).** Lemma N says nothing yet
+about induced subsystems. To carry it over one would need two things for a
+cylinder `[v]` in the inducing set:
+- connecting words that make `(w^m v)^∞` admissible at both concatenation
+  boundaries;
+- a non-degeneracy condition under which the connector preserves the
+  expanding eigendirection of `M_w`.
 
-**Consequence.** At `d = 5` any proof of `λ₂ < 0` must use the invariant
-measure in an essential way. It has to show that the expanding periodic
-behaviour carries too little mass. This rules out the uniform arguments that
-prove `d = 3`. It explains why `d = 4` needed computer-assisted integration,
-and why §3 is the shape of every known approach. The structures still open
-are all measure-dependent:
+Neither is proved here.
+
+**Consequence.** Lemma N rules out exactly the two uniform structures (1)
+and (2), which give the `d = 3` proof. At `d = 5` a proof needs more than
+branchwise uniform bounds on the full system. Whether some induced subsystem
+admits a uniform contraction is open (Remark above). The approaches below
+remain available. The first two use the invariant measure; the third uses it
+through its large-deviation rate:
 - the cylinder sum of §3;
 - validated numerics for the transfer operator on (point, direction) space,
   where the stationary measure gives `λ₁(D)` by the Furstenberg formula;

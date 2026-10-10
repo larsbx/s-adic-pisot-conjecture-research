@@ -289,3 +289,27 @@ def test_brun_five_non_pisot_points():
         assert irreducibility_verdict(f)[0] == 1
         assert pisot_verdict(f) == 0
 
+
+def test_brun_five_pisot_cylinder_expanding_return():
+    # Lemma R5: exact negative control for induction on the pinned Pisot
+    # cylinder. There is exactly one cyclic occurrence of v, hence this
+    # expanding period is a FIRST return, not just a concatenated product.
+    from sadic_reference.periodic import in_mirror_barge_class
+    from sadic_reference.spectrum import primitivity_exponent
+    shift = brun_unordered(5)
+    v = (0, 5, 8, 2, 15, 16)
+    w = (0, 4, 1, 10, 15, 19, 14, 8)
+    u = v + w * 3
+    assert periodic_admissible(shift, u)
+    cyclic = u + u[:len(v) - 1]
+    assert [i for i in range(len(u)) if cyclic[i:i + len(v)] == v] == [0]
+    m = prefix_matrix(shift, u)
+    assert all(a > 0 for row in m for a in row)
+    assert primitivity_exponent(m) == 1
+    f = charpoly(m)
+    assert f == (-1, 77, -2558, 17345, -11392, 1)
+    assert irreducibility_verdict(f) == (1, 5)
+    assert disc_zero_count(f) == 3
+    assert pisot_verdict(f) == 0
+    assert in_mirror_barge_class(compose_all(shift, u))
+

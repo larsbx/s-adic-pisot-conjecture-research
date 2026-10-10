@@ -177,6 +177,14 @@ cylinder `[v]` in the inducing set:
 
 Neither is proved here.
 
+For the specific cylinder of the pinned dimension-five Pisot witness,
+`docs/brun5-induced-structural-route.md` now supplies a period-30 expanding
+first-return certificate (Lemma R5) and rules out all-point branchwise
+nonexpansion on that inducing set. It does not settle arbitrary inducing
+sets. The same note gives a pathwise average-contraction implication and
+an open finite-norm return-budget candidate, with the omitted return-time
+moment recorded as a separate obligation.
+
 **Consequence.** Lemma N rules out exactly the two uniform structures (1)
 and (2), which give the `d = 3` proof. At `d = 5` a proof needs more than
 branchwise uniform bounds on the full system. Whether some induced subsystem

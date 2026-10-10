@@ -36,6 +36,10 @@ Then read:
   unconditional Brun proof still needs. The Pisot condition is proved for
   `d = 3, 4` and open for `5 ≤ d ≤ 10`. The file also gives exact density
   brackets (Lemma D) and the cost of the known rigorous method at `d = 5`.
+- [`docs/brun5-induced-structural-route.md`](docs/brun5-induced-structural-route.md):
+  an exact expanding first-return certificate on the pinned dimension-five
+  Pisot cylinder, a pathwise average-contraction criterion, and an open
+  five-state adapted-norm target requiring a certified return-time tail.
 - [`docs/t1-uniform-overlap-finiteness.md`](docs/t1-uniform-overlap-finiteness.md):
   the swap-walk and uniform overlap bounds (T1), and the finite pool of
   overlap types at selected PRICE return depths (T1′). The all-depth

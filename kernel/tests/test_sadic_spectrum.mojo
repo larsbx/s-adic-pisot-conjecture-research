@@ -333,6 +333,43 @@ def test_brun_five_non_pisot_points() raises:
     require_claim("BrunFiveNonPisotPoints")
 
 
+def test_brun_five_pisot_cylinder_expanding_return() raises:
+    # Lemma R5: the first-return map on [v] has an expanding periodic point.
+    var v: List[Int] = [0, 5, 8, 2, 15, 16]
+    var w: List[Int] = [0, 4, 1, 10, 15, 19, 14, 8]
+    var u = v.copy()
+    for _ in range(3):
+        for a in w:
+            u.append(a)
+    var b = brun_unordered(5)
+    assert_equal(len(u), 30)
+    assert_true(periodic_admissible(b, u))
+    var hits = 0
+    for i in range(len(u)):
+        var hit = True
+        for j in range(len(v)):
+            if u[(i + j) % len(u)] != v[j]:
+                hit = False
+        if hit:
+            assert_equal(i, 0)
+            hits += 1
+    assert_equal(hits, 1)
+    var m = prefix_matrix(b, u)
+    for a in m:
+        assert_true(a > 0)
+    assert_equal(primitivity_exponent(m, 5), 1)
+    var f = charpoly(m, 5)
+    var expected: List[Int] = [-1, 77, -2558, 17345, -11392, 1]
+    assert_true(same(f, expected))
+    var irr = irreducibility_verdict(f)
+    assert_equal(irr.verdict, 1)
+    assert_equal(irr.witness, 5)
+    assert_equal(disc_zero_count(f), 3)
+    assert_equal(pisot_verdict(f), 0)
+    assert_true(in_mirror_class(b.composite(u)))
+    require_claim("BrunFivePisotCylinderExpandingReturn")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -349,5 +386,6 @@ def main() raises:
     test_brun_seven_periodic_point()
     test_brun_pisot_periodic_points()
     test_brun_five_non_pisot_points()
+    test_brun_five_pisot_cylinder_expanding_return()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

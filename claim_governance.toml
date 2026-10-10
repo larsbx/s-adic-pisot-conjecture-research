@@ -385,3 +385,21 @@ aliases = ["Brun Pisot condition five to ten"]
 path = "CLAIMS.md"
 anchor = "| Brun Pisot condition five to ten |"
 window_lines = 0
+
+[[claim]]
+name = "BrunFiveNonPisotPoints"
+status = "finite-domain"
+aliases = ["Brun five non Pisot points"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five non Pisot points |"
+window_lines = 0
+
+[[claim]]
+name = "BrunNoUniformContraction"
+status = "proved"
+aliases = ["Brun no uniform contraction"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun no uniform contraction |"
+window_lines = 0

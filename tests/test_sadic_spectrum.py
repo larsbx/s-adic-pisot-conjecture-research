@@ -270,3 +270,22 @@ def test_brun_full_classes_and_pip_counts():
         classes = brun_full_classes(5, n)
         counts.append((len(classes), sum(is_pip(shift, w) for w in classes)))
     assert counts == [(0, 0), (0, 0), (0, 0), (0, 0), (1, 0), (3, 3), (20, 18)]
+
+
+def test_brun_five_non_pisot_points():
+    # Lemma N (docs/brun-pisot-condition.md §5): primitive admissible d = 5
+    # composites with an irreducible, non-Pisot quintic
+    from sadic_reference.spectrum import primitivity_exponent
+    shift = brun_unordered(5)
+    for w, f in (
+        ((0, 0, 4, 1, 10, 15, 17, 4), (-1, 9, -22, 22, -13, 1)),
+        ((0, 4, 1, 10, 15, 18, 10, 12), (-1, 6, -17, 26, -14, 1)),
+        ((0, 4, 1, 10, 15, 19, 14, 8), (-1, 9, -28, 35, -15, 1)),
+    ):
+        assert periodic_admissible(shift, w)
+        m = prefix_matrix(shift, w)
+        assert primitivity_exponent(m) >= 0
+        assert charpoly(m) == f
+        assert irreducibility_verdict(f)[0] == 1
+        assert pisot_verdict(f) == 0
+

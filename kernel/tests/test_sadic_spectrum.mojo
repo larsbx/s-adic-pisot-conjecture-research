@@ -308,6 +308,31 @@ def test_brun_classes() raises:
     require_claim("BrunClassEnumeration")
 
 
+def test_brun_five_non_pisot_points() raises:
+    # Lemma N (docs/brun-pisot-condition.md §5): admissible periodic d = 5 Brun
+    # points whose composite is primitive with an irreducible quintic that is
+    # not Pisot; an odd-degree irreducible polynomial has no root on the unit
+    # circle, so each has a second eigenvalue of modulus > 1
+    var words = List[List[Int]]()
+    var polys = List[List[Int]]()
+    words.append([0, 0, 4, 1, 10, 15, 17, 4])
+    polys.append([-1, 9, -22, 22, -13, 1])
+    words.append([0, 4, 1, 10, 15, 18, 10, 12])
+    polys.append([-1, 6, -17, 26, -14, 1])
+    words.append([0, 4, 1, 10, 15, 19, 14, 8])
+    polys.append([-1, 9, -28, 35, -15, 1])
+    var b = brun_unordered(5)
+    for k in range(len(words)):
+        assert_true(periodic_admissible(b, words[k]))
+        var m = prefix_matrix(b, words[k])
+        assert_true(primitivity_exponent(m, 5) >= 0)
+        var f = charpoly(m, 5)
+        assert_true(same(f, polys[k]))
+        assert_equal(irreducibility_verdict(f).verdict, 1)
+        assert_equal(pisot_verdict(f), 0)
+    require_claim("BrunFiveNonPisotPoints")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -323,5 +348,6 @@ def main() raises:
     test_brun_six_periodic_point()
     test_brun_seven_periodic_point()
     test_brun_pisot_periodic_points()
+    test_brun_five_non_pisot_points()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

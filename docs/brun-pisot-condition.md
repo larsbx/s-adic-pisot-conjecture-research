@@ -1,7 +1,7 @@
 # The Brun Pisot condition: what is proved, and what a proof for `d ≥ 5` costs
 
 **Status:**
-- Lemma D: repository-proved.
+- Lemma D and Lemma N: repository-proved.
 - §3: feasibility evidence (floating point), not a proof.
 - The Brun Pisot condition for `5 ≤ d ≤ 10` remains an **open** theorem
   target. It is Conjecture 18.4 of ABMST (gate §10).
@@ -125,3 +125,65 @@ cylinder enumeration, for `d = 5`. They are evidence only.
 3. **A GPU-scale certified campaign.** Use the template of §3 with Lemma D's
    rational brackets, exact vertex arithmetic in the Mojo kernel, and
    outward-rounded logarithms.
+
+## 5. No uniform structure exists at `d = 5` (Lemma N)
+
+Three admissible periodic `d = 5` Brun words of period 8, in 1-based labels
+(`test_brun_five_non_pisot_points`, Mojo and Python):
+
+| `w` | characteristic polynomial, lowest degree first | `|λ₂|` (numerical, illustration) |
+|---|---|---|
+| `β₁₂β₁₂β₂₁β₁₃β₃₄β₄₅β₅₂β₂₁` | −1, 9, −22, 22, −13, 1 | 1.029 |
+| `β₁₂β₂₁β₁₃β₃₄β₄₅β₅₃β₃₄β₄₁` | −1, 6, −17, 26, −14, 1 | 1.212 |
+| `β₁₂β₂₁β₁₃β₃₄β₄₅β₅₄β₄₃β₃₁` | −1, 9, −28, 35, −15, 1 | 1.449 |
+
+Each composite is primitive, and its characteristic polynomial is
+irreducible and certified **not** Pisot.
+
+**Lemma N.** Let `d = 5`. For each word above, `M_w` has a second eigenvalue
+of modulus `> 1`. Consequently, for the Brun cocycle:
+1. no Paley–Ursell bound `sup_{n,x} ‖D⁽ⁿ⁾(x)‖ < ∞` holds (BST21 (4.1));
+2. no family of norms makes every branch nonexpanding on the hyperplanes
+   `ι(x)^⊥`. This is the hypothesis of Avila–Delecroix's Lemma 6, which
+   proves `d = 3`.
+
+*Proof.* Let `f` be the characteristic polynomial: monic, irreducible,
+degree 5, `f(0) = ±1`.
+- Suppose `f` had a root `α` with `|α| = 1`. Then `ᾱ = 1/α` is also a root, so
+  `f` and its reciprocal `z⁵f(1/z)` share a root. By irreducibility,
+  `f = ±z⁵f(1/z)`. An odd-degree polynomial of this form has the root `1` or
+  `−1`, which contradicts irreducibility. So no root has modulus 1.
+- Since `f` is not Pisot and its Perron–Frobenius root is `> 1`, a second root
+  has modulus `> 1`.
+
+Let `x₀` be the periodic point (`T^n x₀ = x₀`, `n = |w|`). The row `ι(x₀)` is
+a left Perron–Frobenius eigenvector of `A⁽ⁿ⁾(x₀)`. The hyperplane
+`ι(x₀)^⊥` is invariant, and the spectrum there is that of `M_w` minus the
+Perron root.
+- For (1): `D⁽ᵏⁿ⁾(x₀) = D⁽ⁿ⁾(x₀)^k` is conjugate to the `k`-th power of that
+  restriction. Its spectral radius is `|λ₂|^k → ∞`, so `‖D⁽ᵏⁿ⁾(x₀)‖`
+  is unbounded.
+- For (2): nonexpanding branches give restricted products of norm `≤ 1`
+  along the periodic orbit. Then the spectral radius is `≤ 1`, a
+  contradiction. ∎
+
+**Remark (induced systems; open, not claimed).** Lemma N says nothing yet
+about induced subsystems. To carry it over one would need two things for a
+cylinder `[v]` in the inducing set:
+- connecting words that make `(w^m v)^∞` admissible at both concatenation
+  boundaries;
+- a non-degeneracy condition under which the connector preserves the
+  expanding eigendirection of `M_w`.
+
+Neither is proved here.
+
+**Consequence.** Lemma N rules out exactly the two uniform structures (1)
+and (2), which give the `d = 3` proof. At `d = 5` a proof needs more than
+branchwise uniform bounds on the full system. Whether some induced subsystem
+admits a uniform contraction is open (Remark above). The approaches below
+remain available. The first two use the invariant measure; the third uses it
+through its large-deviation rate:
+- the cylinder sum of §3;
+- validated numerics for the transfer operator on (point, direction) space,
+  where the stationary measure gives `λ₁(D)` by the Furstenberg formula;
+- a large-deviation bound on the time orbits spend near expanding cycles.

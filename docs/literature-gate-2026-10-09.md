@@ -198,3 +198,22 @@ with an irreducible Pisot characteristic polynomial, in every dimension
 BST23 Theorem 3.1 therefore needs only one exact certificate: primitivity,
 irreducibility and the Pisot property of one admissible periodic word. The
 balanced pair algorithm is no longer needed for it.
+
+## 10. The Brun Pisot condition (2026-10-10)
+
+`d` counts coordinates, as everywhere in this repository. BST21 and Hardcastle
+index by projective dimension, which is `d − 1`.
+
+| Key | Statement | Check |
+|---|---|---|
+| ABMST-10.13 | Arnoux–Berthé–Minervino–Steiner–Thuswaldner, arXiv:2508.16441v2, Proposition 10.13: "For d ∈ {3, 4}, each of the (d−1)-dimensional continued fraction algorithms (X_U, F_U, A_U, ν_U), (X_B, F_B, A_B, ν_B), and (X_M, F_M, A_M, ν_M) satisfies the Pisot condition." The proof cites Avila–Delecroix for `d = 3` and Schratzberger 2001 (see also Hardcastle–Khanin, Hardcastle) for `d = 4`. | verified |
+| ABMST-18.4 | Conjecture 18.4: "The Brun continued fraction algorithm satisfies the Pisot condition if and only if d ≤ 10." | verified |
+| ABMST-10.6 | Lemma 10.6: the ordered Brun map on `{(x₁, …, x_{d−1}, 1) : x₁ ≤ … ≤ x_{d−1}}` has invariant density `(x₁⋯x_{d−1})⁻¹ Σ_{S ⊆ {1,…,d−2}} (−1)^{|S|} / (1 + Σ_{k∈S} x_k)`. The map has `d` full branches (`F_B(X_{B,k}) = X_B`). | verified; transfer equation checked numerically (evidence) |
+| BST21-3.4 | `λ₂(A) = λ₁(D) = inf_n (1/n) ∫ log‖D⁽ⁿ⁾(x)‖ dµ(x)` for any matrix norm, with `D⁽ⁿ⁾ = Π A⁽ⁿ⁾ H(x)`. | verified |
+| BST21-§6 | For Brun, only heuristic values of `λ₂` are given, from `n = 2³⁰` orbit simulations. In our indexing: `d = 5`: −0.04651; 6: −0.03051; 7: −0.01974; 8: −0.01210; 9: −0.00647; 10: −0.00218; 11: +0.00115. | verified |
+| BST21-5.4 | The Selmer `d = 4` proof: the bound (3.4) at `n = 52`, using vertex maxima (convexity), density brackets, and outward-rounded floating point. | verified |
+| AD-2 | Avila–Delecroix, arXiv:1506.03692, Theorem 2: products of 3×3 Brun matrices are Pisot when primitive. Lemma 6 gives the cone-norm criterion. | read by a delegated reader |
+| Har02 | Hardcastle, Experiment. Math. 11 (2002): Brun `d = 4` (multiplicative form), `n = 8`, with the author's caveat "I do not attempt to control round-off errors". | read by a delegated reader |
+
+No proof of the Brun Pisot condition for any `d ≥ 5` was found (searches to
+2026-10-10, not exhaustive).

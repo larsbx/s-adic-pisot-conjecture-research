@@ -61,11 +61,19 @@ rational density brackets. This is the measure input to the bound below.
 
 The method is the BST21-5.4 template:
 
-`λ₂ ≤ (1/n) Σ_w µ(Δ_w) max_{v ∈ vert Δ_w} log‖N_{c(T^n v)} D⁽ⁿ⁾(v) N_{c(v)}⁻¹‖∞`.
+`λ₂ ≤ (1/n) Σ_{|w| = n+k} µ(Δ_w) max_{v ∈ vert Δ_w} log‖N_{w[n,n+k)} D⁽ⁿ⁾(v) N_{w[0,k)}⁻¹‖∞`.
+
+Here `w` ranges over the words of length `n + k`, and `Δ_w` is the
+`(n+k)`-cylinder, not the `n`-cylinder.
 
 It is valid because:
-- `D⁽ⁿ⁾` is affine on each `n`-cylinder, since `A⁽ⁿ⁾` is constant there and `H`
-  is affine. So each maximum is at a vertex.
+- On `Δ_w` both norm indices are constant: `c(x) = w[0,k)` and
+  `c(T^n x) = w[n,n+k)`. `D⁽ⁿ⁾` is affine there, since `A⁽ⁿ⁾` depends only on
+  `w[0,n)` and `H` is affine. So the conjugated matrix is affine on `Δ_w`, its
+  ∞-norm is convex there, and the maximum is at a vertex of `Δ_w`.
+- On a coarser `n`-cylinder `c(T^n x)` varies, because the branches are full.
+  There the conjugated matrix is only piecewise affine, and the vertex
+  argument fails.
 - Conjugating by finitely many invertible `N_c`, constant on depth-`k`
   cylinders, preserves the Lyapunov spectrum. So BST21-3.4 applies to the
   conjugated cocycle.
@@ -78,8 +86,8 @@ cylinder enumeration, for `d = 5`. They are evidence only.
 | quantity | `n = 6` | `n = 7` | `n = 8` | `n = 10` | `n = 20` | `n = 25` | `n = 40` |
 |---|---|---|---|---|---|---|---|
 | `(1/n) E log‖D⁽ⁿ⁾‖∞`, orbit average | 0.077 | 0.065 | 0.056 | 0.042 | 0.006 | −0.003 | −0.017 |
-| vertex-max bound, identity norm, exact enumeration | 0.105 | 0.087 | | | | | |
-| vertex-max bound, optimised norms of depth `k ≤ 2` | 0.071 | 0.072 | | | | | |
+| vertex-max bound over `(n+k)`-cylinders (`k = 1`), identity norm, exact enumeration | 0.105 | 0.087 | | | | | |
+| vertex-max bound over `(n+k)`-cylinders, optimised norms of depth `k ≤ 2` | 0.071 | 0.072 | | | | | |
 
 - The orbit average tends to `λ₂ ≈ −0.0465` (BST21) like `c/n`. It turns
   negative only at `n ≈ 24`.

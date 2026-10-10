@@ -4,7 +4,7 @@ digit strings; any disagreement fails closed."""
 
 from sadic.balance import image_balance
 from sadic.cocycle import cross_ratio_bound, first_positive_prefix, is_positive, positive_blocks, prefix_matrix
-from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, words_of_length
+from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, selmer4, words_of_length
 from sadic.overlap import morphic_balance_bound, positive_suffix_ratio, return_overlap_bound, window_overlap_bound
 from sadic.periodic import brun_classes, brun_unordered, is_pip, periodic_verdict, periodic_words, primitivity_exponent
 from sadic.spectrum import charpoly, disc_zero_count, irreducibility_verdict, pisot_verdict
@@ -121,7 +121,9 @@ def main() raises:
     emit(brun3())
     emit_spectral(arnoux_rauzy(3))
     emit_spectral(brun3())
+    emit_spectral(selmer4())
     emit_periodic(brun_unordered(4))
+    emit_periodic(selmer4())
     # the polynomial battery: a reducible quintic and sextic refuted only by
     # the factor search, z^4 + 1 (zeros on the circle), irreducible quartics,
     # and a sextic whose Schur-Cohn recursion overflows 64 bits

@@ -403,3 +403,21 @@ aliases = ["Brun no uniform contraction"]
 path = "CLAIMS.md"
 anchor = "| Brun no uniform contraction |"
 window_lines = 0
+
+[[claim]]
+name = "SelmerFourPeriodicPointBPA"
+status = "finite-domain"
+aliases = ["Selmer four periodic point BPA"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Selmer four periodic point BPA |"
+window_lines = 0
+
+[[claim]]
+name = "SelmerFourPDS"
+status = "proved"
+aliases = ["Selmer four pure discrete spectrum"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Selmer four pure discrete spectrum |"
+window_lines = 0

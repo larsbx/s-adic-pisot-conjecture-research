@@ -81,6 +81,18 @@ def brun3() -> DirectiveShift:
     return full_shift("brun-3", subs)
 
 
+def selmer4() -> DirectiveShift:
+    """Sorted Selmer with four coordinates on its absorbing set (BST21 §5.1),
+    realized faithfully: sigma_a, sigma_b have incidence matrices tS_a, tS_b.
+    sigma_a: 1 -> 2, 2 -> 3, 3 -> 14, 4 -> 1; sigma_b: 1 -> 2, 2 -> 3, 3 -> 1,
+    4 -> 14 (0-based below). Both branches are full, so the shift is full."""
+    subs = (
+        ((1,), (2,), (0, 3), (0,)),
+        ((1,), (2,), (0,), (0, 3)),
+    )
+    return full_shift("selmer-4", subs)
+
+
 def apply(sigma: Substitution, word: Word) -> Word:
     return tuple(x for a in word for x in sigma[a])
 

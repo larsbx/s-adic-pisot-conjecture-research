@@ -145,6 +145,20 @@ def brun3() raises -> DirectiveShift:
     return DirectiveShift.full("brun-3", subs)
 
 
+def selmer4() raises -> DirectiveShift:
+    """Sorted Selmer with four coordinates on its absorbing set (BST21 §5.1),
+    realized faithfully: `sigma_a`, `sigma_b` have incidence matrices `tS_a`,
+    `tS_b` (1-based: `sigma_a: 1 -> 2, 2 -> 3, 3 -> 14, 4 -> 1`,
+    `sigma_b: 1 -> 2, 2 -> 3, 3 -> 1, 4 -> 14`). Both branches are full on the
+    absorbing set, so the shift is full."""
+    var a: List[List[Int]] = [[1], [2], [0, 3], [0]]
+    var b: List[List[Int]] = [[1], [2], [0], [0, 3]]
+    var subs = List[Substitution]()
+    subs.append(Substitution.checked(a))
+    subs.append(Substitution.checked(b))
+    return DirectiveShift.full("selmer-4", subs)
+
+
 def words_of_length(labels: Int, n: Int) -> List[List[Int]]:
     """Every word of length n over `0..labels-1`, lexicographically."""
     var out = List[List[Int]]()

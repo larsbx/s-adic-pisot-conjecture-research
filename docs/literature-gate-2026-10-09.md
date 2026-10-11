@@ -65,9 +65,9 @@ Status of a.e. pure discrete spectrum for the natural measure.
 |---|---|---|---|
 | Arnoux–Rauzy | Sturmian classical; BMST16 under uniform C-balance | a.e. (BST19-3.7). Every sequence of a class (BST19-3.8). **False without a balance restriction** (CFZ00, CFM08) | a.e., every `d` (BST23-6.5) |
 | Brun | as above | a.e. (BST19-3.10) | `d=4` a.e. (BST23-6.7). `5 ≤ d ≤ 10`: numerical Pisot evidence only, **open**. `d ≥ 11`: Pisot numerically false |
-| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: a.e. (Theorem S, `docs/selmer4-pure-discrete-spectrum.md`; Pisot input from BST21). `d ≥ 5`: Pisot numerically false |
+| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: a.e. (Theorem S, `docs/selmer4-pure-discrete-spectrum.md`; Pisot input from BST21). `d ≥ 5`: Pisot numerically false | verified (§§8, 11) |
 | Jacobi–Perron | as above | a.e. (BST23-6.6) | `4 ≤ d ≤ 10`: numerical Pisot only, **open** |
-| Fully subtractive, Poincaré | — | unverified | unverified |
+| Fully subtractive, Poincaré | — | unverified | unverified | delegated reading |
 
 Conjecture 3.5 itself is **open** for every `d ≥ 3`. For `d = 2` it is known
 only under uniform C-balance. In every `d`, the tiling still needs geometric
@@ -239,24 +239,28 @@ is closed in `docs/selmer4-pure-discrete-spectrum.md` (Theorem S).
 
 ## 12. Survey: proved Pisot conditions and stated spectra (2026-10-11)
 
-A delegated reader went through the primary texts. Entries are "read by a
-delegated reader" unless they were already verified in §§8–11. `d` counts
-coordinates.
+**Provisional.** This section is a reading list, not a gate entry. A delegated
+reader went through the primary texts, and only the rows marked *verified* were
+checked against the source in §§8–11. Nothing here is imported: no claim in
+`CLAIMS.md` rests on an unverified row. `d` counts coordinates.
 
-| Algorithm | `d` | Pisot condition | a.e. PDS / natural coding stated |
-|---|---|---|---|
-| Brun | 3, 4 | proved (§10) | BST-AIF Theorem 3.11; BST23 Theorem 6.7 |
-| Modified Jacobi–Perron | 3, 4 | proved (Schratzberger 1998/2001; Hardcastle 2002) | ABMST Corollary 17.4 (two-sided, natural extension) |
-| Cassaigne–Selmer | 3 | BST21 Theorem 5.1 | BST23 Theorem 6.2 |
-| Selmer | 4 | BST21 Theorem 5.4 | **Theorem S** (this repository); not stated elsewhere |
-| Arnoux–Rauzy | all | for measures on the Rauzy gasket (BST23 Proposition 6.4) | BST23 Theorem 6.5 |
-| Jacobi–Perron | 3 | Broise-Alamichel–Guivarc'h 2001 | BST23 Theorem 6.6 |
-| Jacobi–Perron | 4 | not found (BST21 heuristic only) | — |
-| Arnoux–Rauzy–Poincaré | 3 | not found: arXiv BST23 v3 asserts it without citation, and the JEMS version drops it | — |
-| Reverse (Arnoux–Labbé) | 3 | ILT26 (arXiv:2602.14142) Theorem 1.4, `λ₂ < −0.020608`, computer-assisted | not stated; **not unimodular** (one matrix has determinant 2), so BST23 does not apply as stated |
-| Fully subtractive, Poincaré, Garrity | — | none for an absolutely continuous measure | — |
+| Algorithm | `d` | Pisot condition | a.e. PDS / natural coding stated | Status |
+|---|---|---|---|---|
+| Brun | 3, 4 | proved (§10) | BST-AIF Theorem 3.11; BST23 Theorem 6.7 | verified (§10) |
+| Modified Jacobi–Perron | 3, 4 | proved (Schratzberger 1998/2001; Hardcastle 2002) | ABMST Corollary 17.4 (two-sided, natural extension) | delegated reading |
+| Cassaigne–Selmer | 3 | BST21 Theorem 5.1 | BST23 Theorem 6.2 | verified (§§8, 11) |
+| Selmer | 4 | BST21 Theorem 5.4 | **Theorem S** (this repository); not stated elsewhere | verified (§11) |
+| Arnoux–Rauzy | all | for measures on the Rauzy gasket (BST23 Proposition 6.4) | BST23 Theorem 6.5 | spectrum verified (BST23-6.x); Pisot source delegated |
+| Jacobi–Perron | 3 | Broise-Alamichel–Guivarc'h 2001 | BST23 Theorem 6.6 | spectrum verified (BST23-6.x); Pisot source delegated |
+| Jacobi–Perron | 4 | not found (BST21 heuristic only) | — | delegated reading |
+| Arnoux–Rauzy–Poincaré | 3 | not found: arXiv BST23 v3 asserts it without citation, and the JEMS version drops it | — | delegated reading |
+| Reverse (Arnoux–Labbé) | 3 | ILT26 (arXiv:2602.14142) Theorem 1.4, `λ₂ < −0.020608`, computer-assisted | not stated; **not unimodular** (one matrix has determinant 2), so BST23 does not apply as stated | delegated reading |
+| Fully subtractive, Poincaré, Garrity | — | none for an absolutely continuous measure | — | delegated reading |
 
-**Consequence.** Among unimodular algorithms with a rigorously proved Pisot
-condition, Selmer `d = 4` was the only cell without a stated a.e. spectral
-theorem. Theorem S closes it. The Reverse algorithm would need a
+**Provisional consequence.** If the delegated rows hold as read, then among
+unimodular algorithms with a rigorously proved Pisot condition, Selmer `d = 4`
+was the only cell without a stated a.e. spectral theorem. This completeness
+statement is a working hypothesis for choosing targets. It is not a claim, and
+each row is to be gated individually before it is relied on. Theorem S does
+not depend on it. Under the same hypothesis, the Reverse algorithm would need a
 non-unimodular version of the BST23 lever.

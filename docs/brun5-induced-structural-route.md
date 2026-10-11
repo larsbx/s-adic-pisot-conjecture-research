@@ -184,7 +184,11 @@ not a proposed Brun distribution.
 
 The next load-bearing structural obligation is therefore a return-time
 moment bound for `[v]`, coupled to a finite norm budget with negative sign.
-No such bound or sign certificate is established here. Acceleration alone
+The follow-up [Kac reduction](brun5-kac-moment-reduction.md) supplies a
+conditional residual bound `U₁ ≤ C_hi − Σ r_i l_i`, including ambient
+normalization, labelled permutation chambers and a rational singular-cap
+bound. No instantiated return-cell masses or negative sign certificate
+exist yet. Acceleration alone
 does not remove it. The existing claim that *any* finite norm description
 must encode exponentially many cylinders is not a proved description-size
 lower bound; a compressed algebraic description remains possible.

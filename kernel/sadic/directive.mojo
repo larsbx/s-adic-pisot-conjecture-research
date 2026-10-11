@@ -149,10 +149,11 @@ def selmer4() raises -> DirectiveShift:
     """Sorted Selmer with four coordinates on its absorbing set (BST21 §5.1),
     realized faithfully: `sigma_a`, `sigma_b` have incidence matrices `tS_a`,
     `tS_b` (1-based: `sigma_a: 1 -> 2, 2 -> 3, 3 -> 14, 4 -> 1`,
-    `sigma_b: 1 -> 2, 2 -> 3, 3 -> 1, 4 -> 14`). Both branches are full on the
-    absorbing set, so the shift is full."""
+    `sigma_b: 1 -> 2, 2 -> 3, 3 -> 1, 4 -> 41`). Both branches are full on the
+    absorbing set, so the shift is full; the composite of `baabaab` is right
+    proper (every image ends with the same letter)."""
     var a: List[List[Int]] = [[1], [2], [0, 3], [0]]
-    var b: List[List[Int]] = [[1], [2], [0], [0, 3]]
+    var b: List[List[Int]] = [[1], [2], [0], [3, 0]]
     var subs = List[Substitution]()
     subs.append(Substitution.checked(a))
     subs.append(Substitution.checked(b))

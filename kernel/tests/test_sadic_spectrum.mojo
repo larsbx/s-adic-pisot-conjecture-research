@@ -354,6 +354,17 @@ def test_selmer_four_periodic_point() raises:
     require_claim("SelmerFourPeriodicPointBPA")
 
 
+def test_selmer_four_right_proper_word() raises:
+    # Corollary S' (docs/selmer4-pure-discrete-spectrum.md §5): the composite of
+    # baabaab is right proper
+    var w: List[Int] = [1, 0, 0, 1, 0, 0, 1]
+    var sigma = selmer4().composite(w)
+    var last = sigma.images[0][len(sigma.images[0]) - 1]
+    for a in range(4):
+        assert_equal(sigma.images[a][len(sigma.images[a]) - 1], last)
+    require_claim("SelmerFourBoundedRemainderWords")
+
+
 def main() raises:
     test_charpoly()
     test_disc_zero_count()
@@ -371,5 +382,6 @@ def main() raises:
     test_brun_pisot_periodic_points()
     test_brun_five_non_pisot_points()
     test_selmer_four_periodic_point()
+    test_selmer_four_right_proper_word()
     test_iota_embedding_reproduces_the_psc_corpus()
     print("sadic spectrum and periodic layer: all assertions passed")

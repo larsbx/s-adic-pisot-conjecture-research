@@ -65,9 +65,9 @@ Status of a.e. pure discrete spectrum for the natural measure.
 |---|---|---|---|
 | Arnoux–Rauzy | Sturmian classical; BMST16 under uniform C-balance | a.e. (BST19-3.7). Every sequence of a class (BST19-3.8). **False without a balance restriction** (CFZ00, CFM08) | a.e., every `d` (BST23-6.5) |
 | Brun | as above | a.e. (BST19-3.10) | `d=4` a.e. (BST23-6.7). `5 ≤ d ≤ 10`: numerical Pisot evidence only, **open**. `d ≥ 11`: Pisot numerically false |
-| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: a.e. (Theorem S, `docs/selmer4-pure-discrete-spectrum.md`; Pisot input from BST21). `d ≥ 5`: Pisot numerically false | verified (§§8, 11) |
+| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: a.e. (Theorem S, `docs/selmer4-pure-discrete-spectrum.md`; Pisot input from BST21). `d ≥ 5`: Pisot numerically false |
 | Jacobi–Perron | as above | a.e. (BST23-6.6) | `4 ≤ d ≤ 10`: numerical Pisot only, **open** |
-| Fully subtractive, Poincaré | — | unverified | unverified | delegated reading |
+| Fully subtractive, Poincaré | — | unverified | unverified |
 
 Conjecture 3.5 itself is **open** for every `d ≥ 3`. For `d = 2` it is known
 only under uniform C-balance. In every `d`, the tiling still needs geometric
@@ -264,3 +264,32 @@ statement is a working hypothesis for choosing targets. It is not a claim, and
 each row is to be gated individually before it is relied on. Theorem S does
 not depend on it. Under the same hypothesis, the Reverse algorithm would need a
 non-unimodular version of the BST23 lever.
+
+## 13. Corollary S′ independent import audit (2026-10-11)
+
+**Verified source:** Berthé–Steiner–Thuswaldner, *Multidimensional continued
+fractions and symbolic codings of toral translations*, JEMS 25 (2023),
+4997–5057, DOI [10.4171/JEMS/1300](https://doi.org/10.4171/JEMS/1300),
+[published text](https://ems.press/content/serial-article-files/32990).
+This audit uses the published version, not an unverified survey row.
+
+| Source location | Exact requirement or conclusion | Selmer application | Status |
+|---|---|---|---|
+| Definition 2.2, p. 5008 | Incidence matrix `ᵗA(x)`; faithful selection is constant on equal matrices | Reversing `14` to `41` preserves letter counts; one fixed substitution is selected per branch matrix. Both implementations test the transposes explicitly | verified |
+| §2.3, p. 5009 | Right proper means: for every `k`, some composite `σ_[k,n)`, `n > k`, has a common final letter | Positive-measure branch cylinder `baabaab`, ergodicity, and non-erasing outer composition give this tailwise property. No bounded gaps are required | verified |
+| Definitions 2.4–2.5, pp. 5009–5010 | Natural partition of a measurable fundamental domain, null overlaps and boundaries, domain exchange, and natural coding | Theorem S imports the bounded natural coding and canonical four-atom Rauzy partition on `T³` | verified |
+| Definition 2.6, p. 5011 | Bounded discrepancy for every time horizon and almost every starting point, with a constant for the given set | The discrepancy constant may depend on the Selmer parameter and the word; no uniform all-word constant is asserted | verified |
+| Definition 2.7 and (2.10), pp. 5011–5012 | Word subtiles are defined by projected prefixes preceding the word, then projected to `ℝ^{d−1}` | They are not branch cylinders or merely the letter atom of the word's first letter | verified |
+| Theorem 3.8, p. 5017 | Minimal translation on `T^{d−1}`, natural partition with exactly `d` atoms, bounded fundamental domain. Atoms are bounded remainder sets. If the coding is S-adic and its directive sequence is left **or right** proper, every finite language-word cylinder and every negative projected Rauzy word subtile is a bounded remainder set | Apply with `d = 4`, Theorem S, and Lemma P plus positive-measure recurrence, as detailed in `docs/selmer4-pure-discrete-spectrum.md` §5 | verified |
+
+The symbolic word cylinder, the branch cylinder used for recurrence, and
+the geometric cylinder on the torus have different ambient spaces. The
+geometric cylinder on the fundamental domain uses the domain exchange;
+its toral image uses the translation modulo the integer lattice. Null
+boundaries do not affect the almost-everywhere discrepancy conclusion.
+
+The all-word theorem is BST23's general result. Corollary S′ is its
+explicit four-coordinate Selmer application. §12 remains provisional and
+is not evidence for exhaustive novelty or priority. The finite properizing
+witness is independently pinned and cross-checked; it is not by itself a
+proof of the almost-everywhere conclusion.

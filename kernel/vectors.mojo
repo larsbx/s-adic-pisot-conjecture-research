@@ -116,6 +116,11 @@ def main() raises:
                 print("balance|morphic-" + String(d) + "-" + String(c) + "-" + String(j) + "||" + String(morphic_balance_bound(d, c, j)))
     var anchor_word: List[Int] = [0, 1, 2]
     print("anchor-ar3|window||" + String(window_overlap_bound(prefix_matrix(arnoux_rauzy(3), anchor_word), 3, 3, 2, 9)))
+    # Lemma P: complete images for the right-proper block baabaab (0-based).
+    var proper_word: List[Int] = [1, 0, 0, 1, 0, 0, 1]
+    var proper_sigma = selmer4().composite(proper_word)
+    for a in range(4):
+        print("selmer-4|proper-image-" + String(a) + "|1001001|" + joined(proper_sigma.images[a]))
     emit(arnoux_rauzy(2))
     emit(arnoux_rauzy(3))
     emit(brun3())

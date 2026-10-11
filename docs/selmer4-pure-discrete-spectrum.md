@@ -46,8 +46,8 @@ We take (1-based letters):
 This is `selmer4()` in `kernel/sadic/directive.mojo` and in the oracle.
 Theorem S holds for all four orderings of the two-letter images. The mixed
 ordering chosen here is also right proper on a word (Corollary S′); the
-orderings `14, 14` and `41, 41` never are, because their first- or
-last-letter maps are permutations.
+orderings `14, 14` and `41, 41` never are: in both unmixed cases both
+last-letter maps are permutations, so no composite is right proper.
 
 ## 2. Lemma F (full branches)
 
@@ -78,6 +78,15 @@ and `L(y)A = y`. Let `z = (z₀ ≥ … ≥ z₃)` lie in the absorbing cone,
 
 Every point of `∆_S` therefore has a preimage in each branch. The equalities
 of follower sets follow by induction, and positive range follows. ∎
+
+**Positive cylinder measure.** Nonemptiness alone would not imply positive
+measure. On the strict interior of the absorbing cone, each inverse branch
+above, followed by chart normalization, is a projective diffeomorphism with
+nonzero Jacobian. For any finite branch word, composing these inverse
+branches maps a nonempty open subset of that interior into its cylinder.
+The density `c/(x₁x₂x₃)` is positive there; hence every finite branch cylinder
+has positive `µ_S` measure. Boundary points and their iterated preimages may
+be discarded as null sets throughout this argument.
 
 ## 3. The periodic Pisot point
 
@@ -123,8 +132,12 @@ condition is numerically false (BST21; ABMST Conjecture 18.4).
 ## 5. Corollary S′ (bounded remainder sets for all words)
 
 **Lemma P.** The composite `σ_{baabaab}` is right proper: every image ends
-with the same letter (`test_selmer_four_right_proper_word`, Mojo and
-Python).
+with letter 1. With the composition convention of §3, its images are
+`1 ↦ 24131`, `2 ↦ 32241`, `3 ↦ 1`, `4 ↦ 321`.
+`test_selmer_four_right_proper_word` pins all four images in Mojo and
+Python; `kernel/vectors.mojo` and `tools/cross_check.py` compare them
+directly across languages. This finite witness establishes properness of
+the composite, not the measure-theoretic conclusion by itself.
 
 **Corollary S′.** For `µ_S`-almost every `x ∈ ∆_S`, the directive sequence
 `ϕ(x)` is right proper. Hence for every word `i₀i₁⋯iₙ` of its language, the
@@ -132,17 +145,49 @@ set `F_{i₀} ∩ R⁻¹F_{i₁} ∩ ⋯ ∩ R⁻ⁿF_{iₙ}` is a bounded remai
 translation `R` of Theorem S. In particular, every `−R′_{ϕ(x)}(i₀⋯iₙ)` is a
 bounded remainder set.
 
+Here `F_i = −R′_{ϕ(x)}(i)` is a letter subtile in the bounded fundamental
+domain `F = −R′_{ϕ(x)}`. In the displayed intersection the atoms are
+identified with their images on `T³`. Equivalently, on `F` use the associated
+domain exchange `R̃` and form `F_{i₀} ∩ R̃⁻¹F_{i₁} ∩ ⋯ ∩ R̃⁻ⁿF_{iₙ}`.
+The symbolic cylinder `[i₀⋯iₙ] ⊆ X_{ϕ(x)}`, this geometric cylinder, and the
+word subtile defined in BST23 Definition 2.7 are distinct constructions;
+Theorem 3.8 supplies the bounded-remainder conclusion for the geometric
+cylinder and for the negative projected word subtile. Sets are interpreted
+modulo null boundaries, as in BST23 Definitions 2.4–2.6.
+
+Explicitly, for each finite language word `v` its toral set `C_v` has a
+constant `C(x,v)` such that
+`|Σ_{j=0}^{N−1} 1_{C_v}(R^j z) − N λ(C_v)| ≤ C(x,v)`
+for all `N` and Haar-almost every `z`. The constant need not be uniform over
+word lengths or over `x`. There are countably many finite words, so a single
+full-measure set of `z` can be used for all of them. This makes no assertion
+about every boundary orbit, every Selmer parameter, or a uniform balance
+bound for all words.
+
 *Proof.* Let `u = baabaab`.
-- By Lemma F the cylinder `[u]` has positive `µ_S` measure. By ergodicity,
-  `µ_S`-almost every orbit enters it infinitely often.
-- Fix such an `x` and `k`, and pick an occurrence of `u` ending at `n > k`.
+- Let `B_u ⊆ ∆_S` be the **branch** cylinder with itinerary `u`, distinct
+  from a word cylinder in the Selmer language. By Lemma F and its positive
+  cylinder measure argument, `µ_S(B_u) > 0`. Birkhoff's ergodic theorem
+  applied to `1_{B_u}` gives visit frequency `µ_S(B_u) > 0` for almost every
+  `x`, and therefore infinitely many occurrences of `u`.
+- Intersect this full-measure set with the one in Theorem S. Fix such an
+  `x` and any `k`, and choose an occurrence starting at `m ≥ k`; put
+  `n = m + 7 > k`.
   Then `σ_{[k,n)} = σ_{[k,m)} ∘ σ_u`. If `σ_u(i)` ends with `j` for every
   `i`, then `σ_{[k,n)}(i)` ends with the last letter of `σ_{[k,m)}(j)`,
-  which does not depend on `i`. So `ϕ(x)` is right proper in the sense of
+  which does not depend on `i`. All substitutions are non-erasing; when
+  `m = k` the outer composite is the identity. So `ϕ(x)` is right proper in the sense of
   BST23 §2.3.
 - Theorem S gives a natural coding with respect to the partition
   `{−R′_{ϕ(x)}(i)}` of a bounded fundamental domain, the Rauzy fractal.
-  BST23 Theorem 3.8 with right properness then gives the claim. ∎
+  This has exactly four atoms for a translation on `T³`, as required by
+  BST23 Theorem 3.8. Its S-adic hypothesis and right properness give the
+  conclusion for every finite language word, not just letters. ∎
 
 This is the four-coordinate analogue of BST23 Theorem 6.2(iii).
+The general all-word bounded-remainder theorem is imported from BST23,
+not newly proved here. The repository contribution is the explicit mixed
+Selmer realization, Lemmas F and P, and their application to Theorem S.
+The provisional survey in gate §12 is not a dependency and establishes no
+exhaustive priority or literature-completeness claim.
 

@@ -312,6 +312,7 @@ def test_selmer_four_right_proper_word():
     # baabaab ends every image with the same letter
     from sadic_reference import selmer4
     sigma = compose_all(selmer4(), (1, 0, 0, 1, 0, 0, 1))
-    assert len({image[-1] for image in sigma}) == 1
+    assert sigma == ((1, 3, 0, 2, 0), (2, 1, 1, 3, 0), (0,), (2, 1, 0))
+    assert {image[-1] for image in sigma} == {0}
     assert len({image[0] for image in sigma}) > 1
 

@@ -23,6 +23,7 @@ from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
     brun3,
     selmer4,
+    compose_all,
     cross_ratio_bound,
     first_positive_prefix,
     image_balance,
@@ -76,6 +77,10 @@ def battery() -> list[str]:
     out = [f"balance|morphic-{d}-{c}-{j}||{morphic_balance_bound(d, c, j)}"
            for d in range(1, 5) for c in range(4) for j in range(1, 5)]
     out.append(f"anchor-ar3|window||{window_overlap_bound(prefix_matrix(arnoux_rauzy(3), (0, 1, 2)), 3, 2, 9)}")
+    # Lemma P: compare the complete properizing images, not only incidence
+    # matrices or a shared final letter. Letters and labels here are 0-based.
+    for a, image in enumerate(compose_all(selmer4(), (1, 0, 0, 1, 0, 0, 1))):
+        out.append(f"selmer-4|proper-image-{a}|1001001|" + ",".join(map(str, image)))
     for shift in (arnoux_rauzy(2), arnoux_rauzy(3), brun3()):
         key = shift.name
         for n in range(MAX_LEN + 1):

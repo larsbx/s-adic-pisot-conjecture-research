@@ -359,9 +359,10 @@ def test_selmer_four_right_proper_word() raises:
     # baabaab is right proper
     var w: List[Int] = [1, 0, 0, 1, 0, 0, 1]
     var sigma = selmer4().composite(w)
-    var last = sigma.images[0][len(sigma.images[0]) - 1]
+    var expected: List[List[Int]] = [[1, 3, 0, 2, 0], [2, 1, 1, 3, 0], [0], [2, 1, 0]]
     for a in range(4):
-        assert_equal(sigma.images[a][len(sigma.images[a]) - 1], last)
+        assert_true(same(sigma.images[a], expected[a]))
+        assert_equal(sigma.images[a][len(sigma.images[a]) - 1], 0)
     require_claim("SelmerFourBoundedRemainderWords")
 
 

@@ -306,3 +306,12 @@ def test_selmer_four_periodic_point():
     assert charpoly(prefix_matrix(shift, w)) == (1, -1, 0, -2, 1)
     assert periodic_verdict(shift, w, 50000, 5000) == "bpa:terminates"
 
+
+def test_selmer_four_right_proper_word():
+    # Corollary S' (docs/selmer4-pure-discrete-spectrum.md §5): the composite of
+    # baabaab ends every image with the same letter
+    from sadic_reference import selmer4
+    sigma = compose_all(selmer4(), (1, 0, 0, 1, 0, 0, 1))
+    assert len({image[-1] for image in sigma}) == 1
+    assert len({image[0] for image in sigma}) > 1
+

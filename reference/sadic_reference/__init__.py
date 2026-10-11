@@ -85,10 +85,11 @@ def selmer4() -> DirectiveShift:
     """Sorted Selmer with four coordinates on its absorbing set (BST21 §5.1),
     realized faithfully: sigma_a, sigma_b have incidence matrices tS_a, tS_b.
     sigma_a: 1 -> 2, 2 -> 3, 3 -> 14, 4 -> 1; sigma_b: 1 -> 2, 2 -> 3, 3 -> 1,
-    4 -> 14 (0-based below). Both branches are full, so the shift is full."""
+    4 -> 41 (0-based below). Both branches are full, so the shift is full; the
+    composite of baabaab is right proper."""
     subs = (
         ((1,), (2,), (0, 3), (0,)),
-        ((1,), (2,), (0,), (0, 3)),
+        ((1,), (2,), (0,), (3, 0)),
     )
     return full_shift("selmer-4", subs)
 

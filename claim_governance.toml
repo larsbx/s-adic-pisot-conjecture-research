@@ -421,3 +421,12 @@ aliases = ["Selmer four pure discrete spectrum"]
 path = "CLAIMS.md"
 anchor = "| Selmer four pure discrete spectrum |"
 window_lines = 0
+
+[[claim]]
+name = "SelmerFourBoundedRemainderWords"
+status = "proved"
+aliases = ["Selmer four bounded remainder words"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Selmer four bounded remainder words |"
+window_lines = 0

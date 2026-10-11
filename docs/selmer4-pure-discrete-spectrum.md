@@ -8,6 +8,8 @@
   spectrum for *some* acceleration `T^k` with *some* faithful realization,
   once a periodic Pisot point with positive range exists. Theorem S is the
   explicit instance for `T` itself and a concrete realization.
+- Corollary S′ (bounded remainder sets for all words): repository-proved,
+  from BST23 Theorem 3.8 and the right-proper word of Lemma P.
 - No novelty is claimed beyond that.
 
 Convention: `d` counts coordinates, as everywhere in this repository. BST21
@@ -38,11 +40,14 @@ transported to the 1-norm chart, as the domain.
 *faithful* when it depends only on `A(x)`, with incidence matrix `ᵗA(x)`.
 We take (1-based letters):
 - `σ_a: 1 ↦ 2, 2 ↦ 3, 3 ↦ 14, 4 ↦ 1` (incidence matrix `ᵗS_a`);
-- `σ_b: 1 ↦ 2, 2 ↦ 3, 3 ↦ 1, 4 ↦ 14` (incidence matrix `ᵗS_b`);
+- `σ_b: 1 ↦ 2, 2 ↦ 3, 3 ↦ 1, 4 ↦ 41` (incidence matrix `ᵗS_b`);
 - `ϕ(x) = σ_a` on `∆_a` and `σ_b` on `∆_b`.
 
-This is `selmer4()` in `kernel/sadic/directive.mojo` and in the oracle. The
-other three orderings of the images `14` behave identically below.
+This is `selmer4()` in `kernel/sadic/directive.mojo` and in the oracle.
+Theorem S holds for all four orderings of the two-letter images. The mixed
+ordering chosen here is also right proper on a word (Corollary S′); the
+orderings `14, 14` and `41, 41` never are, because their first- or
+last-letter maps are permutations.
 
 ## 2. Lemma F (full branches)
 
@@ -114,3 +119,30 @@ are met as follows:
 coordinates), Theorem S covers the Selmer algorithm in every dimension where
 its Pisot condition is known. For five or more coordinates the Pisot
 condition is numerically false (BST21; ABMST Conjecture 18.4).
+
+## 5. Corollary S′ (bounded remainder sets for all words)
+
+**Lemma P.** The composite `σ_{baabaab}` is right proper: every image ends
+with the same letter (`test_selmer_four_right_proper_word`, Mojo and
+Python).
+
+**Corollary S′.** For `µ_S`-almost every `x ∈ ∆_S`, the directive sequence
+`ϕ(x)` is right proper. Hence for every word `i₀i₁⋯iₙ` of its language, the
+set `F_{i₀} ∩ R⁻¹F_{i₁} ∩ ⋯ ∩ R⁻ⁿF_{iₙ}` is a bounded remainder set of the
+translation `R` of Theorem S. In particular, every `−R′_{ϕ(x)}(i₀⋯iₙ)` is a
+bounded remainder set.
+
+*Proof.* Let `u = baabaab`.
+- By Lemma F the cylinder `[u]` has positive `µ_S` measure. By ergodicity,
+  `µ_S`-almost every orbit enters it infinitely often.
+- Fix such an `x` and `k`, and pick an occurrence of `u` ending at `n > k`.
+  Then `σ_{[k,n)} = σ_{[k,m)} ∘ σ_u`. If `σ_u(i)` ends with `j` for every
+  `i`, then `σ_{[k,n)}(i)` ends with the last letter of `σ_{[k,m)}(j)`,
+  which does not depend on `i`. So `ϕ(x)` is right proper in the sense of
+  BST23 §2.3.
+- Theorem S gives a natural coding with respect to the partition
+  `{−R′_{ϕ(x)}(i)}` of a bounded fundamental domain, the Rauzy fractal.
+  BST23 Theorem 3.8 with right properness then gives the claim. ∎
+
+This is the four-coordinate analogue of BST23 Theorem 6.2(iii).
+

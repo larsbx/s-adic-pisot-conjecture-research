@@ -130,6 +130,15 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
   (`docs/selmer4-pure-discrete-spectrum.md`). A faithful realization only
   needs one substitution per matrix (gate §11). Lemma F shows both branches
   are full, and the witness `(aabb)^∞` passes the balanced pair algorithm.
+  Corollary S′ applies BST23 Theorem 3.8 with right properness (Lemma P), so
+  every finite language word gives a bounded remainder set. Gate §13 audits
+  that import against the published text.
+- **Brun Pisot condition** (`docs/brun-pisot-condition.md`): imported for
+  `d = 3, 4` (gate §10), open for `5 ≤ d ≤ 10`. Lemma D gives exact density
+  brackets; the BST21 template costs about `10¹³–10¹⁴` cylinders at `d = 5`.
+  Lemma N rules out a Paley–Ursell bound or a branchwise nonexpanding norm
+  family at `d = 5`.
+- **Survey** (gate §12): provisional. Only the rows marked verified are gated.
 - **G4:**
   - Lemma S and Theorem T1 are proved under uniform balance and a bounded
     length ratio (`docs/t1-uniform-overlap-finiteness.md`).
@@ -147,3 +156,19 @@ G0 is done in `docs/literature-gate-2026-10-09.md`: hypothesis table, status mat
     Corollary A supplies a nonperiodic Arnoux–Rauzy calibration, using
     Thue–Morse-directed blocks 012 and 021 and BST19's uniform balance bound.
   - T2 is not started.
+
+## 6. Roadmap (2026-10-20)
+
+Open fronts, cheapest first. Each states its deliverable and what blocks it.
+
+| # | Front | Deliverable | Blocker / cost |
+|---|---|---|---|
+| R1 | Gate the §12 survey rows | One verified gate row per algorithm (Modified Jacobi–Perron, Jacobi–Perron `d = 3`, Arnoux–Rauzy, Reverse, Arnoux–Rauzy–Poincaré), with exact hypotheses; then restate the §12 consequence as verified or withdraw it | Reading only. Until done, §12 selects targets but supports no claim |
+| R2 | Reverse algorithm, `d = 3` | A gated non-unimodular analogue of BST23 Theorem 3.1, or a gate row showing none exists. Its Pisot input is ILT26 Theorem 1.4 (pending R1) | One branch matrix has determinant 2, so BST23 does not apply as stated. Needs a literature gate on non-unimodular Rauzy fractals before any kernel work |
+| R3 | Jacobi–Perron `4 ≤ d ≤ 10` | G3 witnesses in the style of Theorem C′: a pinned primitive irreducible Pisot periodic point per `d` passing the balanced pair algorithm, making the Pisot condition the only missing input | Gate first: whether BST23's hypotheses (finite or countable alphabet, positive range, faithful realization) hold for Jacobi–Perron in these `d`. Needs a `jacobi_perron(d)` directive shift in kernel and oracle |
+| R4 | Brun Pisot condition, `5 ≤ d ≤ 10` | A proof of `λ₂ < 0`, which with Theorem C′ gives a.e. pure discrete spectrum | Open (ABMST Conjecture 18.4). Routes in `docs/brun-pisot-condition.md` §4: a structural argument on an induced system (Lemma N excludes uniform ones on the full system), or a certified GPU-scale campaign |
+| R5 | G4 / T2 | All-depth transition finiteness of the uniform graph; whether pure discrete spectrum makes the uniform graph finite | T1′ gives a finite type pool only at selected depths; Theorem W needs the extra anchor condition. T2 is not started |
+
+Every front follows §2: gate before import, and an exact kernel and oracle
+pair, with a cross-check, before any finite-domain claim.
+

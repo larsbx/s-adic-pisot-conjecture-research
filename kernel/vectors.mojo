@@ -4,7 +4,7 @@ digit strings; any disagreement fails closed."""
 
 from sadic.balance import image_balance
 from sadic.cocycle import cross_ratio_bound, first_positive_prefix, is_positive, positive_blocks, prefix_matrix
-from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, words_of_length
+from sadic.directive import DirectiveShift, arnoux_rauzy, brun3, selmer4, words_of_length
 from sadic.overlap import morphic_balance_bound, positive_suffix_ratio, return_overlap_bound, window_overlap_bound
 from sadic.periodic import brun_classes, brun_unordered, is_pip, periodic_verdict, periodic_words, primitivity_exponent
 from sadic.spectrum import charpoly, disc_zero_count, irreducibility_verdict, pisot_verdict
@@ -116,12 +116,19 @@ def main() raises:
                 print("balance|morphic-" + String(d) + "-" + String(c) + "-" + String(j) + "||" + String(morphic_balance_bound(d, c, j)))
     var anchor_word: List[Int] = [0, 1, 2]
     print("anchor-ar3|window||" + String(window_overlap_bound(prefix_matrix(arnoux_rauzy(3), anchor_word), 3, 3, 2, 9)))
+    # Lemma P: complete images for the right-proper block baabaab (0-based).
+    var proper_word: List[Int] = [1, 0, 0, 1, 0, 0, 1]
+    var proper_sigma = selmer4().composite(proper_word)
+    for a in range(4):
+        print("selmer-4|proper-image-" + String(a) + "|1001001|" + joined(proper_sigma.images[a]))
     emit(arnoux_rauzy(2))
     emit(arnoux_rauzy(3))
     emit(brun3())
     emit_spectral(arnoux_rauzy(3))
     emit_spectral(brun3())
+    emit_spectral(selmer4())
     emit_periodic(brun_unordered(4))
+    emit_periodic(selmer4())
     # the polynomial battery: a reducible quintic and sextic refuted only by
     # the factor search, z^4 + 1 (zeros on the circle), irreducible quartics,
     # and a sextic whose Schur-Cohn recursion overflows 64 bits

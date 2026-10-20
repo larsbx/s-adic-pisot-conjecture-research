@@ -358,3 +358,75 @@ aliases = ["Brun class enumeration"]
 path = "CLAIMS.md"
 anchor = "| Brun class enumeration |"
 window_lines = 0
+
+[[claim]]
+name = "BrunPisotConditionThreeFour"
+status = "imported"
+aliases = ["Brun Pisot condition three four"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun Pisot condition three four |"
+window_lines = 0
+
+[[claim]]
+name = "BrunDensityBrackets"
+status = "proved"
+aliases = ["Brun density brackets"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun density brackets |"
+window_lines = 0
+
+[[claim]]
+name = "BrunPisotConditionFiveToTen"
+status = "open"
+aliases = ["Brun Pisot condition five to ten"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun Pisot condition five to ten |"
+window_lines = 0
+
+[[claim]]
+name = "BrunFiveNonPisotPoints"
+status = "finite-domain"
+aliases = ["Brun five non Pisot points"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun five non Pisot points |"
+window_lines = 0
+
+[[claim]]
+name = "BrunNoUniformContraction"
+status = "proved"
+aliases = ["Brun no uniform contraction"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Brun no uniform contraction |"
+window_lines = 0
+
+[[claim]]
+name = "SelmerFourPeriodicPointBPA"
+status = "finite-domain"
+aliases = ["Selmer four periodic point BPA"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Selmer four periodic point BPA |"
+window_lines = 0
+
+[[claim]]
+name = "SelmerFourPDS"
+status = "proved"
+aliases = ["Selmer four pure discrete spectrum"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Selmer four pure discrete spectrum |"
+window_lines = 0
+
+[[claim]]
+name = "SelmerFourBoundedRemainderWords"
+status = "proved"
+aliases = ["Selmer four bounded remainder words"]
+[[claim.surfaces]]
+path = "CLAIMS.md"
+anchor = "| Selmer four bounded remainder words |"
+window_lines = 0

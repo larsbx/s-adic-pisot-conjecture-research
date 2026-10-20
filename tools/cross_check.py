@@ -22,6 +22,8 @@ from sadic_reference.spectrum import Inconclusive, charpoly, disc_zero_count, ir
 from sadic_reference import (  # noqa: E402
     arnoux_rauzy,
     brun3,
+    selmer4,
+    compose_all,
     cross_ratio_bound,
     first_positive_prefix,
     image_balance,
@@ -75,6 +77,10 @@ def battery() -> list[str]:
     out = [f"balance|morphic-{d}-{c}-{j}||{morphic_balance_bound(d, c, j)}"
            for d in range(1, 5) for c in range(4) for j in range(1, 5)]
     out.append(f"anchor-ar3|window||{window_overlap_bound(prefix_matrix(arnoux_rauzy(3), (0, 1, 2)), 3, 2, 9)}")
+    # Lemma P: compare the complete properizing images, not only incidence
+    # matrices or a shared final letter. Letters and labels here are 0-based.
+    for a, image in enumerate(compose_all(selmer4(), (1, 0, 0, 1, 0, 0, 1))):
+        out.append(f"selmer-4|proper-image-{a}|1001001|" + ",".join(map(str, image)))
     for shift in (arnoux_rauzy(2), arnoux_rauzy(3), brun3()):
         key = shift.name
         for n in range(MAX_LEN + 1):
@@ -95,15 +101,15 @@ def battery() -> list[str]:
                 for a in range(shift.size):
                     out.append(f"{key}|image-balance-{a}|{digits}|{image_balance(shift, w, a)}")
         out += [f"{key}|positive-block|{''.join(map(str, w))}|1" for w in positive_blocks(shift, MAX_LEN)]
-    for shift in (arnoux_rauzy(3), brun3()):
+    for shift in (arnoux_rauzy(3), brun3(), selmer4()):
         for n in range(1, SPECTRAL_LEN + 1):
             for w in product(range(shift.labels), repeat=n):
                 out += spectral_lines(shift.name, "".join(map(str, w)), prefix_matrix(shift, w))
-    shift = brun_unordered(4)
-    for n in range(1, PERIODIC_LEN + 1):
-        for w in periodic_words(shift, n):
-            verdict = periodic_verdict(shift, w, BPA_STATES, BPA_LENGTH)
-            out.append(f"{shift.name}|periodic|" + ",".join(map(str, w)) + f"|{verdict}")
+    for shift in (brun_unordered(4), selmer4()):
+        for n in range(1, PERIODIC_LEN + 1):
+            for w in periodic_words(shift, n):
+                verdict = periodic_verdict(shift, w, BPA_STATES, BPA_LENGTH)
+                out.append(f"{shift.name}|periodic|" + ",".join(map(str, w)) + f"|{verdict}")
     for f in POLYNOMIALS:
         out += polynomial_lines(f)
     shift = brun_unordered(5)

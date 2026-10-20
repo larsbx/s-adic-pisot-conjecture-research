@@ -65,7 +65,7 @@ Status of a.e. pure discrete spectrum for the natural measure.
 |---|---|---|---|
 | Arnoux–Rauzy | Sturmian classical; BMST16 under uniform C-balance | a.e. (BST19-3.7). Every sequence of a class (BST19-3.8). **False without a balance restriction** (CFZ00, CFM08) | a.e., every `d` (BST23-6.5) |
 | Brun | as above | a.e. (BST19-3.10) | `d=4` a.e. (BST23-6.7). `5 ≤ d ≤ 10`: numerical Pisot evidence only, **open**. `d ≥ 11`: Pisot numerically false |
-| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: `θ₂ < 0` computer-assisted (BST21), pure discrete spectrum **open**. `d ≥ 5`: Pisot numerically false |
+| Cassaigne–Selmer | as above | a.e. (BST23-6.2) | Selmer `d=4`: a.e. (Theorem S, `docs/selmer4-pure-discrete-spectrum.md`; Pisot input from BST21). `d ≥ 5`: Pisot numerically false |
 | Jacobi–Perron | as above | a.e. (BST23-6.6) | `4 ≤ d ≤ 10`: numerical Pisot only, **open** |
 | Fully subtractive, Poincaré | — | unverified | unverified |
 
@@ -198,3 +198,98 @@ with an irreducible Pisot characteristic polynomial, in every dimension
 BST23 Theorem 3.1 therefore needs only one exact certificate: primitivity,
 irreducibility and the Pisot property of one admissible periodic word. The
 balanced pair algorithm is no longer needed for it.
+
+## 10. The Brun Pisot condition (2026-10-10)
+
+`d` counts coordinates, as everywhere in this repository. BST21 and Hardcastle
+index by projective dimension, which is `d − 1`.
+
+| Key | Statement | Check |
+|---|---|---|
+| ABMST-10.13 | Arnoux–Berthé–Minervino–Steiner–Thuswaldner, arXiv:2508.16441v2, Proposition 10.13: "For d ∈ {3, 4}, each of the (d−1)-dimensional continued fraction algorithms (X_U, F_U, A_U, ν_U), (X_B, F_B, A_B, ν_B), and (X_M, F_M, A_M, ν_M) satisfies the Pisot condition." The proof cites Avila–Delecroix for `d = 3` and Schratzberger 2001 (see also Hardcastle–Khanin, Hardcastle) for `d = 4`. | verified |
+| ABMST-18.4 | Conjecture 18.4: "The Brun continued fraction algorithm satisfies the Pisot condition if and only if d ≤ 10." | verified |
+| ABMST-10.6 | Lemma 10.6: the ordered Brun map on `{(x₁, …, x_{d−1}, 1) : x₁ ≤ … ≤ x_{d−1}}` has invariant density `(x₁⋯x_{d−1})⁻¹ Σ_{S ⊆ {1,…,d−2}} (−1)^{|S|} / (1 + Σ_{k∈S} x_k)`. The map has `d` full branches (`F_B(X_{B,k}) = X_B`). | verified; transfer equation checked numerically (evidence) |
+| BST21-3.4 | `λ₂(A) = λ₁(D) = inf_n (1/n) ∫ log‖D⁽ⁿ⁾(x)‖ dµ(x)` for any matrix norm, with `D⁽ⁿ⁾ = Π A⁽ⁿ⁾ H(x)`. | verified |
+| BST21-§6 | For Brun, only heuristic values of `λ₂` are given, from `n = 2³⁰` orbit simulations. In our indexing: `d = 5`: −0.04651; 6: −0.03051; 7: −0.01974; 8: −0.01210; 9: −0.00647; 10: −0.00218; 11: +0.00115. | verified |
+| BST21-5.4 | The Selmer `d = 4` proof: the bound (3.4) at `n = 52`, using vertex maxima (convexity), density brackets, and outward-rounded floating point. | verified |
+| AD-2 | Avila–Delecroix, arXiv:1506.03692, Theorem 2: products of 3×3 Brun matrices are Pisot when primitive. Lemma 6 gives the cone-norm criterion. | read by a delegated reader |
+| Har02 | Hardcastle, Experiment. Math. 11 (2002): Brun `d = 4` (multiplicative form), `n = 8`, with the author's caveat "I do not attempt to control round-off errors". | read by a delegated reader |
+
+No proof of the Brun Pisot condition for any `d ≥ 5` was found (searches to
+2026-10-10, not exhaustive).
+
+## 11. Selmer with four coordinates (2026-10-10)
+
+| Key | Statement | Check |
+|---|---|---|
+| BST21-5.1def | The sorted Selmer map `T_S(x) = κ(ord(1 − x_d, x₁, …, x_d))`, with matrices `S_a` on `{2x_d > 1}` and `S_b` on `{2x_d < 1 ≤ x_{d−1} + x_d}`. Almost every orbit enters the absorbing set `∆_{S_a} ∪ ∆_{S_b}`. The invariant measure there is `c dx₁⋯dx_d / (x₁⋯x_d)` (citing Schweiger, Theorem 22), and Selmer satisfies Lagarias's (H1)–(H5). | verified |
+| BST23-Def2.2 | A substitution selection `ϕ` is *faithful* if `ϕ(x) = ϕ(y)` whenever `A(x) = A(y)`; its incidence matrix is `ᵗA(x)`. | verified |
+| BST23-§2.1 | The domain is any `∆ ⊆ {x ∈ [0,1]^d : ‖x‖₁ = 1}`. *Positive* means `A(∆) ⊆ {M ∈ ℕ^{d×d} : |det M| = 1}`. | verified |
+| BST23-Def2.8 | `x` has positive range if `inf_n ν(Tⁿ∆⁽ⁿ⁾(x)) > 0`. | verified |
+| BST23-§6.2 end | The "realization of factor complexity `(d−1)n + 1`" concerns the dendric refinements (Corollary 6.3), not the hypotheses of Theorem 3.1. | verified |
+| BST23-3.8 | Theorem 3.8: for a natural coding of a minimal translation with respect to a natural partition of a bounded fundamental domain, the atoms are bounded remainder sets. If the directive sequence is left proper (or right proper), so is every cylinder set `F_{i₀} ∩ R⁻¹F_{i₁} ∩ ⋯ ∩ R⁻ⁿF_{iₙ}`. A sequence is proper if for each `k` some `σ_{[k,n)}`, `n > k`, is proper (§2.3). | verified |
+| ABMST-§18 | "While the Pisot property of the Brun and the Selmer continued fraction algorithms would suffice to apply our theory to these algorithms in higher dimensions, …". No Selmer four-coordinate theorem is stated. | verified |
+
+**Correction to the §5 correction.** The §5 note says that the "faithful
+substitutive realization" hypothesis has no known instance for Selmer
+`d = 4`. That is wrong. By BST23 Definition 2.2, any choice of one
+substitution per matrix is faithful, and the complexity remark in BST23 §6.2
+is not a hypothesis of Theorem 3.1. The Selmer `d = 4` cell is reachable. It
+is closed in `docs/selmer4-pure-discrete-spectrum.md` (Theorem S).
+
+## 12. Survey: proved Pisot conditions and stated spectra (2026-10-11)
+
+**Provisional.** This section is a reading list, not a gate entry. A delegated
+reader went through the primary texts, and only the rows marked *verified* were
+checked against the source in §§8–11. Nothing here is imported: no claim in
+`CLAIMS.md` rests on an unverified row. `d` counts coordinates.
+
+| Algorithm | `d` | Pisot condition | a.e. PDS / natural coding stated | Status |
+|---|---|---|---|---|
+| Brun | 3, 4 | proved (§10) | BST-AIF Theorem 3.11; BST23 Theorem 6.7 | verified (§10) |
+| Modified Jacobi–Perron | 3, 4 | proved (Schratzberger 1998/2001; Hardcastle 2002) | ABMST Corollary 17.4 (two-sided, natural extension) | delegated reading |
+| Cassaigne–Selmer | 3 | BST21 Theorem 5.1 | BST23 Theorem 6.2 | verified (§§8, 11) |
+| Selmer | 4 | BST21 Theorem 5.4 | **Theorem S** (this repository); not stated elsewhere | verified (§11) |
+| Arnoux–Rauzy | all | for measures on the Rauzy gasket (BST23 Proposition 6.4) | BST23 Theorem 6.5 | spectrum verified (BST23-6.x); Pisot source delegated |
+| Jacobi–Perron | 3 | Broise-Alamichel–Guivarc'h 2001 | BST23 Theorem 6.6 | spectrum verified (BST23-6.x); Pisot source delegated |
+| Jacobi–Perron | 4 | not found (BST21 heuristic only) | — | delegated reading |
+| Arnoux–Rauzy–Poincaré | 3 | not found: arXiv BST23 v3 asserts it without citation, and the JEMS version drops it | — | delegated reading |
+| Reverse (Arnoux–Labbé) | 3 | ILT26 (arXiv:2602.14142) Theorem 1.4, `λ₂ < −0.020608`, computer-assisted | not stated; **not unimodular** (one matrix has determinant 2), so BST23 does not apply as stated | delegated reading |
+| Fully subtractive, Poincaré, Garrity | — | none for an absolutely continuous measure | — | delegated reading |
+
+**Provisional consequence.** If the delegated rows hold as read, then among
+unimodular algorithms with a rigorously proved Pisot condition, Selmer `d = 4`
+was the only cell without a stated a.e. spectral theorem. This completeness
+statement is a working hypothesis for choosing targets. It is not a claim, and
+each row is to be gated individually before it is relied on. Theorem S does
+not depend on it. Under the same hypothesis, the Reverse algorithm would need a
+non-unimodular version of the BST23 lever.
+
+## 13. Corollary S′ independent import audit (2026-10-11)
+
+**Verified source:** Berthé–Steiner–Thuswaldner, *Multidimensional continued
+fractions and symbolic codings of toral translations*, JEMS 25 (2023),
+4997–5057, DOI [10.4171/JEMS/1300](https://doi.org/10.4171/JEMS/1300),
+[published text](https://ems.press/content/serial-article-files/32990).
+This audit uses the published version, not an unverified survey row.
+
+| Source location | Exact requirement or conclusion | Selmer application | Status |
+|---|---|---|---|
+| Definition 2.2, p. 5008 | Incidence matrix `ᵗA(x)`; faithful selection is constant on equal matrices | Reversing `14` to `41` preserves letter counts; one fixed substitution is selected per branch matrix. Both implementations test the transposes explicitly | verified |
+| §2.3, p. 5009 | Right proper means: for every `k`, some composite `σ_[k,n)`, `n > k`, has a common final letter | Positive-measure branch cylinder `baabaab`, ergodicity, and non-erasing outer composition give this tailwise property. No bounded gaps are required | verified |
+| Definitions 2.4–2.5, pp. 5009–5010 | Natural partition of a measurable fundamental domain, null overlaps and boundaries, domain exchange, and natural coding | Theorem S imports the bounded natural coding and canonical four-atom Rauzy partition on `T³` | verified |
+| Definition 2.6, p. 5011 | Bounded discrepancy for every time horizon and almost every starting point, with a constant for the given set | The discrepancy constant may depend on the Selmer parameter and the word; no uniform all-word constant is asserted | verified |
+| Definition 2.7 and (2.10), pp. 5011–5012 | Word subtiles are defined by projected prefixes preceding the word, then projected to `ℝ^{d−1}` | They are not branch cylinders or merely the letter atom of the word's first letter | verified |
+| Theorem 3.8, p. 5017 | Minimal translation on `T^{d−1}`, natural partition with exactly `d` atoms, bounded fundamental domain. Atoms are bounded remainder sets. If the coding is S-adic and its directive sequence is left **or right** proper, every finite language-word cylinder and every negative projected Rauzy word subtile is a bounded remainder set | Apply with `d = 4`, Theorem S, and Lemma P plus positive-measure recurrence, as detailed in `docs/selmer4-pure-discrete-spectrum.md` §5 | verified |
+
+The symbolic word cylinder, the branch cylinder used for recurrence, and
+the geometric cylinder on the torus have different ambient spaces. The
+geometric cylinder on the fundamental domain uses the domain exchange;
+its toral image uses the translation modulo the integer lattice. Null
+boundaries do not affect the almost-everywhere discrepancy conclusion.
+
+The all-word theorem is BST23's general result. Corollary S′ is its
+explicit four-coordinate Selmer application. §12 remains provisional and
+is not evidence for exhaustive novelty or priority. The finite properizing
+witness is independently pinned and cross-checked; it is not by itself a
+proof of the almost-everywhere conclusion.

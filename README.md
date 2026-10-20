@@ -5,7 +5,7 @@ infrastructure of
 [`pisot-substitution-conjecture-research`](https://github.com/larsbx/pisot-substitution-conjecture-research)
 and [`finite-math-kernels`](https://github.com/larsbx/finite-math-kernels).
 
-**Status:** the S-adic Pisot conjecture is **open**. The repository's own results are a few elementary lemmas and finite-domain theorems, among them a census of the Brun `d = 4` periodic points. They are listed in `CLAIMS.md`.
+**Status:** the S-adic Pisot conjecture is **open**. The repository's results are listed in `CLAIMS.md`. The main ones are Theorem S (a.e. pure discrete spectrum for Selmer with four coordinates) with Corollary S′ (bounded remainder sets for every word), Theorem C′ (for Brun with `5 ≤ d ≤ 10` only the Pisot condition is missing), and the finite-domain censuses. The roadmap of open fronts is [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) §6.
 
 Start with [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md). It gives the general
 method for attacking a generalization from an existing programme (phases G0–G7
@@ -32,6 +32,15 @@ Then read:
   with a balanced-pair certificate per dimension (Theorem C). Every such Pisot point also has symbolic pure discrete spectrum
   (Corollary B″), so for every `5 ≤ d ≤ 10` the Pisot condition is the only
   missing input (Theorem C′). Census for `d = 5, 6`;
+- [`docs/selmer4-pure-discrete-spectrum.md`](docs/selmer4-pure-discrete-spectrum.md):
+  Theorem S, a.e. pure discrete spectrum for the sorted Selmer algorithm with
+  four coordinates. It rests on BST21's computer-assisted Pisot condition,
+  the full-branch Lemma F, and one balanced-pair witness. Corollary S′ adds
+  bounded remainder sets for every finite word (BST23 Theorem 3.8).
+- [`docs/brun-pisot-condition.md`](docs/brun-pisot-condition.md): what an
+  unconditional Brun proof still needs. The Pisot condition is proved for
+  `d = 3, 4` and open for `5 ≤ d ≤ 10`. The file also gives exact density
+  brackets (Lemma D) and the cost of the known rigorous method at `d = 5`.
 - [`docs/t1-uniform-overlap-finiteness.md`](docs/t1-uniform-overlap-finiteness.md):
   the swap-walk and uniform overlap bounds (T1), and the finite pool of
   overlap types at selected PRICE return depths (T1′). The all-depth

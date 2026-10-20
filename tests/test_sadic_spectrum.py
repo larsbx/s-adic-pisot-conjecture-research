@@ -270,3 +270,49 @@ def test_brun_full_classes_and_pip_counts():
         classes = brun_full_classes(5, n)
         counts.append((len(classes), sum(is_pip(shift, w) for w in classes)))
     assert counts == [(0, 0), (0, 0), (0, 0), (0, 0), (1, 0), (3, 3), (20, 18)]
+
+
+def test_brun_five_non_pisot_points():
+    # Lemma N (docs/brun-pisot-condition.md §5): primitive admissible d = 5
+    # composites with an irreducible, non-Pisot quintic
+    from sadic_reference.spectrum import primitivity_exponent
+    shift = brun_unordered(5)
+    for w, f in (
+        ((0, 0, 4, 1, 10, 15, 17, 4), (-1, 9, -22, 22, -13, 1)),
+        ((0, 4, 1, 10, 15, 18, 10, 12), (-1, 6, -17, 26, -14, 1)),
+        ((0, 4, 1, 10, 15, 19, 14, 8), (-1, 9, -28, 35, -15, 1)),
+    ):
+        assert periodic_admissible(shift, w)
+        m = prefix_matrix(shift, w)
+        assert primitivity_exponent(m) >= 0
+        assert charpoly(m) == f
+        assert irreducibility_verdict(f)[0] == 1
+        assert pisot_verdict(f) == 0
+
+
+def test_selmer_four_periodic_point():
+    # docs/selmer4-pure-discrete-spectrum.md: the realization has incidence
+    # matrices tS_a, tS_b (BST21 §5.1, d = 3 projective), and the periodic
+    # point (a a b b)^infinity is primitive, irreducible, Pisot, and passes
+    # the balanced pair algorithm
+    from sadic_reference import incidence, selmer4
+    from sadic_reference.periodic import periodic_verdict
+    s_a = ((0, 1, 0, 0), (0, 0, 1, 0), (1, 0, 0, 1), (1, 0, 0, 0))
+    s_b = ((0, 1, 0, 0), (0, 0, 1, 0), (1, 0, 0, 0), (1, 0, 0, 1))
+    shift = selmer4()
+    for sigma, s in zip(shift.substitutions, (s_a, s_b)):
+        assert tuple(map(tuple, incidence(sigma))) == tuple(zip(*s))
+    w = (0, 0, 1, 1)
+    assert charpoly(prefix_matrix(shift, w)) == (1, -1, 0, -2, 1)
+    assert periodic_verdict(shift, w, 50000, 5000) == "bpa:terminates"
+
+
+def test_selmer_four_right_proper_word():
+    # Corollary S' (docs/selmer4-pure-discrete-spectrum.md §5): the composite of
+    # baabaab ends every image with the same letter
+    from sadic_reference import selmer4
+    sigma = compose_all(selmer4(), (1, 0, 0, 1, 0, 0, 1))
+    assert sigma == ((1, 3, 0, 2, 0), (2, 1, 1, 3, 0), (0,), (2, 1, 0))
+    assert {image[-1] for image in sigma} == {0}
+    assert len({image[0] for image in sigma}) > 1
+
